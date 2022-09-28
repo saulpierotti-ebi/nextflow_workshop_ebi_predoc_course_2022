@@ -4,8 +4,6 @@ This is text.
 
 - This is a list element
 
-`` A code block`
-
 ```
-
+A code block
 ```
