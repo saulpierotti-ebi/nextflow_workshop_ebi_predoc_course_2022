@@ -1,11 +1,23 @@
 ---
-title: "A Book"
-author: "Frida Gomam"
-documentclass: book
+title: "Nextflow workshop - EBI predoc course 2022"
+author: "Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+link-citations: yes
+colorlinks: yes
+lot: yes
+lof: yes
+fontsize: 12pt
+site: bookdown::bookdown_site
+documentclass: krantz
 output:
   bookdown::gitbook: default
 ---
-# Preface
 
-In this book, we will introduce an interesting
-method.
+# Introduction to the workshop {-}
+
+This workshop aims at introducing you to the world of workflow managers, in particular the workflow manager Nextflow.
+This workshop was written as a practical for the EMBL-EBI predoc course, 2022 cohort.
+I hope that you will find it useful, and in any case I would be happy to hear your feedback on it.
+You can contact me at [saul@ebi.ac.uk](mailto:saul@ebi.ac.uk).
+
+The workshop is written with an increasing level of difficulty, so feel free to skip what is too easy for you or stop when things become too complex.

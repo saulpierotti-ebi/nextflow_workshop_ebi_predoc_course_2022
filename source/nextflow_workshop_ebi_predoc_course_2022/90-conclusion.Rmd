@@ -1,0 +1,21 @@
+# Additional resources
+
+Nextflow documentation:
+
+https://www.nextflow.io/docs/latest/index.html
+
+Nextflow workshop from the Nextflow authors:
+
+https://www.nextflow.io/blog/2022/learn-nextflow-in-2022.html
+
+YouTube playlist:
+
+https://www.youtube.com/playlist?list=PLPZ8WHdZGxmUv4W8ZRlmstkZwhb_fencI
+
+Post on Medium on Nextflow from 23andMe:
+
+https://medium.com/23andme-engineering/introduction-to-nextflow-4d0e3b6768d1
+
+Nextflow course on SofwareCarpentries:
+
+https://carpentries-incubator.github.io/workflows-nextflow/index.html

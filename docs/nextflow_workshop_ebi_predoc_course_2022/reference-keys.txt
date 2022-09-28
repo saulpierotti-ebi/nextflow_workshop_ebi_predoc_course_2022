@@ -1,2 +1,8 @@
-preface
 introduction
+prerequisites
+what-is-nextflow
+learning-objectives
+additional-resources
+setup
+getting-started
+nextflow-domain-specific-language-versions

@@ -4,25 +4,26 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Introduction | A Book</title>
-  <meta name="description" content="2 Introduction | A Book" />
+  <title>1 Introduction | Nextflow workshop - EBI predoc course 2022</title>
+  <meta name="description" content="1 Introduction | Nextflow workshop - EBI predoc course 2022" />
   <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Introduction | A Book" />
+  <meta property="og:title" content="1 Introduction | Nextflow workshop - EBI predoc course 2022" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Introduction | A Book" />
+  <meta name="twitter:title" content="1 Introduction | Nextflow workshop - EBI predoc course 2022" />
   
   
   
 
-<meta name="author" content="Frida Gomam" />
+<meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
 
 
+<meta name="date" content="2022-09-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -30,7 +31,7 @@
   
   
 <link rel="prev" href="index.html"/>
-
+<link rel="next" href="additional-resources.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -53,6 +54,70 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 
 </head>
@@ -67,8 +132,19 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
-<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction to the workshop</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#prerequisites"><i class="fa fa-check"></i><b>1.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#what-is-nextflow"><i class="fa fa-check"></i><b>1.2</b> What is Nextflow?</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#learning-objectives"><i class="fa fa-check"></i><b>1.3</b> Learning objectives</a></li>
+<li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setup</a></li>
+<li class="chapter" data-level="1.5" data-path="introduction.html"><a href="introduction.html#getting-started"><i class="fa fa-check"></i><b>1.5</b> Getting started</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="introduction.html"><a href="introduction.html#nextflow-domain-specific-language-versions"><i class="fa fa-check"></i><b>1.5.1</b> Nextflow domain specific language versions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>2</b> Additional resources</a></li>
 </ul>
 
       </nav>
@@ -78,7 +154,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Book</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Nextflow workshop - EBI predoc course 2022</a>
           </h1>
         </div>
 
@@ -86,19 +162,76 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="introduction" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">2</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This chapter is an overview of the methods that
-we propose to solve an <strong>important problem</strong>.</p>
+<div id="introduction" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="prerequisites" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Prerequisites<a href="introduction.html#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Familiarity with the Linux shell, as well as basic programming constructs such as for/while loops and if/else statements is assumed.
+Familiarity with at least one scripting language such as R or Python will be beneficial.
+A basic knowledge of virtual environments and software containers would be helpful.
+Basic knowledge of git is required.</p>
+</div>
+<div id="what-is-nextflow" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> What is Nextflow?<a href="introduction.html#what-is-nextflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://www.nextflow.io/index.html">Nextflow</a> is an open-source workflow manager consisting of a domain specific language built as a superset of the <a href="https://groovy-lang.org/">Groovy</a> programming language, which is itself a superset of <a href="https://www.java.com/en/">Java</a>.
+The purpose of Nextflow is to make it easier to coordinate the execution of complex <a href="https://www.wikiwand.com/en/Pipeline_(computing)">data analysis pipelines</a>, and to facilitate the execution of such pipelines in <a href="https://www.wikiwand.com/en/Cloud_computing">cloud environments</a> and <a href="https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster">high-performance clusters</a>.</p>
+<p>In practice, Nextflow allows you to declare how the output of some processes in a pipeline are fed as the input of other processes, leading to the production of a final result.
+In addition, Nextflow allows the specification of software requirements for each process using <a href="https://docs.conda.io/en/latest/">conda</a> environments, <a href="https://www.docker.com/">docker</a> containers, and a variety of other solutions.</p>
+<p>Once a pipeline has been written in Nextflow, it can be easily scaled from a local laptop to a high-performance cluster or cloud environment without any modification, with Nextflow taking care of environment-specific commands (for example, submitting appropriate jobs to a batch scheduler).
+Moreover, the pipeline execution is parallelised if the dependencies among different processes allow it.
+A motivation for using a workflow manager such as Nextflow is also to increase the reproducibility of your data analysis.</p>
+<p>Finally, each processes in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.</p>
+<p>Nextflow is developed and maintained by <a href="https://seqera.io/">Seqera Labs</a>. The project was started in Cedric Notredame’s lab at the Centre for Genomic Regulation (<a href="https://www.crg.eu/">CRG</a>) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use-case, but it is domain-agnostic and can be used for any data-intensive workflow.</p>
+</div>
+<div id="learning-objectives" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Learning objectives<a href="introduction.html#learning-objectives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>After following this tutorial, the learner will be autonomous in using nextflow for their own data analysis.
+They will understand fundamental Nextflow concepts such as processes, workflows, channels, they will be able to write a configuration file to alter the resources allocated for a processes and the software environment of execution, and they will be able to deploy a community-curated pipeline from <a href="https://nf-co.re/">nf-core</a>.</p>
+</div>
+<div id="setup" class="section level2 hasAnchor" number="1.4">
+<h2><span class="header-section-number">1.4</span> Setup<a href="introduction.html#setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Install <a href="https://github.com/conda-forge/miniforge">mamba</a>, a faster alternative to <a href="https://docs.conda.io/en/latest/">conda</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="introduction.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-O</span> <span class="st">&quot;https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-</span><span class="va">$(</span><span class="fu">uname</span><span class="va">)</span><span class="st">-</span><span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span><span class="st">.sh&quot;</span></span>
+<span id="cb1-2"><a href="introduction.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> Mambaforge-<span class="va">$(</span><span class="fu">uname</span><span class="va">)</span>-<span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span>.sh</span></code></pre></div>
+<p>Setup the shell to use mamba</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="introduction.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> init</span></code></pre></div>
+<p>Close and re-open your shell.
+Then, create a mamba environment for installing Nextflow</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="introduction.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> create <span class="at">-n</span> nextflow nextflow</span></code></pre></div>
+<p>Now activate the environment that you just created</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="introduction.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> activate nextflow</span></code></pre></div>
+<p>Create an empty git repository in your GitHub account and clone it locally.
+I will pretend that this repository is called <code>my_repo</code> in this workshop.
+Don’t forget to replace this with the name of your actual repository.</p>
+<p>Now change directory to the root of the cloned repository.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="introduction.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my_repo</span></code></pre></div>
+<p>You can use a text editor of your choice to write Nextflow code.
+For example, you may want to use <a href="https://flight-manual.atom.io/getting-started/sections/installing-atom/">Atom</a>.
+I recommend to add Nextflow language support to Atom by clicking <a href="atom://settings-view/show-package?package=language-nextflow">here</a>.</p>
+<p>Create some essential files that we will be working on inside your new repository</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="introduction.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> main.nf</span>
+<span id="cb6-2"><a href="introduction.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> nextflow.config</span></code></pre></div>
+</div>
+<div id="getting-started" class="section level2 hasAnchor" number="1.5">
+<h2><span class="header-section-number">1.5</span> Getting started<a href="introduction.html#getting-started" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="nextflow-domain-specific-language-versions" class="section level3 hasAnchor" number="1.5.1">
+<h3><span class="header-section-number">1.5.1</span> Nextflow domain specific language versions<a href="introduction.html#nextflow-domain-specific-language-versions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain Specific Language (DSL) 1.
+A major change in the Nextflow syntax was done by its developers, and the new syntax is referred to as DSL 2.
+In this workshop we will be using exclusively the new DSL2 syntax.</p>
+<p>For this reason, you need to add the following line at the top of your <code>main.nf</code> file</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb7-1"><a href="introduction.html#cb7-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span></code></pre></div>
 
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="additional-resources.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

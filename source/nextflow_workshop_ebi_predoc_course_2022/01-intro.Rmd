@@ -1,4 +1,92 @@
 # Introduction
 
-This chapter is an overview of the methods that
-we propose to solve an **important problem**.
+## Prerequisites
+
+Familiarity with the Linux shell, as well as basic programming constructs such as for/while loops and if/else statements is assumed.
+Familiarity with at least one scripting language such as R or Python will be beneficial.
+A basic knowledge of virtual environments and software containers would be helpful.
+Basic knowledge of git is required.
+
+## What is Nextflow?
+
+[Nextflow](https://www.nextflow.io/index.html) is an open-source workflow manager consisting of a domain specific language built as a superset of the [Groovy](https://groovy-lang.org/) programming language, which is itself a superset of [Java](https://www.java.com/en/).
+The purpose of Nextflow is to make it easier to coordinate the execution of complex [data analysis pipelines](https://www.wikiwand.com/en/Pipeline_(computing)), and to facilitate the execution of such pipelines in [cloud environments](https://www.wikiwand.com/en/Cloud_computing) and [high-performance clusters](https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster).
+
+In practice, Nextflow allows you to declare how the output of some processes in a pipeline are fed as the input of other processes, leading to the production of a final result.
+In addition, Nextflow allows the specification of software requirements for each process using [conda](https://docs.conda.io/en/latest/) environments, [docker](https://www.docker.com/) containers, and a variety of other solutions.
+
+Once a pipeline has been written in Nextflow, it can be easily scaled from a local laptop to a high-performance cluster or cloud environment without any modification, with Nextflow taking care of environment-specific commands (for example, submitting appropriate jobs to a batch scheduler).
+Moreover, the pipeline execution is parallelised if the dependencies among different processes allow it.
+A motivation for using a workflow manager such as Nextflow is also to increase the reproducibility of your data analysis.
+
+Finally, each processes in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.
+
+Nextflow is developed and maintained by [Seqera Labs](https://seqera.io/). The project was started in Cedric Notredame's lab at the Centre for Genomic Regulation ([CRG](https://www.crg.eu/)) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use-case, but it is domain-agnostic and can be used for any data-intensive workflow.
+
+## Learning objectives
+
+After following this tutorial, the learner will be autonomous in using nextflow for their own data analysis.
+They will understand fundamental Nextflow concepts such as processes, workflows, channels, they will be able to write a configuration file to alter the resources allocated for a processes and the software environment of execution, and they will be able to deploy a community-curated pipeline from [nf-core](https://nf-co.re/).
+
+## Setup
+
+Install [mamba](https://github.com/conda-forge/miniforge), a faster alternative to [conda](https://docs.conda.io/en/latest/)
+
+```bash
+curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
+bash Mambaforge-$(uname)-$(uname -m).sh
+```
+
+Setup the shell to use mamba
+
+```bash
+mamba init
+```
+
+Close and re-open your shell.
+Then, create a mamba environment for installing Nextflow
+
+```bash
+mamba create -n nextflow nextflow
+```
+
+Now activate the environment that you just created
+
+```bash
+mamba activate nextflow
+```
+
+Create an empty git repository in your GitHub account and clone it locally.
+I will pretend that this repository is called `my_repo` in this workshop.
+Don't forget to replace this with the name of your actual repository.
+
+Now change directory to the root of the cloned repository.
+
+```bash
+cd my_repo
+```
+
+You can use a text editor of your choice to write Nextflow code.
+For example, you may want to use [Atom](https://flight-manual.atom.io/getting-started/sections/installing-atom/).
+I recommend to add Nextflow language support to Atom by clicking [here](atom://settings-view/show-package?package=language-nextflow).
+
+Create some essential files that we will be working on inside your new repository
+
+```bash
+touch main.nf
+touch nextflow.config
+```
+
+## Getting started
+
+### Nextflow domain specific language versions
+
+Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain Specific Language (DSL) 1.
+A major change in the Nextflow syntax was done by its developers, and the new syntax is referred to as DSL 2.
+In this workshop we will be using exclusively the new DSL2 syntax.
+
+For this reason, you need to add the following line at the top of your `main.nf` file
+
+```groovy
+nextflow.enable.dsl = 2
+```
