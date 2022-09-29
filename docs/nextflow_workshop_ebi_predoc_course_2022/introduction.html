@@ -296,7 +296,7 @@ Code
 <span id="cb9-4"><a href="introduction.html#cb9-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
 <span id="cb9-5"><a href="introduction.html#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
 <span id="cb9-6"><a href="introduction.html#cb9-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb9-7"><a href="introduction.html#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb9-7"><a href="introduction.html#cb9-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
 <span id="cb9-8"><a href="introduction.html#cb9-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
 <span id="cb9-9"><a href="introduction.html#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
 <span id="cb9-10"><a href="introduction.html#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
@@ -308,9 +308,54 @@ Code
 <span id="cb9-16"><a href="introduction.html#cb9-16" aria-hidden="true" tabindex="-1"></a>    say_hello<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
 <span id="cb9-17"><a href="introduction.html#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
+<p>Now open the file <code>nextflow.config</code> and add the following line</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb10-1"><a href="introduction.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb10-2"><a href="introduction.html#cb10-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;~/nextflow_workdir&quot;</span></span></code></pre></div>
 <p>Now run the workflow executing from the root of your repository the following</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="introduction.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="introduction.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf</span></code></pre></div>
 <p>You should see a bunch of information about your workflow and finally you will see the name of the file we just created, <code>hello_world.txt</code>, appear on your terminal.</p>
+<p>Let’s now examine the code step by step:</p>
+<ul>
+<li>In <code>nextflow.config</code> we declared out working directory to be <code>~/nextflow_workdir</code> with the keyword <code>workDir</code>. The working directory is where Nextflow actually stores your files during intermediate processing.</li>
+<li>Lines starting with <code>//</code> define a comment in groovy, and they are ignored.</li>
+<li>The keyword <code>process</code> defines a process, with the statement that follows defining the process name. So <code>process say_hello</code> creates a process named <code>say_hello</code>.</li>
+<li>Curly braces enclose a block of code, so <code>process say_hello {&lt;some code&gt;}</code> is understood by Nextflow as defining <code>&lt;some code&gt;</code> to belong to the process named <code>say_hello</code>.</li>
+<li>The keyword <code>output:</code> when used inside of a process defines the expected outputs that that process should produce. If the declared output is absent at the end of the process’ execution the execution fails.</li>
+<li>Several types of outputs can be defined, and <code>path</code> is one of them. The keyword <code>path</code> defines what comes after it to be a file.</li>
+<li>Output files are named in the output block after the <code>path</code> qualifier. They should be placed inside a string. Strings are enclosed in quotes in groovy (<code>"this is a string"</code>).</li>
+<li>The <code>script:</code> keyword defines the actual command to be executed in the process. The command should be provided as a string. Since commands can be long, here a multi-line string is used. In groovy, multi-line strings are enclosed in there quotes
+<ul>
+<li>What is declared in the <code>script:</code> block is executed in the shell by default, so we should write <a href="https://www.wikiwand.com/en/Bash_(Unix_shell)">bash</a> code there</li>
+<li>The command that we wrote, <code>echo "This is the EBI predoc course" &gt; hello_world.txt</code>, creates a file called <code>hello_world.txt</code> containing the string <code>"This is the EBI predoc course"</code></li>
+</ul>
+<pre><code>&quot;&quot;&quot;
+this is a multi-line string
+it is very long
+&quot;&quot;&quot;</code></pre></li>
+<li>The keyword <code>workflow</code> defines a workflow, that we left unnamed in this case. The last workflow to be written in your <code>main.nf</code> file is automatically executed by Nextflow.
+<ul>
+<li>The workflow that we defined executes the process <code>say_hello</code> that we defined above with the command <code>say_hello()</code>, as if it was a function.</li>
+<li>The output of the process say_hello is captured by <code>say_hello.out</code>, which is a channel. In this case it will contain just the file <code>hello_world.txt</code></li>
+<li>The operator <code>view()</code> just echoes to the terminal the content of the channel. In this case it prints <code>hello_world.txt</code> to our shell.</li>
+</ul></li>
+</ul>
+<p>So to put everything together, when you ran <code>nextflow run main.nf</code> Nextflow read the <code>main.nf</code> file, it found the last workflow, which we left unnamed, and executed it.
+Some additional notes:</p>
+<ul>
+<li>It is possible to write <code>path("a_file.txt")</code> or <code>path a_file.txt</code>, they are equivalent statements</li>
+<li>There is no need to think about where we are creating our files, Nextflow under the hood creates a private directory for each execution and takes care of moving files around as needed by other processes</li>
+<li>It is common practice to chain different operators on a channel. For this reason, it is possible to also write them on separate lines. So the following is equivalent to <code>say_hello.out.view()</code>.
+<ul>
+<li>Note that spaces and <a href="https://www.wikiwand.com/en/Tab_key">tab charachters</a> are just for visual clarity and are not required</li>
+</ul>
+<pre><code>say_hello.out
+  .view()</code></pre></li>
+<li>Explore the working directory <code>~/nextflow_workdir</code>. It contains a directory with a strange alphanumeric name like <code>00/fjdanurew9gihwepw1455idusodhfweioru</code> (NOTE: yours will have a different name). One different directory like this is created by Nextflow for the execution of each task (a task is an instance of a process, a process is the definition itself, while a task is created each time that process is executed on different inputs).
+<ul>
+<li>Inside the directory with the strange name, you will see the file that we just created, <code>hello_world.txt</code></li>
+<li>Read the content of the file with <code>cat hello_world.txt</code>. You should see <code>This is the EBI predoc course</code> in your terminal.</li>
+</ul></li>
+</ul>
 
 </div>
 </div>
