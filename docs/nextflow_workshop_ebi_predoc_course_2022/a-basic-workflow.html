@@ -546,6 +546,13 @@ csv input 2</code></pre>
 <li>We fed the output of <code>duplicate_lines</code> to <code>append_to_file</code>, together with the values in <code>content_ch</code></li>
 <li><code>append_to_file</code> appended the value of <code>content_ch</code> to the output of <code>duplicate_lines</code>, creating the final result</li>
 </ul>
+<p>Note that we introduced a new qualifier: <code>val</code>. The <code>val</code> qualifier specifies a value, differently from the <code>path</code> qualifier that specifies a file. If I write <code>val variable_name</code>, then <code>variable_name</code> can contain something like a string or a number, depending on what is fed to the process input.
+It is also possible to manually create value channels using the channel factory <code>Channel.value</code>.
+So for example the following</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb40-1"><a href="a-basic-workflow.html#cb40-1" aria-hidden="true" tabindex="-1"></a>workflow<span class="op">{</span></span>
+<span id="cb40-2"><a href="a-basic-workflow.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Channel</span><span class="op">.</span><span class="fu">value</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">).</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb40-3"><a href="a-basic-workflow.html#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>This would produce a channel containing in order the values 1, 2, and 3. These would then be printed one by one to the terminal by the view operator.</p>
 
 </div>
 </div>

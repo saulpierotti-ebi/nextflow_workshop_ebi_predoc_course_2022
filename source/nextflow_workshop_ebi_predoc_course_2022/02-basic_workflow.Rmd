@@ -460,3 +460,15 @@ Let's examine what happened:
 - We fed `sample_ch` to `duplicate_lines`
 - We fed the output of `duplicate_lines` to `append_to_file`, together with the values in `content_ch`
 - `append_to_file` appended the value of `content_ch` to the output of `duplicate_lines`, creating the final result
+
+Note that we introduced a new qualifier: `val`. The `val` qualifier specifies a value, differently from the `path` qualifier that specifies a file. If I write `val variable_name`, then `variable_name` can contain something like a string or a number, depending on what is fed to the process input.
+It is also possible to manually create value channels using the channel factory `Channel.value`.
+So for example the following
+
+```groovy
+workflow{
+  Channel.value(1, 2, 3).view()
+}
+```
+
+This would produce a channel containing in order the values 1, 2, and 3. These would then be printed one by one to the terminal by the view operator.
