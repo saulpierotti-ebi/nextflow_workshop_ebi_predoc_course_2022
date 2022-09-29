@@ -1,0 +1,92 @@
+# A basic workflow
+
+Let's now step up a bit the complexity and write a workflow containing two processes that communicate with each other.
+Add the following process to your `main.nf` file.
+
+```groovy
+process duplicate_lines {
+    input:
+        path my_file
+    output:
+        "${my_file.simpleName}.duplicated.txt"
+    script:
+        """
+        cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt
+        """
+}
+```
+
+And modify your workflow block as follows
+
+```groovy
+workflow {
+    say_hello()
+    duplicate_lines( say_hello.out )
+    duplicate_lines.out.view()
+}
+```
+
+If you want to see how your `main.nf` should look like at this stage open this hidden section
+
+
+<details>
+<summary>Code</summary>
+```groovy
+nextflow.enable.dsl = 2
+
+// this is a comment
+process say_hello {
+    // comments can be written anywhere
+    output:
+        path "hello_world.txt"
+    script:
+        """
+        echo "This is the EBI predoc course" > hello_world.txt
+        """
+}
+
+process duplicate_lines {
+    input:
+        path my_file
+    output:
+        "${my_file.simpleName}.duplicated.txt"
+    script:
+        """
+        cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt
+        """
+}
+
+workflow {
+    say_hello()
+    duplicate_lines( say_hello.out )
+    duplicate_lines.out.view()
+}
+```
+</details>
+
+Now run again the workflow with `nextflow run main.nf`.
+This time your workflow should print the name of a file called `hello_world.duplicated.txt`.
+Copy the full path to that file and check its content. Be sure to substitute `<your_directory_name>` with the path that you see on the Nextflow output.
+
+```
+cat <your_directory_name>/hello_world.duplicated.txt
+```
+
+This should print the following to the terminal
+
+```
+This is the EBI predoc course
+This is the EBI predoc course
+```
+
+So as you see, the content of the `hello_world.txt` file that we created before has been duplicated and now appears on two lines.
+
+So let's analyse what happened this time:
+
+- We created another process called `duplicate_lines` which duplicates a given file thanks to its `script` command `cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt`
+- `duplicate_lines` declares an `input:` block. The input block is similar to the output block that we saw before in that it can use the `path` qualifier to declare the input to be a file. However, what comes after `path` does not need to be a real filename, it is just a variable name (note that it is not quoted). Nextflow replace that variable with the real name of the file given in input.
+- In the script and output blocks we can refer to the inputs by specifying `$my_file`. Note that we need to use the same name used in the input declaration.
+  - It is possible to enclose the variable name in curly braces to demark it from other text. So `${my_file}` is equivalent to `$my_file`.
+  - We applied the operator `simpleName` to the variable `$my_file` by writing `${my_file.simpleName}`. This removes the path and the extension from `my_file`, so that we can use it to name our output file (if `$my_file` contains the value `"/some/path/hello_world.txt"`, then `${my_file.simpleName}` contains only `hello_world`).
+- In the workflow block we called the process `duplicate_lines` with `say_hello.out` as an argument. So the output of `say_hello` is used as an input for `duplicate_lines`. Note that the number of arguments provided to a process must match the number of arguments declared in its input block.
+- As before, we use `view()` to see the output of `duplicate_lines` on the terminal.

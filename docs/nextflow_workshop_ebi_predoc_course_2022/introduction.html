@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="additional-resources.html"/>
+<link rel="next" href="a-basic-workflow.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -147,7 +147,8 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="1.5.4" data-path="introduction.html"><a href="introduction.html#your-first-workflow"><i class="fa fa-check"></i><b>1.5.4</b> Your first workflow</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>2</b> Additional resources</a></li>
+<li class="chapter" data-level="2" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html"><i class="fa fa-check"></i><b>2</b> A basic workflow</a></li>
+<li class="chapter" data-level="3" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>3</b> Additional resources</a></li>
 </ul>
 
       </nav>
@@ -316,7 +317,7 @@ Code
 <p>You should see a bunch of information about your workflow and finally you will see the name of the file we just created, <code>hello_world.txt</code>, appear on your terminal.</p>
 <p>Let’s now examine the code step by step:</p>
 <ul>
-<li>In <code>nextflow.config</code> we declared out working directory to be <code>~/nextflow_workdir</code> with the keyword <code>workDir</code>. The working directory is where Nextflow actually stores your files during intermediate processing.</li>
+<li>In <code>nextflow.config</code> we declared our working directory to be <code>~/nextflow_workdir</code> with the keyword <code>workDir</code>. The working directory is where Nextflow actually stores your files during intermediate processing.</li>
 <li>Lines starting with <code>//</code> define a comment in groovy, and they are ignored.</li>
 <li>The keyword <code>process</code> defines a process, with the statement that follows defining the process name. So <code>process say_hello</code> creates a process named <code>say_hello</code>.</li>
 <li>Curly braces enclose a block of code, so <code>process say_hello {&lt;some code&gt;}</code> is understood by Nextflow as defining <code>&lt;some code&gt;</code> to belong to the process named <code>say_hello</code>.</li>
@@ -366,7 +367,7 @@ Some additional notes:</p>
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="additional-resources.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="a-basic-workflow.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

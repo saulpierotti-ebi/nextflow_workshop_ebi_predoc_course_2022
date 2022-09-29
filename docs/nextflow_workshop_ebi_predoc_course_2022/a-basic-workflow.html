@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 A basic workflow | Nextflow workshop - EBI predoc course 2022</title>
+  <meta name="description" content="2 A basic workflow | Nextflow workshop - EBI predoc course 2022" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 A basic workflow | Nextflow workshop - EBI predoc course 2022" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="saulpierotti-ebi/saulpierotti-ebi.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 A basic workflow | Nextflow workshop - EBI predoc course 2022" />
+  
+  
+  
+
+<meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
+
+
+<meta name="date" content="2022-09-29" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="additional-resources.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  { color: #cccccc; background-color: #303030; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffcfaf; } /* Alert */
+code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #dca3a3; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #f0dfaf; } /* ControlFlow */
+code span.ch { color: #dca3a3; } /* Char */
+code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+code span.co { color: #7f9f7f; } /* Comment */
+code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+code span.do { color: #7f9f7f; } /* Documentation */
+code span.dt { color: #dfdfbf; } /* DataType */
+code span.dv { color: #dcdccc; } /* DecVal */
+code span.er { color: #c3bf9f; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #c0bed1; } /* Float */
+code span.fu { color: #efef8f; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+code span.kw { color: #f0dfaf; } /* Keyword */
+code span.op { color: #f0efd0; } /* Operator */
+code span.ot { color: #efef8f; } /* Other */
+code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+code span.sc { color: #dca3a3; } /* SpecialChar */
+code span.ss { color: #cc9393; } /* SpecialString */
+code span.st { color: #cc9393; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #cc9393; } /* VerbatimString */
+code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction to the workshop</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#prerequisites"><i class="fa fa-check"></i><b>1.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#what-is-nextflow"><i class="fa fa-check"></i><b>1.2</b> What is Nextflow?</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#learning-objectives"><i class="fa fa-check"></i><b>1.3</b> Learning objectives</a></li>
+<li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setup</a></li>
+<li class="chapter" data-level="1.5" data-path="introduction.html"><a href="introduction.html#getting-started"><i class="fa fa-check"></i><b>1.5</b> Getting started</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="introduction.html"><a href="introduction.html#general-anatomy-of-a-nextflow-workflow"><i class="fa fa-check"></i><b>1.5.1</b> General anatomy of a Nextflow workflow</a></li>
+<li class="chapter" data-level="1.5.2" data-path="introduction.html"><a href="introduction.html#nextflow-domain-specific-language-versions"><i class="fa fa-check"></i><b>1.5.2</b> Nextflow domain specific language versions</a></li>
+<li class="chapter" data-level="1.5.3" data-path="introduction.html"><a href="introduction.html#core-concepts"><i class="fa fa-check"></i><b>1.5.3</b> Core concepts</a></li>
+<li class="chapter" data-level="1.5.4" data-path="introduction.html"><a href="introduction.html#your-first-workflow"><i class="fa fa-check"></i><b>1.5.4</b> Your first workflow</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html"><i class="fa fa-check"></i><b>2</b> A basic workflow</a></li>
+<li class="chapter" data-level="3" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>3</b> Additional resources</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Nextflow workshop - EBI predoc course 2022</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="a-basic-workflow" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> A basic workflow<a href="a-basic-workflow.html#a-basic-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Let’s now step up a bit the complexity and write a workflow containing two processes that communicate with each other.
+Add the following process to your <code>main.nf</code> file.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb14-1"><a href="a-basic-workflow.html#cb14-1" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
+<span id="cb14-2"><a href="a-basic-workflow.html#cb14-2" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb14-3"><a href="a-basic-workflow.html#cb14-3" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb14-4"><a href="a-basic-workflow.html#cb14-4" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb14-5"><a href="a-basic-workflow.html#cb14-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb14-6"><a href="a-basic-workflow.html#cb14-6" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb14-7"><a href="a-basic-workflow.html#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb14-8"><a href="a-basic-workflow.html#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
+<span id="cb14-9"><a href="a-basic-workflow.html#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb14-10"><a href="a-basic-workflow.html#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>And modify your workflow block as follows</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb15-1"><a href="a-basic-workflow.html#cb15-1" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb15-2"><a href="a-basic-workflow.html#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb15-3"><a href="a-basic-workflow.html#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> say_hello<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb15-4"><a href="a-basic-workflow.html#cb15-4" aria-hidden="true" tabindex="-1"></a>    duplicate_lines<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb15-5"><a href="a-basic-workflow.html#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>main.nf</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb16"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb16-1"><a href="a-basic-workflow.html#cb16-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb16-2"><a href="a-basic-workflow.html#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="a-basic-workflow.html#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb16-4"><a href="a-basic-workflow.html#cb16-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb16-5"><a href="a-basic-workflow.html#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb16-6"><a href="a-basic-workflow.html#cb16-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb16-7"><a href="a-basic-workflow.html#cb16-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb16-8"><a href="a-basic-workflow.html#cb16-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb16-9"><a href="a-basic-workflow.html#cb16-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb16-10"><a href="a-basic-workflow.html#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb16-11"><a href="a-basic-workflow.html#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb16-12"><a href="a-basic-workflow.html#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-13"><a href="a-basic-workflow.html#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="a-basic-workflow.html#cb16-14" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
+<span id="cb16-15"><a href="a-basic-workflow.html#cb16-15" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb16-16"><a href="a-basic-workflow.html#cb16-16" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb16-17"><a href="a-basic-workflow.html#cb16-17" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb16-18"><a href="a-basic-workflow.html#cb16-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb16-19"><a href="a-basic-workflow.html#cb16-19" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb16-20"><a href="a-basic-workflow.html#cb16-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb16-21"><a href="a-basic-workflow.html#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
+<span id="cb16-22"><a href="a-basic-workflow.html#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb16-23"><a href="a-basic-workflow.html#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-24"><a href="a-basic-workflow.html#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="a-basic-workflow.html#cb16-25" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb16-26"><a href="a-basic-workflow.html#cb16-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb16-27"><a href="a-basic-workflow.html#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> say_hello<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb16-28"><a href="a-basic-workflow.html#cb16-28" aria-hidden="true" tabindex="-1"></a>    duplicate_lines<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb16-29"><a href="a-basic-workflow.html#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now run again the workflow with <code>nextflow run main.nf</code>.
+This time your workflow should print the name of a file called <code>hello_world.duplicated.txt</code>.
+Copy the full path to that file and check its content. Be sure to substitute <code>&lt;your_directory_name&gt;</code> with the path that you see on the Nextflow output.</p>
+<pre><code>cat &lt;your_directory_name&gt;/hello_world.duplicated.txt</code></pre>
+<p>This should print the following to the terminal</p>
+<pre><code>This is the EBI predoc course
+This is the EBI predoc course</code></pre>
+<p>So as you see, the content of the <code>hello_world.txt</code> file that we created before has been duplicated and now appears on two lines.</p>
+<p>So let’s analyse what happened this time:</p>
+<ul>
+<li>We created another process called <code>duplicate_lines</code> which duplicates a given file thanks to its <code>script</code> command <code>cat $my_file $my_file &gt; ${my_file.simpleName}.duplicated.txt</code></li>
+<li><code>duplicate_lines</code> declares an <code>input:</code> block. The input block is similar to the output block that we saw before in that it can use the <code>path</code> qualifier to declare the input to be a file. However, what comes after <code>path</code> does not need to be a real filename, it is just a variable name (note that it is not quoted). Nextflow replace that variable with the real name of the file given in input.</li>
+<li>In the script and output blocks we can refer to the inputs by specifying <code>$my_file</code>. Note that we need to use the same name used in the input declaration.
+<ul>
+<li>It is possible to enclose the variable name in curly braces to demark it from other text. So <code>${my_file}</code> is equivalent to <code>$my_file</code>.</li>
+<li>We applied the operator <code>simpleName</code> to the variable <code>$my_file</code> by writing <code>${my_file.simpleName}</code>. This removes the path and the extension from <code>my_file</code>, so that we can use it to name our output file (if <code>$my_file</code> contains the value <code>"/some/path/hello_world.txt"</code>, then <code>${my_file.simpleName}</code> contains only <code>hello_world</code>).</li>
+</ul></li>
+<li>In the workflow block we called the process <code>duplicate_lines</code> with <code>say_hello.out</code> as an argument. So the output of <code>say_hello</code> is used as an input for <code>duplicate_lines</code>. Note that the number of arguments provided to a process must match the number of arguments declared in its input block.</li>
+</ul>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="additional-resources.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "night",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/saulpierotti-ebi/saulpierotti-ebi.github.io/blob/main/source/nextflow_workshop_ebi_predoc_course_2022/02-basic_workflow.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"info": true
+});
+});
+</script>
+
+</body>
+
+</html>
