@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="introduction.html"/>
-<link rel="next" href="additional-resources.html"/>
+<link rel="next" href="a-more-advanced-example.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -153,8 +153,21 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="2.2" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#creating-channels-and-specifying-pipeline-parameters"><i class="fa fa-check"></i><b>2.2</b> Creating channels and specifying pipeline parameters</a></li>
 <li class="chapter" data-level="2.3" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#multiple-input-files"><i class="fa fa-check"></i><b>2.3</b> Multiple input files</a></li>
 <li class="chapter" data-level="2.4" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#using-a-sample-sheet-and-value-channels"><i class="fa fa-check"></i><b>2.4</b> Using a sample sheet and value channels</a></li>
+<li class="chapter" data-level="2.5" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#software-dependencies-and-resource-allocation"><i class="fa fa-check"></i><b>2.5</b> Software dependencies and resource allocation</a></li>
+<li class="chapter" data-level="2.6" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#the-resume-feature"><i class="fa fa-check"></i><b>2.6</b> The resume feature</a></li>
+<li class="chapter" data-level="2.7" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#nf-core-pipelines"><i class="fa fa-check"></i><b>2.7</b> nf-core pipelines</a></li>
+<li class="chapter" data-level="2.8" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#additional-notes"><i class="fa fa-check"></i><b>2.8</b> Additional notes</a></li>
+<li class="chapter" data-level="2.9" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#basic-challenge"><i class="fa fa-check"></i><b>2.9</b> Basic challenge</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>3</b> Additional resources</a></li>
+<li class="chapter" data-level="3" data-path="a-more-advanced-example.html"><a href="a-more-advanced-example.html"><i class="fa fa-check"></i><b>3</b> A more advanced example</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="a-more-advanced-example.html"><a href="a-more-advanced-example.html#some-more-operators"><i class="fa fa-check"></i><b>3.1</b> Some more operators</a></li>
+<li class="chapter" data-level="3.2" data-path="a-more-advanced-example.html"><a href="a-more-advanced-example.html#some-more-directives"><i class="fa fa-check"></i><b>3.2</b> Some more directives</a></li>
+<li class="chapter" data-level="3.3" data-path="a-more-advanced-example.html"><a href="a-more-advanced-example.html#execution-environments"><i class="fa fa-check"></i><b>3.3</b> Execution environments</a></li>
+<li class="chapter" data-level="3.4" data-path="a-more-advanced-example.html"><a href="a-more-advanced-example.html#sub-workflows"><i class="fa fa-check"></i><b>3.4</b> Sub-workflows</a></li>
+<li class="chapter" data-level="3.5" data-path="a-more-advanced-example.html"><a href="a-more-advanced-example.html#nextflow-tower"><i class="fa fa-check"></i><b>3.5</b> Nextflow tower</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>4</b> Additional resources</a></li>
 </ul>
 
       </nav>
@@ -548,11 +561,26 @@ csv input 2</code></pre>
 </ul>
 <p>Note that we introduced a new qualifier: <code>val</code>. The <code>val</code> qualifier specifies a value, differently from the <code>path</code> qualifier that specifies a file. If I write <code>val variable_name</code>, then <code>variable_name</code> can contain something like a string or a number, depending on what is fed to the process input.
 It is also possible to manually create value channels using the channel factory <code>Channel.value</code>.
-So for example the following</p>
+Take as an example the following</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb40-1"><a href="a-basic-workflow.html#cb40-1" aria-hidden="true" tabindex="-1"></a>workflow<span class="op">{</span></span>
 <span id="cb40-2"><a href="a-basic-workflow.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Channel</span><span class="op">.</span><span class="fu">value</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">).</span><span class="fu">view</span><span class="op">()</span></span>
 <span id="cb40-3"><a href="a-basic-workflow.html#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>This would produce a channel containing in order the values 1, 2, and 3. These would then be printed one by one to the terminal by the view operator.</p>
+</div>
+<div id="software-dependencies-and-resource-allocation" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Software dependencies and resource allocation<a href="a-basic-workflow.html#software-dependencies-and-resource-allocation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="the-resume-feature" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> The resume feature<a href="a-basic-workflow.html#the-resume-feature" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="nf-core-pipelines" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> nf-core pipelines<a href="a-basic-workflow.html#nf-core-pipelines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="additional-notes" class="section level2 hasAnchor" number="2.8">
+<h2><span class="header-section-number">2.8</span> Additional notes<a href="a-basic-workflow.html#additional-notes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="basic-challenge" class="section level2 hasAnchor" number="2.9">
+<h2><span class="header-section-number">2.9</span> Basic challenge<a href="a-basic-workflow.html#basic-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
 </div>
@@ -562,7 +590,7 @@ So for example the following</p>
         </div>
       </div>
 <a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="additional-resources.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="a-more-advanced-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

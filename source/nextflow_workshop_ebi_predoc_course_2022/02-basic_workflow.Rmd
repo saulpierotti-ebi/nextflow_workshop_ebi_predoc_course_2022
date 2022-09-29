@@ -463,7 +463,7 @@ Let's examine what happened:
 
 Note that we introduced a new qualifier: `val`. The `val` qualifier specifies a value, differently from the `path` qualifier that specifies a file. If I write `val variable_name`, then `variable_name` can contain something like a string or a number, depending on what is fed to the process input.
 It is also possible to manually create value channels using the channel factory `Channel.value`.
-So for example the following
+Take as an example the following
 
 ```groovy
 workflow{
@@ -472,3 +472,13 @@ workflow{
 ```
 
 This would produce a channel containing in order the values 1, 2, and 3. These would then be printed one by one to the terminal by the view operator.
+
+## Software dependencies and resource allocation
+
+## The resume feature
+
+## nf-core pipelines
+
+## Additional notes
+
+## Basic challenge
