@@ -3,8 +3,12 @@
 Let's now step up a bit the complexity and write a workflow containing two processes that communicate with each other.
 Add the following process to your `main.nf` file.
 
+## Multiple process and publication of workflow outputs
+
 ```groovy
 process duplicate_lines {
+    publishDir "~/nextflow_output/duplicate_lines"
+
     input:
         path my_file
     output:
@@ -22,7 +26,6 @@ And modify your workflow block as follows
 workflow {
     say_hello()
     duplicate_lines( say_hello.out )
-    duplicate_lines.out.view()
 }
 ```
 
@@ -46,6 +49,8 @@ process say_hello {
 }
 
 process duplicate_lines {
+    publishDir "~/nextflow_output/duplicate_lines"
+
     input:
         path my_file
     output:
@@ -59,34 +64,144 @@ process duplicate_lines {
 workflow {
     say_hello()
     duplicate_lines( say_hello.out )
-    duplicate_lines.out.view()
 }
 ```
 </details>
 
 Now run again the workflow with `nextflow run main.nf`.
-This time your workflow should print the name of a file called `hello_world.duplicated.txt`.
-Copy the full path to that file and check its content. Be sure to substitute `<your_directory_name>` with the path that you see on the Nextflow output.
+This time your workflow will not print anything since we omitted the `view()` operator.
+However, if you type in your terminal the following
 
-```
-cat <your_directory_name>/hello_world.duplicated.txt
+```bash
+cat ~/nextflow_output/duplicate_lines/hello_world.duplicated.txt
 ```
 
-This should print the following to the terminal
+You should see the following
 
 ```
 This is the EBI predoc course
 This is the EBI predoc course
 ```
 
-So as you see, the content of the `hello_world.txt` file that we created before has been duplicated and now appears on two lines.
+So as you see, the content of the `hello_world.txt` file that we created before has been duplicated so that it appears twice and it has been placed on a new file, `~/nextflow_output/duplicate_lines/hello_world.duplicated.txt`.
 
-So let's analyse what happened this time:
+Let's analyse what happened this time:
 
 - We created another process called `duplicate_lines` which duplicates a given file thanks to its `script` command `cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt`
 - `duplicate_lines` declares an `input:` block. The input block is similar to the output block that we saw before in that it can use the `path` qualifier to declare the input to be a file. However, what comes after `path` does not need to be a real filename, it is just a variable name (note that it is not quoted). Nextflow replace that variable with the real name of the file given in input.
 - In the script and output blocks we can refer to the inputs by specifying `$my_file`. Note that we need to use the same name used in the input declaration.
   - It is possible to enclose the variable name in curly braces to demark it from other text. So `${my_file}` is equivalent to `$my_file`.
   - We applied the operator `simpleName` to the variable `$my_file` by writing `${my_file.simpleName}`. This removes the path and the extension from `my_file`, so that we can use it to name our output file (if `$my_file` contains the value `"/some/path/hello_world.txt"`, then `${my_file.simpleName}` contains only `hello_world`).
+- We used a new directive in the process `duplicate_lines`, called `publishDir`. This specifies the folder where the output of the process should be placed at the end of the execution. This is usually done to put the final outputs of your workflow in a meaningful directory structure. In our case, `publishDir "~/nextflow_output/duplicate_lines"` places `${my_file.simpleName}.duplicated.txt` in the folder `~/nextflow_output/duplicate_lines`
 - In the workflow block we called the process `duplicate_lines` with `say_hello.out` as an argument. So the output of `say_hello` is used as an input for `duplicate_lines`. Note that the number of arguments provided to a process must match the number of arguments declared in its input block.
-- As before, we use `view()` to see the output of `duplicate_lines` on the terminal.
+
+## Creating channels and specifying pipeline parameters
+
+The workflow that we wrote works as expected but it is not very useful since we cannot specify some input files dynamically for it. We will not learn how to use pipeline parameters to specify an external input file for the whole workflow and how to use channel factories to feed it to our processes.
+
+First create a text file called `~/nextflow_inputs/a_file.txt` containing the string `"This is the file content"`
+
+```bash
+echo "This is the file content" > ~/nextflow_inputs/a_file.txt
+```
+
+Modify the workflow as follows
+
+```groovy
+workflow {
+    Channel.fromPath( params.input_file ).set{ input_ch }
+    duplicate_lines( input_ch )
+}
+```
+
+If you want to see how your `main.nf` should look like at this stage open this hidden section
+
+<details>
+<summary>Code</summary>
+```groovy
+nextflow.enable.dsl = 2
+
+// this is a comment
+process say_hello {
+    // comments can be written anywhere
+    output:
+        path "hello_world.txt"
+    script:
+        """
+        echo "This is the EBI predoc course" > hello_world.txt
+        """
+}
+
+process duplicate_lines {
+    publishDir "~/nextflow_output/duplicate_lines"
+
+    input:
+        path my_file
+    output:
+        "${my_file.simpleName}.duplicated.txt"
+    script:
+        """
+        cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt
+        """
+}
+
+workflow {
+    Channel.fromPath( params.input_file ).set{ input_ch }
+    duplicate_lines( input_ch )
+}
+```
+</details>
+
+Now open the file `nextflow.config` and add the following
+
+```groovy
+params {
+  input_file = "~/nextflow_inputs/new_file.txt"
+}
+```
+
+If you want to see how your `nextflow.config` should look like at this stage open this hidden section
+
+<details>
+<summary>Code</summary>
+```groovy
+// you can also put comments in nextflow.config
+workDir = "~/nextflow_workdir"
+
+params {
+  input_file = "~/nextflow_inputs/new_file.txt"
+}
+```
+</details>
+
+Now run again the workflow with `nextflow run main.nf`.
+This time if you examine the folder `~/nextflow_output/duplicate_lines` you will find a file called `a_file.duplicated.txt`. Let's see it's content.
+
+```bash
+cat ~/nextflow_output/a_file.duplicated.txt
+```
+
+This should print
+
+```
+This is the file content
+This is the file content
+```
+
+So the content of the file that we created before, `a_file.txt` was duplicated and placed in the file `a_file.duplicated.txt` in the folder `~/nextflow_output/duplicate_lines`.
+Let's examine what happened:
+
+- In `nextflow.config`, we declared a `params` block. Any variable written inside this block, like `input_file = "~/nextflow_inputs/new_file.txt"`, is accessible in the workflow by writing `params.<variable_name>`, so `params.input_file` in this case.
+- In `main.nf`, we wrote `Channel.fromPath( params.input_file )`. This uses the channel factory `Channel.fromPath` to create a new channel using the content of `params.input_file`. The `Channel.fromPath` factory interprets its argument to be the path to a file.
+- After `Channel.fromPath( params.input_file )` we added `set{ input_ch }` (note the curly braces: it is a [closure](https://www.wikiwand.com/en/Closure_(computer_programming)), we will explore later what does it mean). This assigns to the newly created channel the name `input_ch`
+- We then used the channel `input_ch` as an input for `duplicate_lines` in `duplicate_lines( input_ch )`. Since `input_ch` contains `params.input_file`, which we declared to be `~/nextflow_inputs/a_file.txt`, this file is given in input to `duplicate_lines`
+- `duplicate_lines` performed its function as before, putting its output in `~/nextflow_output/duplicate_lines`
+
+Instead than hard-coding parameters in `nextflow.config`, it is also possible to pass them on the command line. So for example we could have omitted the `params` block in `nextflow.config` and run
+
+```
+nextflow run main.nf --input_file ~/nextflow_inputs/a_file.txt
+```
+
+This produces the same result. Note that pipeline parameters need to be specified with two prepending dashes (`--my_parameter`).
+This differentiates them from command line options for Nextflow itself, such as `-dry-run`, which use a single dash.

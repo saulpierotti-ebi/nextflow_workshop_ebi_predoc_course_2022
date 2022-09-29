@@ -147,7 +147,11 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="1.5.4" data-path="introduction.html"><a href="introduction.html#your-first-workflow"><i class="fa fa-check"></i><b>1.5.4</b> Your first workflow</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html"><i class="fa fa-check"></i><b>2</b> A basic workflow</a></li>
+<li class="chapter" data-level="2" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html"><i class="fa fa-check"></i><b>2</b> A basic workflow</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#multiple-process-and-publication-of-workflow-outputs"><i class="fa fa-check"></i><b>2.1</b> Multiple process and publication of workflow outputs</a></li>
+<li class="chapter" data-level="2.2" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#creating-channels-and-specifying-pipeline-parameters"><i class="fa fa-check"></i><b>2.2</b> Creating channels and specifying pipeline parameters</a></li>
+</ul></li>
 <li class="chapter" data-level="3" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>3</b> Additional resources</a></li>
 </ul>
 
@@ -170,22 +174,25 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <h1><span class="header-section-number">2</span> A basic workflow<a href="a-basic-workflow.html#a-basic-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Let’s now step up a bit the complexity and write a workflow containing two processes that communicate with each other.
 Add the following process to your <code>main.nf</code> file.</p>
+<div id="multiple-process-and-publication-of-workflow-outputs" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Multiple process and publication of workflow outputs<a href="a-basic-workflow.html#multiple-process-and-publication-of-workflow-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb14"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb14-1"><a href="a-basic-workflow.html#cb14-1" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
-<span id="cb14-2"><a href="a-basic-workflow.html#cb14-2" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
-<span id="cb14-3"><a href="a-basic-workflow.html#cb14-3" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
-<span id="cb14-4"><a href="a-basic-workflow.html#cb14-4" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb14-5"><a href="a-basic-workflow.html#cb14-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
-<span id="cb14-6"><a href="a-basic-workflow.html#cb14-6" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb14-7"><a href="a-basic-workflow.html#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb14-8"><a href="a-basic-workflow.html#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
-<span id="cb14-9"><a href="a-basic-workflow.html#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb14-10"><a href="a-basic-workflow.html#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb14-2"><a href="a-basic-workflow.html#cb14-2" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;~/nextflow_output/duplicate_lines&quot;</span></span>
+<span id="cb14-3"><a href="a-basic-workflow.html#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="a-basic-workflow.html#cb14-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb14-5"><a href="a-basic-workflow.html#cb14-5" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb14-6"><a href="a-basic-workflow.html#cb14-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb14-7"><a href="a-basic-workflow.html#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb14-8"><a href="a-basic-workflow.html#cb14-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb14-9"><a href="a-basic-workflow.html#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb14-10"><a href="a-basic-workflow.html#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
+<span id="cb14-11"><a href="a-basic-workflow.html#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb14-12"><a href="a-basic-workflow.html#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>And modify your workflow block as follows</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb15-1"><a href="a-basic-workflow.html#cb15-1" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
 <span id="cb15-2"><a href="a-basic-workflow.html#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
 <span id="cb15-3"><a href="a-basic-workflow.html#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> say_hello<span class="op">.</span>out <span class="op">)</span></span>
-<span id="cb15-4"><a href="a-basic-workflow.html#cb15-4" aria-hidden="true" tabindex="-1"></a>    duplicate_lines<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
-<span id="cb15-5"><a href="a-basic-workflow.html#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb15-4"><a href="a-basic-workflow.html#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>If you want to see how your <code>main.nf</code> should look like at this stage open this hidden section</p>
 <details>
 <summary>
@@ -205,31 +212,32 @@ Code
 <span id="cb16-12"><a href="a-basic-workflow.html#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb16-13"><a href="a-basic-workflow.html#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-14"><a href="a-basic-workflow.html#cb16-14" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
-<span id="cb16-15"><a href="a-basic-workflow.html#cb16-15" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
-<span id="cb16-16"><a href="a-basic-workflow.html#cb16-16" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
-<span id="cb16-17"><a href="a-basic-workflow.html#cb16-17" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb16-18"><a href="a-basic-workflow.html#cb16-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
-<span id="cb16-19"><a href="a-basic-workflow.html#cb16-19" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb16-20"><a href="a-basic-workflow.html#cb16-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb16-21"><a href="a-basic-workflow.html#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
-<span id="cb16-22"><a href="a-basic-workflow.html#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb16-23"><a href="a-basic-workflow.html#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb16-24"><a href="a-basic-workflow.html#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-25"><a href="a-basic-workflow.html#cb16-25" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
-<span id="cb16-26"><a href="a-basic-workflow.html#cb16-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
-<span id="cb16-27"><a href="a-basic-workflow.html#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> say_hello<span class="op">.</span>out <span class="op">)</span></span>
-<span id="cb16-28"><a href="a-basic-workflow.html#cb16-28" aria-hidden="true" tabindex="-1"></a>    duplicate_lines<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
-<span id="cb16-29"><a href="a-basic-workflow.html#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb16-15"><a href="a-basic-workflow.html#cb16-15" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;~/nextflow_output/duplicate_lines&quot;</span></span>
+<span id="cb16-16"><a href="a-basic-workflow.html#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="a-basic-workflow.html#cb16-17" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb16-18"><a href="a-basic-workflow.html#cb16-18" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb16-19"><a href="a-basic-workflow.html#cb16-19" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb16-20"><a href="a-basic-workflow.html#cb16-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb16-21"><a href="a-basic-workflow.html#cb16-21" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb16-22"><a href="a-basic-workflow.html#cb16-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb16-23"><a href="a-basic-workflow.html#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
+<span id="cb16-24"><a href="a-basic-workflow.html#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb16-25"><a href="a-basic-workflow.html#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-26"><a href="a-basic-workflow.html#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="a-basic-workflow.html#cb16-27" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb16-28"><a href="a-basic-workflow.html#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb16-29"><a href="a-basic-workflow.html#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> say_hello<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb16-30"><a href="a-basic-workflow.html#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
 <p>Now run again the workflow with <code>nextflow run main.nf</code>.
-This time your workflow should print the name of a file called <code>hello_world.duplicated.txt</code>.
-Copy the full path to that file and check its content. Be sure to substitute <code>&lt;your_directory_name&gt;</code> with the path that you see on the Nextflow output.</p>
-<pre><code>cat &lt;your_directory_name&gt;/hello_world.duplicated.txt</code></pre>
-<p>This should print the following to the terminal</p>
+This time your workflow will not print anything since we omitted the <code>view()</code> operator.
+However, if you type in your terminal the following</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="a-basic-workflow.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/nextflow_output/duplicate_lines/hello_world.duplicated.txt</span></code></pre></div>
+<p>You should see the following</p>
 <pre><code>This is the EBI predoc course
 This is the EBI predoc course</code></pre>
-<p>So as you see, the content of the <code>hello_world.txt</code> file that we created before has been duplicated and now appears on two lines.</p>
-<p>So let’s analyse what happened this time:</p>
+<p>So as you see, the content of the <code>hello_world.txt</code> file that we created before has been duplicated so that it appears twice and it has been placed on a new file, <code>~/nextflow_output/duplicate_lines/hello_world.duplicated.txt</code>.</p>
+<p>Let’s analyse what happened this time:</p>
 <ul>
 <li>We created another process called <code>duplicate_lines</code> which duplicates a given file thanks to its <code>script</code> command <code>cat $my_file $my_file &gt; ${my_file.simpleName}.duplicated.txt</code></li>
 <li><code>duplicate_lines</code> declares an <code>input:</code> block. The input block is similar to the output block that we saw before in that it can use the <code>path</code> qualifier to declare the input to be a file. However, what comes after <code>path</code> does not need to be a real filename, it is just a variable name (note that it is not quoted). Nextflow replace that variable with the real name of the file given in input.</li>
@@ -238,9 +246,93 @@ This is the EBI predoc course</code></pre>
 <li>It is possible to enclose the variable name in curly braces to demark it from other text. So <code>${my_file}</code> is equivalent to <code>$my_file</code>.</li>
 <li>We applied the operator <code>simpleName</code> to the variable <code>$my_file</code> by writing <code>${my_file.simpleName}</code>. This removes the path and the extension from <code>my_file</code>, so that we can use it to name our output file (if <code>$my_file</code> contains the value <code>"/some/path/hello_world.txt"</code>, then <code>${my_file.simpleName}</code> contains only <code>hello_world</code>).</li>
 </ul></li>
+<li>We used a new directive in the process <code>duplicate_lines</code>, called <code>publishDir</code>. This specifies the folder where the output of the process should be placed at the end of the execution. This is usually done to put the final outputs of your workflow in a meaningful directory structure. In our case, <code>publishDir "~/nextflow_output/duplicate_lines"</code> places <code>${my_file.simpleName}.duplicated.txt</code> in the folder <code>~/nextflow_output/duplicate_lines</code></li>
 <li>In the workflow block we called the process <code>duplicate_lines</code> with <code>say_hello.out</code> as an argument. So the output of <code>say_hello</code> is used as an input for <code>duplicate_lines</code>. Note that the number of arguments provided to a process must match the number of arguments declared in its input block.</li>
 </ul>
+</div>
+<div id="creating-channels-and-specifying-pipeline-parameters" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Creating channels and specifying pipeline parameters<a href="a-basic-workflow.html#creating-channels-and-specifying-pipeline-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The workflow that we wrote works as expected but it is not very useful since we cannot specify some input files dynamically for it. We will not learn how to use pipeline parameters to specify an external input file for the whole workflow and how to use channel factories to feed it to our processes.</p>
+<p>First create a text file called <code>~/nextflow_inputs/a_file.txt</code> containing the string <code>"This is the file content"</code></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="a-basic-workflow.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is the file content&quot;</span> <span class="op">&gt;</span> ~/nextflow_inputs/a_file.txt</span></code></pre></div>
+<p>Modify the workflow as follows</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb20-1"><a href="a-basic-workflow.html#cb20-1" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb20-2"><a href="a-basic-workflow.html#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>input_file <span class="op">).</span><span class="fu">set</span><span class="op">{</span> input_ch <span class="op">}</span></span>
+<span id="cb20-3"><a href="a-basic-workflow.html#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> input_ch <span class="op">)</span></span>
+<span id="cb20-4"><a href="a-basic-workflow.html#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>main.nf</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb21"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb21-1"><a href="a-basic-workflow.html#cb21-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb21-2"><a href="a-basic-workflow.html#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="a-basic-workflow.html#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb21-4"><a href="a-basic-workflow.html#cb21-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb21-5"><a href="a-basic-workflow.html#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb21-6"><a href="a-basic-workflow.html#cb21-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb21-7"><a href="a-basic-workflow.html#cb21-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb21-8"><a href="a-basic-workflow.html#cb21-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb21-9"><a href="a-basic-workflow.html#cb21-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb21-10"><a href="a-basic-workflow.html#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb21-11"><a href="a-basic-workflow.html#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb21-12"><a href="a-basic-workflow.html#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb21-13"><a href="a-basic-workflow.html#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="a-basic-workflow.html#cb21-14" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
+<span id="cb21-15"><a href="a-basic-workflow.html#cb21-15" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;~/nextflow_output/duplicate_lines&quot;</span></span>
+<span id="cb21-16"><a href="a-basic-workflow.html#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="a-basic-workflow.html#cb21-17" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb21-18"><a href="a-basic-workflow.html#cb21-18" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb21-19"><a href="a-basic-workflow.html#cb21-19" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb21-20"><a href="a-basic-workflow.html#cb21-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb21-21"><a href="a-basic-workflow.html#cb21-21" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb21-22"><a href="a-basic-workflow.html#cb21-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb21-23"><a href="a-basic-workflow.html#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
+<span id="cb21-24"><a href="a-basic-workflow.html#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb21-25"><a href="a-basic-workflow.html#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb21-26"><a href="a-basic-workflow.html#cb21-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-27"><a href="a-basic-workflow.html#cb21-27" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb21-28"><a href="a-basic-workflow.html#cb21-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>input_file <span class="op">).</span><span class="fu">set</span><span class="op">{</span> input_ch <span class="op">}</span></span>
+<span id="cb21-29"><a href="a-basic-workflow.html#cb21-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> input_ch <span class="op">)</span></span>
+<span id="cb21-30"><a href="a-basic-workflow.html#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now open the file <code>nextflow.config</code> and add the following</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb22-1"><a href="a-basic-workflow.html#cb22-1" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb22-2"><a href="a-basic-workflow.html#cb22-2" aria-hidden="true" tabindex="-1"></a>  input_file <span class="op">=</span> <span class="st">&quot;~/nextflow_inputs/new_file.txt&quot;</span></span>
+<span id="cb22-3"><a href="a-basic-workflow.html#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>nextflow.config</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb23"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb23-1"><a href="a-basic-workflow.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb23-2"><a href="a-basic-workflow.html#cb23-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;~/nextflow_workdir&quot;</span></span>
+<span id="cb23-3"><a href="a-basic-workflow.html#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="a-basic-workflow.html#cb23-4" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb23-5"><a href="a-basic-workflow.html#cb23-5" aria-hidden="true" tabindex="-1"></a>  input_file <span class="op">=</span> <span class="st">&quot;~/nextflow_inputs/new_file.txt&quot;</span></span>
+<span id="cb23-6"><a href="a-basic-workflow.html#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now run again the workflow with <code>nextflow run main.nf</code>.
+This time if you examine the folder <code>~/nextflow_output/duplicate_lines</code> you will find a file called <code>a_file.duplicated.txt</code>. Let’s see it’s content.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="a-basic-workflow.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/nextflow_output/a_file.duplicated.txt</span></code></pre></div>
+<p>This should print</p>
+<pre><code>This is the file content
+This is the file content</code></pre>
+<p>So the content of the file that we created before, <code>a_file.txt</code> was duplicated and placed in the file <code>a_file.duplicated.txt</code> in the folder <code>~/nextflow_output/duplicate_lines</code>.
+Let’s examine what happened:</p>
+<ul>
+<li>In <code>nextflow.config</code>, we declared a <code>params</code> block. Any variable written inside this block, like <code>input_file = "~/nextflow_inputs/new_file.txt"</code>, is accessible in the workflow by writing <code>params.&lt;variable_name&gt;</code>, so <code>params.input_file</code> in this case.</li>
+<li>In <code>main.nf</code>, we wrote <code>Channel.fromPath( params.input_file )</code>. This uses the channel factory <code>Channel.fromPath</code> to create a new channel using the content of <code>params.input_file</code>. The <code>Channel.fromPath</code> factory interprets its argument to be the path to a file.</li>
+<li>After <code>Channel.fromPath( params.input_file )</code> we added <code>set{ input_ch }</code> (note the curly braces: it is a <a href="https://www.wikiwand.com/en/Closure_(computer_programming)">closure</a>, we will explore later what does it mean). This assigns to the newly created channel the name <code>input_ch</code></li>
+<li>We then used the channel <code>input_ch</code> as an input for <code>duplicate_lines</code> in <code>duplicate_lines( input_ch )</code>. Since <code>input_ch</code> contains <code>params.input_file</code>, which we declared to be <code>~/nextflow_inputs/a_file.txt</code>, this file is given in input to <code>duplicate_lines</code></li>
+<li><code>duplicate_lines</code> performed its function as before, putting its output in <code>~/nextflow_output/duplicate_lines</code></li>
+</ul>
+<p>Instead than hard-coding parameters in <code>nextflow.config</code>, it is also possible to pass them on the command line. So for example we could have omitted the <code>params</code> block in <code>nextflow.config</code> and run</p>
+<pre><code>nextflow run main.nf --input_file ~/nextflow_inputs/a_file.txt</code></pre>
+<p>This produces the same result. Note that pipeline parameters need to be specified with two prepending dashes (<code>--my_parameter</code>).
+This differentiates them from command line options for Nextflow itself, such as <code>-dry-run</code>, which use a single dash.</p>
 
+</div>
 </div>
             </section>
 

@@ -9,4 +9,6 @@ nextflow-domain-specific-language-versions
 core-concepts
 your-first-workflow
 a-basic-workflow
+multiple-process-and-publication-of-workflow-outputs
+creating-channels-and-specifying-pipeline-parameters
 additional-resources
