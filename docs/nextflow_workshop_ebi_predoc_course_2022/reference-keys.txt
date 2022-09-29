@@ -11,4 +11,5 @@ your-first-workflow
 a-basic-workflow
 multiple-process-and-publication-of-workflow-outputs
 creating-channels-and-specifying-pipeline-parameters
+multiple-input-files
 additional-resources

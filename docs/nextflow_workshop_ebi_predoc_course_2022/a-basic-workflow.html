@@ -151,6 +151,7 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <ul>
 <li class="chapter" data-level="2.1" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#multiple-process-and-publication-of-workflow-outputs"><i class="fa fa-check"></i><b>2.1</b> Multiple process and publication of workflow outputs</a></li>
 <li class="chapter" data-level="2.2" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#creating-channels-and-specifying-pipeline-parameters"><i class="fa fa-check"></i><b>2.2</b> Creating channels and specifying pipeline parameters</a></li>
+<li class="chapter" data-level="2.3" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#multiple-input-files"><i class="fa fa-check"></i><b>2.3</b> Multiple input files</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>3</b> Additional resources</a></li>
 </ul>
@@ -331,6 +332,42 @@ Let’s examine what happened:</p>
 <pre><code>nextflow run main.nf --input_file ~/nextflow_inputs/a_file.txt</code></pre>
 <p>This produces the same result. Note that pipeline parameters need to be specified with two prepending dashes (<code>--my_parameter</code>).
 This differentiates them from command line options for Nextflow itself, such as <code>-dry-run</code>, which use a single dash.</p>
+</div>
+<div id="multiple-input-files" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Multiple input files<a href="a-basic-workflow.html#multiple-input-files" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We are now able to process a single file with our pipeline, but what if we have many files that we need to process in the same way?
+One approach for this is to use a <a href="https://www.wikiwand.com/en/Glob_(programming)">glob pattern</a> as an input.</p>
+<p>Let’s create a bunch of files to use in input</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="a-basic-workflow.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 1&quot;</span> <span class="op">&gt;</span> ~/nextflow_inputs/set_of_files_1.txt</span>
+<span id="cb27-2"><a href="a-basic-workflow.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 2&quot;</span> <span class="op">&gt;</span> ~/nextflow_inputs/set_of_files_2.txt</span>
+<span id="cb27-3"><a href="a-basic-workflow.html#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 3&quot;</span> <span class="op">&gt;</span> ~/nextflow_inputs/set_of_files_3.txt</span>
+<span id="cb27-4"><a href="a-basic-workflow.html#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 4&quot;</span> <span class="op">&gt;</span> ~/nextflow_inputs/set_of_files_4.txt</span>
+<span id="cb27-5"><a href="a-basic-workflow.html#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 5&quot;</span> <span class="op">&gt;</span> ~/nextflow_inputs/set_of_files_5.txt</span>
+<span id="cb27-6"><a href="a-basic-workflow.html#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 6&quot;</span> <span class="op">&gt;</span> ~/nextflow_inputs/set_of_files_6.txt</span>
+<span id="cb27-7"><a href="a-basic-workflow.html#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 7&quot;</span> <span class="op">&gt;</span> ~/nextflow_inputs/set_of_files_7.txt</span>
+<span id="cb27-8"><a href="a-basic-workflow.html#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 8&quot;</span> <span class="op">&gt;</span> ~/nextflow_inputs/set_of_files_8.txt</span></code></pre></div>
+<p>Now we just need to modify <code>input_file</code> in <code>nextflow.config</code></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb28-1"><a href="a-basic-workflow.html#cb28-1" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb28-2"><a href="a-basic-workflow.html#cb28-2" aria-hidden="true" tabindex="-1"></a>  input_ch <span class="op">=</span> <span class="st">&quot;~/nextflow_inputs/set_of_files_*.txt&quot;</span></span>
+<span id="cb28-3"><a href="a-basic-workflow.html#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Now run again the workflow with <code>nextflow run main.nf</code>.
+This time if you examine the output folder with <code>ls ~/nextflow_output/duplicate_lines</code> you will find a set of files</p>
+<pre><code>a_file.duplicated.txt
+set_of_files_1.duplicated.txt
+set_of_files_2.duplicated.txt
+set_of_files_3.duplicated.txt
+set_of_files_4.duplicated.txt
+set_of_files_5.duplicated.txt
+set_of_files_6.duplicated.txt
+set_of_files_7.duplicated.txt
+set_of_files_8.duplicated.txt</code></pre>
+<p>Like before, each of them will contain the duplicated version of the original files.</p>
+<p>Let’s examine what happened:</p>
+<ul>
+<li>We changed <code>params.input_ch</code> to contain a glob pattern. This is expanded by Nextflow to yield a list of matching files.</li>
+<li>The matching files are fed one by one via the channel <code>input_ch</code> to the process <code>duplicate_lines</code></li>
+<li><code>duplicate_lines</code> operates independently but in parallel on all the inputs, producing the output files. Each task is executed in its own private directory.</li>
+</ul>
 
 </div>
 </div>

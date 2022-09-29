@@ -205,3 +205,52 @@ nextflow run main.nf --input_file ~/nextflow_inputs/a_file.txt
 
 This produces the same result. Note that pipeline parameters need to be specified with two prepending dashes (`--my_parameter`).
 This differentiates them from command line options for Nextflow itself, such as `-dry-run`, which use a single dash.
+
+## Multiple input files
+
+We are now able to process a single file with our pipeline, but what if we have many files that we need to process in the same way?
+One approach for this is to use a [glob pattern](https://www.wikiwand.com/en/Glob_(programming)) as an input.
+
+Let's create a bunch of files to use in input
+
+```bash
+echo "This is content of file 1" > ~/nextflow_inputs/set_of_files_1.txt
+echo "This is content of file 2" > ~/nextflow_inputs/set_of_files_2.txt
+echo "This is content of file 3" > ~/nextflow_inputs/set_of_files_3.txt
+echo "This is content of file 4" > ~/nextflow_inputs/set_of_files_4.txt
+echo "This is content of file 5" > ~/nextflow_inputs/set_of_files_5.txt
+echo "This is content of file 6" > ~/nextflow_inputs/set_of_files_6.txt
+echo "This is content of file 7" > ~/nextflow_inputs/set_of_files_7.txt
+echo "This is content of file 8" > ~/nextflow_inputs/set_of_files_8.txt
+```
+
+Now we just need to modify `input_file` in `nextflow.config`
+
+```groovy
+params {
+  input_ch = "~/nextflow_inputs/set_of_files_*.txt"
+}
+```
+
+Now run again the workflow with `nextflow run main.nf`.
+This time if you examine the output folder with `ls ~/nextflow_output/duplicate_lines` you will find a set of files
+
+```
+a_file.duplicated.txt
+set_of_files_1.duplicated.txt
+set_of_files_2.duplicated.txt
+set_of_files_3.duplicated.txt
+set_of_files_4.duplicated.txt
+set_of_files_5.duplicated.txt
+set_of_files_6.duplicated.txt
+set_of_files_7.duplicated.txt
+set_of_files_8.duplicated.txt
+```
+
+Like before, each of them will contain the duplicated version of the original files.
+
+Let's examine what happened:
+
+- We changed `params.input_ch` to contain a glob pattern. This is expanded by Nextflow to yield a list of matching files.
+- The matching files are fed one by one via the channel `input_ch` to the process `duplicate_lines`
+- `duplicate_lines` operates independently but in parallel on all the inputs, producing the output files. Each task is executed in its own private directory.
