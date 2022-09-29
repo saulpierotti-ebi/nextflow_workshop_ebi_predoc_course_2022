@@ -24,4 +24,5 @@ some-more-directives
 execution-environments
 sub-workflows
 nextflow-tower
+advanced-challenge
 additional-resources
