@@ -521,7 +521,30 @@ This is content of file 2
 csv input 2</code></pre>
 <p>Let’s examine what happened:</p>
 <ul>
-<li>aaa</li>
+<li>We created the process <code>append_to_file</code>, which takes in input a file (<code>path my_file</code>) and a value (<code>val my_val</code>). This process copies the content of <code>my_file</code> to <code>${my_file.simpleName}.append_to_file.txt</code> and then appends to the newly created file the content of <code>my_val</code></li>
+<li>We defined the parameter <code>samplesheet</code> in <code>nextflow.config</code></li>
+<li>We modified the workflow so that we use <code>params.samplesheet</code> to create a channel with <code>Channel.fromPath</code></li>
+<li>We applied the operator <code>splitCsv</code> to this channel containing the samplesheet, using the option <code>header: true</code>. This operator reads the file contained in the channel assuming it to be a csv file with an header line. Then it produces in output another channel containing, for each row in the samplesheet, a groovy map (what in Python would be called a <a href="https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_data_structures/Dictionaries">dictionary</a>). This map contains a key for each element in the csv header, and a value corresponding to the value of that column in the current line of the csv file.</li>
+<li>We apply the <code>map</code> operator (<code>.map{ it["sample"] }</code>) to the resulting channel
+<ul>
+<li>The map operator is follwed by a <a href="https://www.wikiwand.com/en/Closure_(computer_programming)">closure</a> (<code>{ it["sample"] }</code>)</li>
+<li>You can think of a closure as an unnamed function (like a lambda function in Python)</li>
+<li>The <code>map</code> operator calls this unnamed function for each element in the channel, and creates another channel containing the respective function outputs</li>
+<li>Closure understand the implicit variable <code>it</code>, which represents whatever imput is given to the function</li>
+<li>If an explicit return statement is not present in the closure, the last evaluated expression is returned by the closure ( <code>it["sample"]</code> in this case)</li>
+</ul></li>
+<li>Since <code>splitCsv</code> created a dictionary for each item in the samplesheet, <code>map{ it["sample"] }</code> replaces that dictionary (<code>it</code> in the closure) with the content of the value contained in it under the key <code>"sample"</code></li>
+<li><code>input_ch</code> is used again in <code>input_ch.map{ it["content"] }.set{ content_ch }</code> to extract the value of <code>content</code> for each sample from the samplesheet
+<ul>
+<li>Channels can be used many times, and each time all the files contained in it are processed. So both <code>input_ch.map{ it["content"] }.set{ content_ch }</code> and <code>input_ch.map{ it["sample"] }.set{ sample_ch }</code> process every element in <code>input_ch</code></li>
+</ul></li>
+<li>We created the channels <code>sample_ch</code> and <code>content_ch</code> using the <code>set</code> operator. They contain respectively the sample files and the <code>content</code> values related to them.
+<ul>
+<li>The order of processing in a channel is guaranteed, so we can be sure that each sample will be paired with the correct <code>content</code> value</li>
+</ul></li>
+<li>We fed <code>sample_ch</code> to <code>duplicate_lines</code></li>
+<li>We fed the output of <code>duplicate_lines</code> to <code>append_to_file</code>, together with the values in <code>content_ch</code></li>
+<li><code>append_to_file</code> appended the value of <code>content_ch</code> to the output of <code>duplicate_lines</code>, creating the final result</li>
 </ul>
 
 </div>

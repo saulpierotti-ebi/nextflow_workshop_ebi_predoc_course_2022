@@ -442,4 +442,21 @@ csv input 2
 
 Let's examine what happened:
 
-- aaa
+- We created the process `append_to_file`, which takes in input a file (`path my_file`) and a value (`val my_val`). This process copies the content of `my_file` to `${my_file.simpleName}.append_to_file.txt` and then appends to the newly created file the content of `my_val`
+- We defined the parameter `samplesheet` in `nextflow.config`
+- We modified the workflow so that we use `params.samplesheet` to create a channel with `Channel.fromPath`
+- We applied the operator `splitCsv` to this channel containing the samplesheet, using the option `header: true`. This operator reads the file contained in the channel assuming it to be a csv file with an header line. Then it produces in output another channel containing, for each row in the samplesheet, a groovy map (what in Python would be called a [dictionary](https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_data_structures/Dictionaries)). This map contains a key for each element in the csv header, and a value corresponding to the value of that column in the current line of the csv file.
+- We apply the `map` operator (`.map{ it["sample"] }`) to the resulting channel
+  - The map operator is follwed by a [closure](https://www.wikiwand.com/en/Closure_(computer_programming)) (`{ it["sample"] }`)
+  - You can think of a closure as an unnamed function (like a lambda function in Python)
+  - The `map` operator calls this unnamed function for each element in the channel, and creates another channel containing the respective function outputs
+  - Closure understand the implicit variable `it`, which represents whatever imput is given to the function
+  - If an explicit return statement is not present in the closure, the last evaluated expression is returned by the closure ( `it["sample"]` in this case)
+- Since `splitCsv` created a dictionary for each item in the samplesheet, `map{ it["sample"] }` replaces that dictionary (`it` in the closure) with the content of the value contained in it under the key `"sample"`
+- `input_ch` is used again in `input_ch.map{ it["content"] }.set{ content_ch }` to extract the value of `content` for each sample from the samplesheet
+  - Channels can be used many times, and each time all the files contained in it are processed. So both `input_ch.map{ it["content"] }.set{ content_ch }` and `input_ch.map{ it["sample"] }.set{ sample_ch }` process every element in `input_ch`
+- We created the channels `sample_ch` and `content_ch` using the `set` operator. They contain respectively the sample files and the `content` values related to them.
+  - The order of processing in a channel is guaranteed, so we can be sure that each sample will be paired with the correct `content` value
+- We fed `sample_ch` to `duplicate_lines`
+- We fed the output of `duplicate_lines` to `append_to_file`, together with the values in `content_ch`
+- `append_to_file` appended the value of `content_ch` to the output of `duplicate_lines`, creating the final result
