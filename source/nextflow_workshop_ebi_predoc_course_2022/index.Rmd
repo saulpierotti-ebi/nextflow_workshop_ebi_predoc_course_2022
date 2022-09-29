@@ -4,13 +4,12 @@ author: "Saul Pierotti, PhD student in the Birney group (European Bioinformatics
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
 link-citations: yes
 colorlinks: yes
+github-repo: "saulpierotti-ebi/saulpierotti-ebi.github.io"
+url: "https\\://saulpierotti-ebi.github.io/nextflow_workshop_ebi_predoc_course_2022/"
 lot: yes
 lof: yes
 fontsize: 12pt
 site: bookdown::bookdown_site
-documentclass: krantz
-output:
-  bookdown::gitbook: default
 ---
 
 # Introduction to the workshop {-}
@@ -21,3 +20,5 @@ I hope that you will find it useful, and in any case I would be happy to hear yo
 You can contact me at [saul@ebi.ac.uk](mailto:saul@ebi.ac.uk).
 
 The workshop is written with an increasing level of difficulty, so feel free to skip what is too easy for you or stop when things become too complex.
+
+Finally, I wanted to point out that in this workshop I am using the words "pipeline" and "workflow" interchangeably, so consider them as equivalent.

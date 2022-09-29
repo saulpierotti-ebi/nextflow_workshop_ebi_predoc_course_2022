@@ -1,0 +1,33 @@
+bookdown::gitbook:
+  code_folding: null
+  highlight: zenburn
+  config:
+    toc:
+      collapse: subsection
+      scroll_highlight: true
+      before: null
+      after: null
+    toolbar:
+      position: fixed
+    edit : "https://github.com/saulpierotti-ebi/saulpierotti-ebi.github.io/blob/main/source/nextflow_workshop_ebi_predoc_course_2022/%s"
+    download: null
+    search:
+      engine: lunr # or fuse
+      # options to control/tune search engine behavior (for
+      # fuse.js, refer to https://fusejs.io/api/options.html)
+      options: null
+    fontsettings:
+      theme: night
+      family: sans
+      size: 2
+    sharing:
+      facebook: true
+      github: true
+      twitter: true
+      linkedin: false
+      weibo: false
+      instapaper: false
+      vk: false
+      whatsapp: false
+      all: ['facebook', 'twitter', 'linkedin', 'weibo', 'instapaper']
+    info: true

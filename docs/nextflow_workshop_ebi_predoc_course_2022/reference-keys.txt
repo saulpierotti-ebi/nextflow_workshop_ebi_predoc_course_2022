@@ -2,7 +2,10 @@ introduction
 prerequisites
 what-is-nextflow
 learning-objectives
-additional-resources
 setup
 getting-started
+general-anatomy-of-a-nextflow-workflow
 nextflow-domain-specific-language-versions
+core-concepts
+your-first-workflow
+additional-resources

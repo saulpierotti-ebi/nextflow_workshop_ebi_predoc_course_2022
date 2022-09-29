@@ -60,7 +60,6 @@ Create an empty git repository in your GitHub account and clone it locally.
 I will pretend that this repository is called `my_repo` in this workshop.
 Don't forget to replace this with the name of your actual repository.
 
-Now change directory to the root of the cloned repository.
 
 ```bash
 cd my_repo
@@ -79,14 +78,126 @@ touch nextflow.config
 
 ## Getting started
 
+### General anatomy of a Nextflow workflow
+
+A Nextflow workflow is usually represented by a git repository containing all the files describing the workflow logic, configurations, and dependencies.
+
+Text files containing Nextflow code usually have the `.nf` extension (i.e. `my_file.nf`).
+It does not really matter how you name your files, as long as they contain valid Nextflow code, but for consistency the best practice is to call the file describing the workflow as `main.nf` and place it at the root of your repository.
+
+The `main.nf` file can access code from other Nextflow scripts, called sub-workflows, that can have arbitrary names.
+The best practice is to place such additional Nextflow scripts under the folder `workflows` in the root of the repository.
+So for example an additional Nextflow script could be named `workflows/preprocessing.nf`.
+We will explore later the usage of sub-workflows, so don't worry if you don't understand their purpose yet.
+
+The configurations for the pipeline need to be placed in a file called `nextflow.config` at the root of the repository.
+Note that differently from what was said before regarding `main.nf`, this name is mandatory for Nextflow to properly recognise the file.
+The `nextflow.config` file can contain for example resource requirements, execution, parameters, and metadata about your workflow.
+We will explore more in depth the usage of configurations files in a later section.
+
+Scripts (in any language, for example R or Python) that are used in the execution of specific processes in your pipeline should be placed in the folder `bin`.
+Scripts placed here are automatically recognise by Nextflow during task execution without the need to specify their full path.
+
+Additional files needed for your workflow, for example a table containing some metadata for your samples, are usually placed under the folder `assets`.
+However this is not required and many workflows do not have an `assets` folder.
+
+Inputs to the workflow are usually defined in a so-called "sample sheet" that should contain the (preferably) absolute file path to the input files end eventual sample-specific parameters for task execution.
+Best practice is to have your sample sheet formatted as a [csv](https://www.wikiwand.com/en/Comma-separated_values) file with an appropriate header.
+Note that the sample sheet is not part of the pipeline itself.
+The absolute path to the sample sheet is usually provided to Nextflow either as a command-line parameter or in the `nextflow.config` file.
+
+In order to execute your workflow, you would run (do not do it now, we still need to write the workflow) `nextflow run main.nf` at the root of your repository if your workflow is in a file named `main.nf`.
+This would prompt Nextflow to read the `main.nf` file and eventual sub-workflows, extract the workflow logic from it, load the configurations in `nextflow.config`, and coordinate the execution of the different steps in your pipeline to produce the final result.
+
 ### Nextflow domain specific language versions
 
-Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain Specific Language (DSL) 1.
+Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain Specific Language 1 (DSL1).
 A major change in the Nextflow syntax was done by its developers, and the new syntax is referred to as DSL 2.
 In this workshop we will be using exclusively the new DSL2 syntax.
 
-For this reason, you need to add the following line at the top of your `main.nf` file
+For this reason, you need to add the following line at the top of your `main.nf` file:
 
 ```groovy
 nextflow.enable.dsl = 2
 ```
+
+So if in the future you will find yourself looking at a Nextflow workflow which is written very differently from what you are used to, it will probably be written according to DSL1 instead of DSL2.
+
+### Core concepts
+
+A Nextflow workflow is defined by a set of processes, which execute a single task each, which are coordinate by one or more workflows.
+So for example there may be a processes called `align_fastq` that takes in input a [fastq](https://www.wikiwand.com/en/FASTQ_format) file and a [reference genome](https://www.wikiwand.com/en/Reference_genome) and uses the software [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2) to align it, producing an aligned [cram file](https://www.sanger.ac.uk/tool/cram/) in output.
+
+A processes defines as a minimum some output and the command to be executed.
+Inputs are usually also defined but there may be processes that do not need any input and instead perform a static computation.
+Many additional parameters can be specified for a process, for example the software needed, or how much memory or time is required for its execution.
+We will explore processes and their definition more in detail in a later section.
+
+If processes determine what is to be executed and how, workflows instead determine the logic of execution and how different processes communicate with each other.
+So for example there may be a workflow called `SNP_CALLING` that takes a [fastq](https://www.wikiwand.com/en/FASTQ_format) file in input, uses the process `align_fastq` to obtain an aligned [cram file](https://www.sanger.ac.uk/tool/cram/), then gives that cram file in input to another process called `gatk_call` that uses it to create a [vcf file](https://www.wikiwand.com/en/Variant_Call_Format) containing genetic variants.
+
+Processes communicate with each other using so-called "channels", which are unidirectional [First-In-First-Out (FIFO)](https://www.wikiwand.com/en/FIFO_(computing_and_electronics)) queues.
+This means that a channel is populated with a set of elements (for example, files) produced by a process in the order in which they are produced.
+Then, these elements are consumed one by one by another process in the same order.
+Several ways to manipulate, merge, and split channel exist, and we will explore them later.
+So for example the workflow that I described above may define an input channel containing the [fastq](https://www.wikiwand.com/en/FASTQ_format) files in input, and a channel connecting the output of `align_fastq` to the input of `gatk_call`.
+Note that channels are unidirectional: communication happens only in one direction, from outputs to inputs.
+
+### Your first workflow
+
+Now that you know the basics of what a Nextflow workflow is, we will write a simple workflow and we will execute it.
+
+First of all, open the file `main.nf` that you created before at the root of your repository in a text editor and add the following to it
+
+```groovy
+// this is a comment
+process say_hello {
+    // comments can be written anywhere
+    output:
+        "hello_world.txt"
+    script:
+        """
+        echo "This is the EBI predoc course" > hello_world.txt
+        """
+}
+
+workflow {
+    say_hello()
+    say_hello.out.view()
+}
+```
+
+If you want to see how your `main.nf` should look like at this stage open this hidden section
+
+
+<details>
+<summary>Code</summary>
+```groovy
+nextflow.enable.dsl = 2
+
+// this is a comment
+process say_hello {
+    // comments can be written anywhere
+    output:
+        "hello_world.txt"
+    script:
+        """
+        echo "This is the EBI predoc course" > hello_world.txt
+        """
+}
+
+workflow {
+    say_hello()
+    say_hello.out.view()
+}
+```
+</details>
+
+
+Now run the workflow executing from the root of your repository the following
+
+```bash
+nextflow run main.nf
+```
+
+You should see a bunch of information about your workflow and finally you will see the name of the file we just created, `hello_world.txt`, appear on your terminal.

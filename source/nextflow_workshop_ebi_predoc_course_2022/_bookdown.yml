@@ -1,1 +1,2 @@
 output_dir: "../../docs/nextflow_workshop_ebi_predoc_course_2022"
+delete_merged_file: true
