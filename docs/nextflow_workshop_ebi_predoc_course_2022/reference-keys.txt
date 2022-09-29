@@ -12,4 +12,5 @@ a-basic-workflow
 multiple-process-and-publication-of-workflow-outputs
 creating-channels-and-specifying-pipeline-parameters
 multiple-input-files
+using-a-sample-sheet-and-value-channels
 additional-resources

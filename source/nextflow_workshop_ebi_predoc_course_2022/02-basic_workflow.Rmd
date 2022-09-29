@@ -156,7 +156,7 @@ Now open the file `nextflow.config` and add the following
 
 ```groovy
 params {
-  input_file = "~/nextflow_inputs/new_file.txt"
+  input_file = "~/nextflow_inputs/a_file.txt"
 }
 ```
 
@@ -169,7 +169,7 @@ If you want to see how your `nextflow.config` should look like at this stage ope
 workDir = "~/nextflow_workdir"
 
 params {
-  input_file = "~/nextflow_inputs/new_file.txt"
+  input_file = "~/nextflow_inputs/a_file.txt"
 }
 ```
 </details>
@@ -191,7 +191,7 @@ This is the file content
 So the content of the file that we created before, `a_file.txt` was duplicated and placed in the file `a_file.duplicated.txt` in the folder `~/nextflow_output/duplicate_lines`.
 Let's examine what happened:
 
-- In `nextflow.config`, we declared a `params` block. Any variable written inside this block, like `input_file = "~/nextflow_inputs/new_file.txt"`, is accessible in the workflow by writing `params.<variable_name>`, so `params.input_file` in this case.
+- In `nextflow.config`, we declared a `params` block. Any variable written inside this block, like `input_file = "~/nextflow_inputs/a_file.txt"`, is accessible in the workflow by writing `params.<variable_name>`, so `params.input_file` in this case.
 - In `main.nf`, we wrote `Channel.fromPath( params.input_file )`. This uses the channel factory `Channel.fromPath` to create a new channel using the content of `params.input_file`. The `Channel.fromPath` factory interprets its argument to be the path to a file.
 - After `Channel.fromPath( params.input_file )` we added `set{ input_ch }` (note the curly braces: it is a [closure](https://www.wikiwand.com/en/Closure_(computer_programming)), we will explore later what does it mean). This assigns to the newly created channel the name `input_ch`
 - We then used the channel `input_ch` as an input for `duplicate_lines` in `duplicate_lines( input_ch )`. Since `input_ch` contains `params.input_file`, which we declared to be `~/nextflow_inputs/a_file.txt`, this file is given in input to `duplicate_lines`
@@ -228,9 +228,23 @@ Now we just need to modify `input_file` in `nextflow.config`
 
 ```groovy
 params {
-  input_ch = "~/nextflow_inputs/set_of_files_*.txt"
+  input_file = "~/nextflow_inputs/set_of_files_*.txt"
 }
 ```
+
+If you want to see how your `nextflow.config` should look like at this stage open this hidden section
+
+<details>
+<summary>Code</summary>
+```groovy
+// you can also put comments in nextflow.config
+workDir = "~/nextflow_workdir"
+
+params {
+  input_file = "~/nextflow_inputs/set_of_files_*.txt"
+}
+```
+</details>
 
 Now run again the workflow with `nextflow run main.nf`.
 This time if you examine the output folder with `ls ~/nextflow_output/duplicate_lines` you will find a set of files
@@ -254,3 +268,178 @@ Let's examine what happened:
 - We changed `params.input_ch` to contain a glob pattern. This is expanded by Nextflow to yield a list of matching files.
 - The matching files are fed one by one via the channel `input_ch` to the process `duplicate_lines`
 - `duplicate_lines` operates independently but in parallel on all the inputs, producing the output files. Each task is executed in its own private directory.
+
+## Using a sample sheet and value channels
+
+Using glob patterns for specifying samples is useful and quick, but what if we want to specify input files that live in many different directories with very different names?
+And if we want some files to be processed in pairs with other specific files, or with specific parameters?
+For such use cases a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.
+
+A sample sheet is just a [csv](https://www.wikiwand.com/en/Comma-separated_values) file with one row per file to be processed, and with each column specifying either a file or a parameter.
+Create a sample sheet called `~/nextflow_inputs/samplesheet.csv` with the following content
+
+
+```bash
+sample,content
+~/nextflow_inputs/set_of_files_1.txt,"csv input 1"
+~/nextflow_inputs/set_of_files_2.txt,"csv input 2"
+~/nextflow_inputs/set_of_files_3.txt,"csv input 3"
+~/nextflow_inputs/set_of_files_4.txt,"csv input 4"
+~/nextflow_inputs/set_of_files_5.txt,"csv input 5"
+~/nextflow_inputs/set_of_files_6.txt,"csv input 6"
+~/nextflow_inputs/set_of_files_7.txt,"csv input 7"
+~/nextflow_inputs/set_of_files_8.txt,"csv input 8"
+```
+
+Now create a process called `append_to_file`
+
+```groovy
+process append_to_file {
+    publishDir "~/nextflow_output/write_text_file"
+
+    input:
+        path my_file
+        val my_val
+    output:
+        "${my_file.simpleName}.duplicated.txt"
+    script:
+        """
+        cat $my_file > ${my_file.simpleName}.appended.txt
+        echo "$my_val" >> ${my_file.simpleName}.appended.txt
+        """
+}
+```
+
+And modify the workflow as follows
+
+```groovy
+workflow {
+    Channel.fromPath( params.samplesheet )
+      .splitCsv( header: true )
+      .set{ input_ch }
+
+    input_ch.map{ it["sample"] }.set{ sample_ch }
+    input_ch.map{ it["content"] }.set{ content_ch }
+
+    duplicate_lines( sample_ch )
+    append_to_file( duplicate_lines.out, content_ch )
+}
+```
+
+If you want to see how your `main.nf` file should look like at this stage open this hidden section
+
+<details>
+<summary>Code</summary>
+```groovy
+nextflow.enable.dsl = 2
+
+// this is a comment
+process say_hello {
+    // comments can be written anywhere
+    output:
+        path "hello_world.txt"
+    script:
+        """
+        echo "This is the EBI predoc course" > hello_world.txt
+        """
+}
+
+process duplicate_lines {
+    publishDir "~/nextflow_output/duplicate_lines"
+
+    input:
+        path my_file
+    output:
+        "${my_file.simpleName}.duplicated.txt"
+    script:
+        """
+        cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt
+        """
+}
+
+process append_to_file {
+    publishDir "~/nextflow_output/write_text_file"
+
+    input:
+        path my_file
+        val my_val
+    output:
+        "${my_file.simpleName}.duplicated.txt"
+    script:
+        """
+        cat $my_file > ${my_file.simpleName}.appended.txt
+        echo "$my_val" >> ${my_file.simpleName}.appended.txt
+        """
+}
+
+workflow {
+    Channel.fromPath( params.samplesheet )
+      .splitCsv( header: true )
+      .set{ input_ch }
+
+    input_ch.map{ it["sample"] }.set{ sample_ch }
+    input_ch.map{ it["content"] }.set{ content_ch }
+
+    duplicate_lines( sample_ch )
+    append_to_file( duplicate_lines.out, content_ch )
+}
+```
+</details>
+
+Now we need to add the parameter `samplesheet` in `nextflow.config`
+
+```groovy
+params {
+  input_file = "~/nextflow_inputs/set_of_files_*.txt"
+  samplesheet = "~/nextflow_inputs/samplesheet.csv"
+}
+```
+
+If you want to see how your `nextflow.config` should look like at this stage open this hidden section
+
+<details>
+<summary>Code</summary>
+```groovy
+// you can also put comments in nextflow.config
+workDir = "~/nextflow_workdir"
+
+params {
+  input_file = "~/nextflow_inputs/set_of_files_*.txt"
+  samplesheet = "~/nextflow_inputs/samplesheet.csv"
+}
+```
+</details>
+
+Now run again the workflow with `nextflow run main.nf`.
+This time if you examine the output folder with `ls ~/nextflow_output/append_to_file` you will find a set of files
+
+```
+set_of_files_1.append_to_file.txt
+set_of_files_2.append_to_file.txt
+set_of_files_3.append_to_file.txt
+set_of_files_4.append_to_file.txt
+set_of_files_5.append_to_file.txt
+set_of_files_6.append_to_file.txt
+set_of_files_7.append_to_file.txt
+set_of_files_8.append_to_file.txt
+```
+
+Taking as an example the first one, `set_of_files_1.append_to_file.txt` it should contain
+
+```
+This is content of file 1
+This is content of file 1
+csv input 1
+```
+
+While the second one, `set_of_files_2.append_to_file.txt`, should contain
+
+```
+This is content of file 2
+This is content of file 2
+csv input 2
+```
+
+Let's examine what happened:
+
+- aaa
