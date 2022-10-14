@@ -9,12 +9,13 @@ nextflow-domain-specific-language-versions
 core-concepts
 your-first-workflow
 a-basic-workflow
-multiple-process-and-publication-of-workflow-outputs
+multiple-processes-and-publication-of-workflow-outputs
 creating-channels-and-specifying-pipeline-parameters
 multiple-input-files
 using-a-sample-sheet-and-value-channels
 software-dependencies-and-resource-allocation
 the-resume-feature
+using-external-scripts
 nf-core-pipelines
 additional-notes
 basic-challenge
