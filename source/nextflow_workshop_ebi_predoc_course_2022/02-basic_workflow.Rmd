@@ -481,7 +481,7 @@ This would produce a channel containing in order the values 1, 2, and 3. These w
 We can do many things with just shell scripts, but for real-word scenarios we would probably need to use some additional library or tool.
 Software dependencies for a process can be specified in Nextflow in two main ways: using [software containers](https://www.docker.com/resources/what-container/) or [virtual environments](https://realpython.com/python-virtual-environments-a-primer/).
 
-A software container is like a shipping container: it is a monolithic block of code and data that contains everything needed to run a specific application, including the operating system (but not the kernel, the host kernel is used). The most popular container engine (the software that is used to actually run a container) is [Docker](https://www.docker.com/). In high-performance clusters, for security reasons Docker is discouraged or forbidden. A popular alternative container engine used in bioinformatics is [Singularity](https://sylabs.io/singularity/). The good news is that Singularity is also able to run containers created with Docker, so we can consider them equivalent for our purpose.
+A software container is like a shipping container: it is a monolithic block of code and data that contains everything needed to run a specific application, including the operating system (but not the kernel, the host kernel is used). The most popular container engine (the software that is used to actually run a container) is [Docker](https://www.docker.com/). In high-performance clusters, for security reasons Docker is often discouraged or forbidden. A popular alternative container engine used in bioinformatics is [Singularity](https://sylabs.io/singularity/). The good news is that Singularity is also able to run containers created with Docker, so we can consider them equivalent for our purpose.
 
 For popular tools, a container has most probably already been created by someone and put in a public container registry like [DockerHub](https://hub.docker.com/). In this case, we can provide to Nextflow just a link to the container and it will do the rest.
 If instead we need to use a custom container, we would need to write an appropriate description file for it (called a "Dockerfile"), use it to actually build the container, and then upload the container to DockerHub.
@@ -490,17 +490,26 @@ This last use-case will not be treated in this workshop, and we will limit ourse
 On the other hand, virtual environments are a more lightweight and modifiable alternative to containers.
 They rely on the host operating system but they allow to define additional software.
 Nextflow is compatible with [Conda](https://docs.conda.io/en/latest/) environments, and can also use the faster [Mamba](https://mamba.readthedocs.io/en/latest/index.html) implementation of Conda.
+It is worth noting that while Conda/Mamba are typically thought of as package managers for Python, they are actually able to install also R packages, the R interpreter itself, stand-alone tools, and even GPU drivers.
 
 Differently from containers, environments do not need to be pre-built to be used by Nextflow.
 It is possible to just define the software that we need and Nextflow will take care to build an appropriate environment with it.
 
-While Conda/Mamba are typically thought of as package managers for Python, they are actually able to install also R packages, the R interpreter itself, stand-alone tools,
+Let's now write a workflow that makes use of containers and virtual environments.
+
+```groovy
+```
+
+
+## Resource allocation
 
 ## The resume feature
 
 ## Using external scripts
 
 ## nf-core pipelines
+
+## Labels
 
 ## Additional notes
 
