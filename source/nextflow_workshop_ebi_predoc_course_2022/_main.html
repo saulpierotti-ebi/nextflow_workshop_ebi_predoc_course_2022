@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Nextflow workshop - EBI predoc course 2022</title>
+  <meta name="description" content="Nextflow workshop - EBI predoc course 2022" />
+  <meta name="generator" content="bookdown #bookdown:version# and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Nextflow workshop - EBI predoc course 2022" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="saulpierotti-ebi/saulpierotti-ebi.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Nextflow workshop - EBI predoc course 2022" />
+  
+  
+  
+
+<meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
+
+
+<meta name="date" content="2022-10-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<!--bookdown:link_prev-->
+<!--bookdown:link_next-->
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  { color: #cccccc; background-color: #303030; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffcfaf; } /* Alert */
+code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #dca3a3; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #f0dfaf; } /* ControlFlow */
+code span.ch { color: #dca3a3; } /* Char */
+code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+code span.co { color: #7f9f7f; } /* Comment */
+code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+code span.do { color: #7f9f7f; } /* Documentation */
+code span.dt { color: #dfdfbf; } /* DataType */
+code span.dv { color: #dcdccc; } /* DecVal */
+code span.er { color: #c3bf9f; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #c0bed1; } /* Float */
+code span.fu { color: #efef8f; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+code span.kw { color: #f0dfaf; } /* Keyword */
+code span.op { color: #f0efd0; } /* Operator */
+code span.ot { color: #efef8f; } /* Other */
+code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+code span.sc { color: #dca3a3; } /* SpecialChar */
+code span.ss { color: #cc9393; } /* SpecialString */
+code span.st { color: #cc9393; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #cc9393; } /* VerbatimString */
+code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+<!--bookdown:title:start-->
+<div id="header">
+<h1 class="title">Nextflow workshop - EBI predoc course 2022</h1>
+<p class="author"><em>Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)</em></p>
+<p class="date"><em>October 14, 2022</em></p>
+</div>
+<!--bookdown:title:end-->
+
+<!--bookdown:toc:start-->
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+<!--bookdown:toc2:start-->
+<ul>
+<li><a href="#introduction-to-the-workshop" id="toc-introduction-to-the-workshop">Introduction to the workshop</a></li>
+<li><a href="#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="#prerequisites" id="toc-prerequisites"><span class="toc-section-number">1.1</span> Prerequisites</a></li>
+<li><a href="#what-is-nextflow" id="toc-what-is-nextflow"><span class="toc-section-number">1.2</span> What is Nextflow?</a></li>
+<li><a href="#learning-objectives" id="toc-learning-objectives"><span class="toc-section-number">1.3</span> Learning objectives</a></li>
+<li><a href="#setup" id="toc-setup"><span class="toc-section-number">1.4</span> Setup</a></li>
+<li><a href="#getting-started" id="toc-getting-started"><span class="toc-section-number">1.5</span> Getting started</a>
+<ul>
+<li><a href="#general-anatomy-of-a-nextflow-workflow" id="toc-general-anatomy-of-a-nextflow-workflow"><span class="toc-section-number">1.5.1</span> General anatomy of a Nextflow workflow</a></li>
+<li><a href="#nextflow-domain-specific-language-versions" id="toc-nextflow-domain-specific-language-versions"><span class="toc-section-number">1.5.2</span> Nextflow domain specific language versions</a></li>
+<li><a href="#core-concepts" id="toc-core-concepts"><span class="toc-section-number">1.5.3</span> Core concepts</a></li>
+<li><a href="#your-first-workflow" id="toc-your-first-workflow"><span class="toc-section-number">1.5.4</span> Your first workflow</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#a-basic-workflow" id="toc-a-basic-workflow"><span class="toc-section-number">2</span> A basic workflow</a>
+<ul>
+<li><a href="#multiple-processes-and-publication-of-workflow-outputs" id="toc-multiple-processes-and-publication-of-workflow-outputs"><span class="toc-section-number">2.1</span> Multiple processes and publication of workflow outputs</a></li>
+<li><a href="#creating-channels-and-specifying-pipeline-parameters" id="toc-creating-channels-and-specifying-pipeline-parameters"><span class="toc-section-number">2.2</span> Creating channels and specifying pipeline parameters</a></li>
+<li><a href="#multiple-input-files" id="toc-multiple-input-files"><span class="toc-section-number">2.3</span> Multiple input files</a></li>
+<li><a href="#using-a-sample-sheet-and-value-channels" id="toc-using-a-sample-sheet-and-value-channels"><span class="toc-section-number">2.4</span> Using a sample sheet and value channels</a></li>
+<li><a href="#software-dependencies" id="toc-software-dependencies"><span class="toc-section-number">2.5</span> Software dependencies</a></li>
+<li><a href="#resource-allocation" id="toc-resource-allocation"><span class="toc-section-number">2.6</span> Resource allocation</a></li>
+<li><a href="#the-resume-feature" id="toc-the-resume-feature"><span class="toc-section-number">2.7</span> The resume feature</a></li>
+<li><a href="#nf-core-pipelines" id="toc-nf-core-pipelines"><span class="toc-section-number">2.8</span> nf-core pipelines</a></li>
+<li><a href="#labels" id="toc-labels"><span class="toc-section-number">2.9</span> Labels</a></li>
+<li><a href="#additional-notes" id="toc-additional-notes"><span class="toc-section-number">2.10</span> Additional notes</a></li>
+<li><a href="#basic-challenge" id="toc-basic-challenge"><span class="toc-section-number">2.11</span> Basic challenge</a></li>
+</ul></li>
+<li><a href="#a-more-advanced-example" id="toc-a-more-advanced-example"><span class="toc-section-number">3</span> A more advanced example</a>
+<ul>
+<li><a href="#some-more-operators" id="toc-some-more-operators"><span class="toc-section-number">3.1</span> Some more operators</a></li>
+<li><a href="#some-more-directives" id="toc-some-more-directives"><span class="toc-section-number">3.2</span> Some more directives</a></li>
+<li><a href="#execution-environments" id="toc-execution-environments"><span class="toc-section-number">3.3</span> Execution environments</a></li>
+<li><a href="#sub-workflows" id="toc-sub-workflows"><span class="toc-section-number">3.4</span> Sub-workflows</a></li>
+<li><a href="#nextflow-tower" id="toc-nextflow-tower"><span class="toc-section-number">3.5</span> Nextflow tower</a></li>
+<li><a href="#advanced-challenge" id="toc-advanced-challenge"><span class="toc-section-number">3.6</span> Advanced challenge</a></li>
+</ul></li>
+<li><a href="#additional-resources" id="toc-additional-resources"><span class="toc-section-number">4</span> Additional resources</a></li>
+</ul>
+<!--bookdown:toc2:end-->
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Nextflow workshop - EBI predoc course 2022</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<!--bookdown:toc:end-->
+<!--bookdown:body:start-->
+<div id="introduction-to-the-workshop" class="section level1 unnumbered hasAnchor">
+<h1 class="unnumbered hasAnchor">Introduction to the workshop<a href="#introduction-to-the-workshop" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This workshop aims at introducing you to the world of workflow managers, in particular the workflow manager Nextflow.
+This workshop was written as a practical for the EMBL-EBI predoc course, 2022 cohort.
+I hope that you will find it useful, and in any case I would be happy to hear your feedback on it.
+You can contact me at <a href="mailto:saul@ebi.ac.uk">saul@ebi.ac.uk</a>.</p>
+<p>The workshop is written with an increasing level of difficulty, so feel free to skip what is too easy for you or stop when things become too complex.</p>
+<p>Finally, I wanted to point out that in this workshop I am using the words “pipeline” and “workflow” interchangeably, so consider them as equivalent.</p>
+<!--chapter:end:index.Rmd-->
+</div>
+<div id="introduction" class="section level1 hasAnchor" number="1">
+<h1 class="hasAnchor"><span class="header-section-number">1</span> Introduction<a href="#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="prerequisites" class="section level2 hasAnchor" number="1.1">
+<h2 class="hasAnchor"><span class="header-section-number">1.1</span> Prerequisites<a href="#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Familiarity with the Linux shell, as well as basic programming constructs such as for/while loops and if/else statements is assumed.
+Familiarity with at least one scripting language such as <a href="https://www.r-project.org/about.html">R</a> or <a href="https://www.python.org/">Python</a> will be beneficial.
+A basic knowledge of virtual environments and software containers would be helpful.
+Basic knowledge of git is required.</p>
+</div>
+<div id="what-is-nextflow" class="section level2 hasAnchor" number="1.2">
+<h2 class="hasAnchor"><span class="header-section-number">1.2</span> What is Nextflow?<a href="#what-is-nextflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://www.nextflow.io/index.html">Nextflow</a> is an open-source workflow manager consisting of a domain specific language built as a superset of the <a href="https://groovy-lang.org/">Groovy</a> programming language, which is itself a superset of <a href="https://www.java.com/en/">Java</a>.
+The purpose of Nextflow is to make it easier to coordinate the execution of complex <a href="https://www.wikiwand.com/en/Pipeline_(computing)">data analysis pipelines</a>, and to facilitate the execution of such pipelines in <a href="https://www.wikiwand.com/en/Cloud_computing">cloud environments</a> and <a href="https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster">high-performance clusters</a>.</p>
+<p>In practice, Nextflow allows you to declare how the output of some processes in a pipeline are fed as the input of other processes, leading to the production of a final result.
+In addition, Nextflow allows the specification of software requirements for each process using <a href="https://docs.conda.io/en/latest/">conda</a> environments, <a href="https://www.docker.com/">docker</a> containers, and a variety of other solutions.</p>
+<p>Once a pipeline has been written in Nextflow, it can be easily scaled from a local laptop to a high-performance cluster or cloud environment without any modification, with Nextflow taking care of environment-specific commands (for example, submitting appropriate jobs to a batch scheduler).
+Moreover, the pipeline execution is parallelised if the dependencies among different processes allow it.
+A motivation for using a workflow manager such as Nextflow is also to increase the reproducibility of your data analysis.</p>
+<p>Finally, each processes in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.</p>
+<p>Nextflow is developed and maintained by <a href="https://seqera.io/">Seqera Labs</a>. The project was started in Cedric Notredame’s lab at the Centre for Genomic Regulation (<a href="https://www.crg.eu/">CRG</a>) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use-case, but it is domain-agnostic and can be used for any data-intensive workflow.</p>
+</div>
+<div id="learning-objectives" class="section level2 hasAnchor" number="1.3">
+<h2 class="hasAnchor"><span class="header-section-number">1.3</span> Learning objectives<a href="#learning-objectives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>After following this tutorial, the learner will be autonomous in using nextflow for their own data analysis.
+They will understand fundamental Nextflow concepts such as processes, workflows, channels, they will be able to write a configuration file to alter the resources allocated for a processes and the software environment of execution, and they will be able to deploy a community-curated pipeline from <a href="https://nf-co.re/">nf-core</a>.</p>
+</div>
+<div id="setup" class="section level2 hasAnchor" number="1.4">
+<h2 class="hasAnchor"><span class="header-section-number">1.4</span> Setup<a href="#setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Install <a href="https://github.com/conda-forge/miniforge">mamba</a>, a faster alternative to <a href="https://docs.conda.io/en/latest/">conda</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-O</span> <span class="st">&quot;https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-</span><span class="va">$(</span><span class="fu">uname</span><span class="va">)</span><span class="st">-</span><span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span><span class="st">.sh&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> Mambaforge-<span class="va">$(</span><span class="fu">uname</span><span class="va">)</span>-<span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span>.sh</span></code></pre></div>
+<p>Setup the shell to use mamba</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> init</span></code></pre></div>
+<p>Close and re-open your shell.
+Then, create a mamba environment for installing Nextflow</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> create <span class="at">-n</span> nextflow nextflow</span></code></pre></div>
+<p>Now activate the environment that you just created</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> activate nextflow</span></code></pre></div>
+<p>Create an empty git repository in your GitHub account and clone it locally.
+I will pretend that this repository is called <code>my_repo</code> in this workshop.
+Don’t forget to replace this with the name of your actual repository.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my_repo</span></code></pre></div>
+<p>You can use a text editor of your choice to write Nextflow code.
+For example, you may want to use <a href="https://flight-manual.atom.io/getting-started/sections/installing-atom/">Atom</a>.
+I recommend to add Nextflow language support to Atom by clicking <a href="atom://settings-view/show-package?package=language-nextflow">here</a>.</p>
+<p>Create some essential files that we will be working on inside your new repository</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> main.nf</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> nextflow.config</span></code></pre></div>
+</div>
+<div id="getting-started" class="section level2 hasAnchor" number="1.5">
+<h2 class="hasAnchor"><span class="header-section-number">1.5</span> Getting started<a href="#getting-started" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="general-anatomy-of-a-nextflow-workflow" class="section level3 hasAnchor" number="1.5.1">
+<h3 class="hasAnchor"><span class="header-section-number">1.5.1</span> General anatomy of a Nextflow workflow<a href="#general-anatomy-of-a-nextflow-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A Nextflow workflow is usually represented by a git repository containing all the files describing the workflow logic, configurations, and dependencies.</p>
+<p>Text files containing Nextflow code usually have the <code>.nf</code> extension (i.e. <code>my_file.nf</code>).
+It does not really matter how you name your files, as long as they contain valid Nextflow code, but for consistency the best practice is to call the file describing the workflow as <code>main.nf</code> and place it at the root of your repository.</p>
+<p>The <code>main.nf</code> file can access code from other Nextflow scripts, called sub-workflows, that can have arbitrary names.
+The best practice is to place such additional Nextflow scripts under the folder <code>workflows</code> in the root of the repository.
+So for example an additional Nextflow script could be named <code>workflows/preprocessing.nf</code>.
+We will explore later the usage of sub-workflows, so don’t worry if you don’t understand their purpose yet.</p>
+<p>The configurations for the pipeline need to be placed in a file called <code>nextflow.config</code> at the root of the repository.
+Note that differently from what was said before regarding <code>main.nf</code>, this name is mandatory for Nextflow to properly recognise the file.
+The <code>nextflow.config</code> file can contain for example resource requirements, execution, parameters, and metadata about your workflow.
+We will explore more in depth the usage of configurations files in a later section.</p>
+<p>Scripts (in any language, for example <a href="https://www.r-project.org/about.html">R</a> or <a href="https://www.python.org/">Python</a>) that are used in the execution of specific processes in your pipeline should be placed in the folder <code>bin</code>.
+Scripts placed here are automatically recognise by Nextflow during task execution without the need to specify their full path.</p>
+<p>Additional files needed for your workflow, for example a table containing some metadata for your samples, are usually placed under the folder <code>assets</code>.
+However this is not required and many workflows do not have an <code>assets</code> folder.</p>
+<p>Inputs to the workflow are usually defined in a so-called “sample sheet” that should contain the (preferably) absolute file path to the input files end eventual sample-specific parameters for task execution.
+Best practice is to have your sample sheet formatted as a <a href="https://www.wikiwand.com/en/Comma-separated_values">csv</a> file with an appropriate header.
+Note that the sample sheet is not part of the pipeline itself.
+The absolute path to the sample sheet is usually provided to Nextflow either as a command-line parameter or in the <code>nextflow.config</code> file.</p>
+<p>In order to execute your workflow, you would run (do not do it now, we still need to write the workflow) <code>nextflow run main.nf</code> at the root of your repository if your workflow is in a file named <code>main.nf</code>.
+This would prompt Nextflow to read the <code>main.nf</code> file and eventual sub-workflows, extract the workflow logic from it, load the configurations in <code>nextflow.config</code>, and coordinate the execution of the different steps in your pipeline to produce the final result.</p>
+</div>
+<div id="nextflow-domain-specific-language-versions" class="section level3 hasAnchor" number="1.5.2">
+<h3 class="hasAnchor"><span class="header-section-number">1.5.2</span> Nextflow domain specific language versions<a href="#nextflow-domain-specific-language-versions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain Specific Language 1 (DSL1).
+A major change in the Nextflow syntax was done by its developers, and the new syntax is referred to as DSL 2.
+In this workshop we will be using exclusively the new DSL2 syntax.</p>
+<p>For this reason, you need to add the following line at the top of your <code>main.nf</code> file:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span></code></pre></div>
+<p>So if in the future you will find yourself looking at a Nextflow workflow which is written very differently from what you are used to, it will probably be written according to DSL1 instead of DSL2.</p>
+</div>
+<div id="core-concepts" class="section level3 hasAnchor" number="1.5.3">
+<h3 class="hasAnchor"><span class="header-section-number">1.5.3</span> Core concepts<a href="#core-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A Nextflow workflow is defined by a set of processes, which execute a single task each, which are coordinate by one or more workflows.
+So for example there may be a processes called <code>align_fastq</code> that takes in input a <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> file and a <a href="https://www.wikiwand.com/en/Reference_genome">reference genome</a> and uses the software <a href="https://github.com/bwa-mem2/bwa-mem2">bwa-mem2</a> to align it, producing an aligned <a href="https://www.sanger.ac.uk/tool/cram/">cram file</a> in output.</p>
+<p>A processes defines as a minimum the command to be executed.
+Outputs are typically defined but may be omitted if the process is run for its side effects.
+Inputs are usually also defined but there may be processes that do not need any input and instead perform a static computation.
+Many additional parameters can be specified for a process, for example the software needed, or how much memory or time is required for its execution.
+We will explore processes and their definition more in detail in a later section.</p>
+<p>If processes determine what is to be executed and how, workflows instead determine the logic of execution and how different processes communicate with each other.
+So for example there may be a workflow called <code>SNP_CALLING</code> that takes a <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> file in input, uses the process <code>align_fastq</code> to obtain an aligned <a href="https://www.sanger.ac.uk/tool/cram/">cram file</a>, then gives that cram file in input to another process called <code>gatk_call</code> that uses it to create a <a href="https://www.wikiwand.com/en/Variant_Call_Format">vcf file</a> containing genetic variants.</p>
+<p>Processes communicate with each other using so-called “channels”, which are unidirectional <a href="https://www.wikiwand.com/en/FIFO_(computing_and_electronics)">First-In-First-Out (FIFO)</a> queues.
+This means that a channel is populated with a set of elements (for example, files) produced by a process in the order in which they are produced.
+Then, these elements are consumed one by one by another process in the same order.
+Several ways to manipulate, merge, and split channel exist, and we will explore them later.
+So for example the workflow that I described above may define an input channel containing the <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> files in input, and a channel connecting the output of <code>align_fastq</code> to the input of <code>gatk_call</code>.
+Note that channels are unidirectional: communication happens only in one direction, from outputs to inputs.</p>
+</div>
+<div id="your-first-workflow" class="section level3 hasAnchor" number="1.5.4">
+<h3 class="hasAnchor"><span class="header-section-number">1.5.4</span> Your first workflow<a href="#your-first-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now that you know the basics of what a Nextflow workflow is, we will write a simple workflow and we will execute it.</p>
+<p>First of all, open the file <code>main.nf</code> that you created before at the root of your repository in a text editor and add the following to it</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    say_hello<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>main.nf</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb9"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    say_hello<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now open the file <code>nextflow.config</code> and add the following line</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span></code></pre></div>
+<p>Now run the workflow executing from the root of your repository the following</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf</span></code></pre></div>
+<p>You should see a bunch of information about your workflow and finally you will see the name of the file we just created, <code>hello_world.txt</code>, appear on your terminal. Note that the full path to the file will be printed in your terminal, which will look something like <code>/home/myname/nextflow_workdir/00/fjdanurew9gihwepw1455idusodhfweioru/hello_world.txt</code>.</p>
+<p>Let’s now examine the code step by step:</p>
+<ul>
+<li>In <code>nextflow.config</code> we declared our working directory to be <code>../nextflow_workdir</code> with the keyword <code>workDir</code>. The working directory is where Nextflow actually stores your files during intermediate processing.</li>
+<li>Lines starting with <code>//</code> define a comment in groovy, and they are ignored.</li>
+<li>The keyword <code>process</code> defines a process, with the statement that follows defining the process name. So <code>process say_hello</code> creates a process named <code>say_hello</code>.</li>
+<li>Curly braces enclose a block of code, so <code>process say_hello {&lt;some code&gt;}</code> is understood by Nextflow as defining <code>&lt;some code&gt;</code> to belong to the process named <code>say_hello</code>.</li>
+<li>The keyword <code>output:</code> when used inside of a process defines the expected outputs that that process should produce. If the declared output is absent at the end of the process’ execution the execution fails.</li>
+<li>Several types of outputs can be defined, and <code>path</code> is one of them. The keyword <code>path</code> defines what comes after it to be a file.</li>
+<li>Output files are named in the output block after the <code>path</code> qualifier. They should be placed inside a string. Strings are enclosed in quotes in groovy (<code>"this is a string"</code>).</li>
+<li>The <code>script:</code> keyword defines the actual command to be executed in the process. The command should be provided as a string. Since commands can be long, here a multi-line string is used. In groovy, multi-line strings are enclosed in three quotes</li>
+</ul>
+<pre><code>&quot;&quot;&quot;
+this is a multi-line string
+it is very long
+&quot;&quot;&quot;</code></pre>
+<ul>
+<li>What is declared in the <code>script:</code> block is executed in the shell by default, so we should write <a href="https://www.wikiwand.com/en/Bash_(Unix_shell)">bash</a> code there
+<ul>
+<li>The command that we wrote, <code>echo "This is the EBI predoc course" &gt; hello_world.txt</code>, creates a file called <code>hello_world.txt</code> containing the string <code>"This is the EBI predoc course"</code></li>
+</ul></li>
+<li>The keyword <code>workflow</code> defines a workflow, that we left unnamed in this case. The last workflow to be written in your <code>main.nf</code> file is automatically executed by Nextflow.
+<ul>
+<li>The workflow that we defined executes the process <code>say_hello</code></li>
+<li>The output of the process <code>say_hello</code> is captured by <code>say_hello.out</code>, which is a channel. In this case it will contain just the file <code>hello_world.txt</code></li>
+<li>The operator <code>view()</code> just echoes to the terminal the content of the channel. In this case it prints <code>hello_world.txt</code> to our shell.</li>
+</ul></li>
+</ul>
+<p>So to put everything together, when you ran <code>nextflow run main.nf</code> Nextflow read the <code>main.nf</code> file, it found the last workflow, which we left unnamed, and executed it.
+Some additional notes:</p>
+<ul>
+<li>It is possible to write <code>path("a_file.txt")</code> or <code>path "a_file.txt"</code>, they are equivalent statements</li>
+<li>There is no need to think about where we are creating our files, Nextflow under the hood creates a private directory for each execution and takes care of moving files around as needed by other processes</li>
+<li>It is common practice to chain different operators on a channel</li>
+<li>It is possible to chain operators on separate lines
+<ul>
+<li>The following is equivalent to <code>say_hello.out.view()</code></li>
+</ul>
+<pre><code>say_hello.out
+  .view()</code></pre></li>
+<li>Note that spaces and <a href="https://www.wikiwand.com/en/Tab_key">tab charachters</a> are just for visual clarity and are not required</li>
+<li>Explore the working directory <code>../nextflow_workdir</code>. It contains a directory with a strange alphanumeric name like <code>00/fjdanurew9gihwepw1455idusodhfweioru</code> (NOTE: yours will have a different name). One different directory like this is created by Nextflow for the execution of each task (a task is an instance of a process, a process is the definition itself, while a task is created each time that process is executed on different inputs).
+<ul>
+<li>Inside the directory with the strange name, you will see the file that we just created, <code>hello_world.txt</code></li>
+<li>Read the content of the file with <code>cat hello_world.txt</code>. You should see <code>This is the EBI predoc course</code> in your terminal.</li>
+</ul></li>
+</ul>
+<!--chapter:end:01-intro.Rmd-->
+</div>
+</div>
+</div>
+<div id="a-basic-workflow" class="section level1 hasAnchor" number="2">
+<h1 class="hasAnchor"><span class="header-section-number">2</span> A basic workflow<a href="#a-basic-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Let’s now step up a bit the complexity and write a workflow containing two processes that communicate with each other.
+Add the following process to your <code>main.nf</code> file.</p>
+<div id="multiple-processes-and-publication-of-workflow-outputs" class="section level2 hasAnchor" number="2.1">
+<h2 class="hasAnchor"><span class="header-section-number">2.1</span> Multiple processes and publication of workflow outputs<a href="#multiple-processes-and-publication-of-workflow-outputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/duplicate_lines&quot;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>And modify your workflow block as follows</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> say_hello<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>main.nf</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb16"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/duplicate_lines&quot;</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> say_hello<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now run again the workflow with <code>nextflow run main.nf</code>.
+This time your workflow will not print anything since we omitted the <code>view()</code> operator.
+However, if you type in your terminal the following</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ../nextflow_output/duplicate_lines/hello_world.duplicated.txt</span></code></pre></div>
+<p>You should see the following</p>
+<pre><code>This is the EBI predoc course
+This is the EBI predoc course</code></pre>
+<p>So as you see, the content of the <code>hello_world.txt</code> file that we created before has been duplicated so that it appears twice and it has been placed on a new file, <code>../nextflow_output/duplicate_lines/hello_world.duplicated.txt</code>.</p>
+<p>Let’s analyse what happened this time:</p>
+<ul>
+<li>We created another process called <code>duplicate_lines</code> which duplicates a given file thanks to its <code>script</code> command <code>cat $my_file $my_file &gt; ${my_file.simpleName}.duplicated.txt</code></li>
+<li><code>duplicate_lines</code> declares an <code>input:</code> block. The input block is similar to the output block that we saw before in that it can use the <code>path</code> qualifier to declare the input to be a file. However, what comes after <code>path</code> does not need to be a real filename, it is just a variable name (note that it is not quoted). Nextflow replaces that variable with the real name of the file given in input.</li>
+<li>In the script and output blocks we can refer to the inputs by specifying <code>$my_file</code>. Note that we need to use the same name used in the input declaration.
+<ul>
+<li>It is possible to enclose the variable name in curly braces to demark it from other text. So <code>${my_file}</code> is equivalent to <code>$my_file</code>.</li>
+<li>We applied the operator <code>simpleName</code> to the variable <code>$my_file</code> by writing <code>${my_file.simpleName}</code>. This removes the path and the extension from <code>my_file</code>, so that we can use it to name our output file (if <code>$my_file</code> contains the value <code>"/some/path/hello_world.txt"</code>, then <code>${my_file.simpleName}</code> contains only <code>hello_world</code>).</li>
+</ul></li>
+<li>We used a new directive in the process <code>duplicate_lines</code>, called <code>publishDir</code>. This specifies the folder where the output of the process should be placed at the end of the execution. This is usually done to put the final outputs of your workflow in a meaningful directory structure. In our case, <code>publishDir "../nextflow_output/duplicate_lines"</code> places <code>${my_file.simpleName}.duplicated.txt</code> in the folder <code>../nextflow_output/duplicate_lines</code></li>
+<li>In the workflow block we called the process <code>duplicate_lines</code> with <code>say_hello.out</code> as an argument. So the output of <code>say_hello</code> is used as an input for <code>duplicate_lines</code>. Note that the number of arguments provided to a process must match the number of arguments declared in its input block.</li>
+</ul>
+</div>
+<div id="creating-channels-and-specifying-pipeline-parameters" class="section level2 hasAnchor" number="2.2">
+<h2 class="hasAnchor"><span class="header-section-number">2.2</span> Creating channels and specifying pipeline parameters<a href="#creating-channels-and-specifying-pipeline-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The workflow that we wrote works as expected but it is not very useful since we cannot specify dynamically its input files. We will now learn how to use pipeline parameters to specify an external input file for the whole workflow and how to use channel factories to feed it to our processes.</p>
+<p>First create a text file called <code>../nextflow_inputs/a_file.txt</code> containing the string <code>"This is the file content"</code></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ../nextflow_inputs</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is the file content&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/a_file.txt</span></code></pre></div>
+<p>Modify the workflow as follows</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>input_file <span class="op">).</span><span class="fu">set</span><span class="op">{</span> input_ch <span class="op">}</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> input_ch <span class="op">)</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>main.nf</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb21"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/duplicate_lines&quot;</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>input_file <span class="op">).</span><span class="fu">set</span><span class="op">{</span> input_ch <span class="op">}</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> input_ch <span class="op">)</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now open the file <code>nextflow.config</code> and add the following</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  input_file <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/a_file.txt&quot;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>nextflow.config</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb23"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  input_file <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/a_file.txt&quot;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now run again the workflow with <code>nextflow run main.nf</code>.
+This time if you examine the folder <code>../nextflow_output/duplicate_lines</code> you will find a file called <code>a_file.duplicated.txt</code>. Let’s see it’s content.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ../nextflow_output/duplicate_lines/a_file.duplicated.txt</span></code></pre></div>
+<p>This should print</p>
+<pre><code>This is the file content
+This is the file content</code></pre>
+<p>So the content of the file that we created before, <code>a_file.txt</code> was duplicated and placed in the file <code>a_file.duplicated.txt</code> in the folder <code>../nextflow_output/duplicate_lines</code>.
+Let’s examine what happened:</p>
+<ul>
+<li>In <code>nextflow.config</code>, we declared a <code>params</code> block. Any variable written inside this block, like <code>input_file = "../nextflow_inputs/a_file.txt"</code>, is accessible in the workflow by writing <code>params.&lt;variable_name&gt;</code>, so <code>params.input_file</code> in this case.</li>
+<li>In <code>main.nf</code>, we wrote <code>Channel.fromPath( params.input_file )</code>. This uses the channel factory <code>Channel.fromPath</code> to create a new channel using the content of <code>params.input_file</code>. The <code>Channel.fromPath</code> factory interprets its argument to be the path to a file.</li>
+<li>After <code>Channel.fromPath( params.input_file )</code> we added <code>set{ input_ch }</code> (note the curly braces: it is a <a href="https://www.wikiwand.com/en/Closure_(computer_programming)">closure</a>, we will explore later what does it mean). This assigns to the newly created channel the name <code>input_ch</code></li>
+<li>We then used the channel <code>input_ch</code> as an input for the process <code>duplicate_lines</code> in the statement <code>duplicate_lines( input_ch )</code>. Since the channel <code>input_ch</code> contains the variable <code>params.input_file</code>, which we declared to contain the value <code>../nextflow_inputs/a_file.txt</code>, this file is given in input to <code>duplicate_lines</code></li>
+<li><code>duplicate_lines</code> performed its function as before, putting its output in <code>../nextflow_output/duplicate_lines</code></li>
+</ul>
+<p>Instead than hard-coding parameters in <code>nextflow.config</code>, it is also possible to pass them on the command line. So for example we could have omitted the <code>params</code> block in <code>nextflow.config</code> and run</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input_file</span> ../nextflow_inputs/a_file.txt</span></code></pre></div>
+<p>This produces the same result. Note that pipeline parameters need to be specified with two prepending dashes (<code>--my_parameter</code>).
+This differentiates them from command line options for Nextflow itself, such as <code>-dry-run</code>, which use a single dash.</p>
+</div>
+<div id="multiple-input-files" class="section level2 hasAnchor" number="2.3">
+<h2 class="hasAnchor"><span class="header-section-number">2.3</span> Multiple input files<a href="#multiple-input-files" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We are now able to process a single file with our pipeline, but what if we have many files that we need to process in the same way?
+One approach for this is to use a <a href="https://www.wikiwand.com/en/Glob_(programming)">glob pattern</a> as an input.</p>
+<p>Let’s create a bunch of files to use in input</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 1&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/set_of_files_1.txt</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 2&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/set_of_files_2.txt</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 3&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/set_of_files_3.txt</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 4&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/set_of_files_4.txt</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 5&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/set_of_files_5.txt</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 6&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/set_of_files_6.txt</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 7&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/set_of_files_7.txt</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is content of file 8&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/set_of_files_8.txt</span></code></pre></div>
+<p>Now we just need to modify <code>input_file</code> in <code>nextflow.config</code></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  input_file <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/set_of_files_*.txt&quot;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>nextflow.config</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb29"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  input_file <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/set_of_files_*.txt&quot;</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now run again the workflow with <code>nextflow run main.nf</code>.
+This time if you examine the output folder with <code>ls ../nextflow_output/duplicate_lines</code> you will find a set of files</p>
+<pre><code>a_file.duplicated.txt
+set_of_files_1.duplicated.txt
+set_of_files_2.duplicated.txt
+set_of_files_3.duplicated.txt
+set_of_files_4.duplicated.txt
+set_of_files_5.duplicated.txt
+set_of_files_6.duplicated.txt
+set_of_files_7.duplicated.txt
+set_of_files_8.duplicated.txt</code></pre>
+<p>Like before, each of them will contain the duplicated version of the original files.</p>
+<p>Let’s examine what happened:</p>
+<ul>
+<li>We changed <code>params.input_ch</code> to contain a glob pattern. This is expanded by Nextflow to yield a list of matching files.</li>
+<li>The matching files are fed one by one via the channel <code>input_ch</code> to the process <code>duplicate_lines</code></li>
+<li><code>duplicate_lines</code> operates independently but in parallel on all the inputs, producing the output files. Each task is executed in its own private directory.</li>
+</ul>
+</div>
+<div id="using-a-sample-sheet-and-value-channels" class="section level2 hasAnchor" number="2.4">
+<h2 class="hasAnchor"><span class="header-section-number">2.4</span> Using a sample sheet and value channels<a href="#using-a-sample-sheet-and-value-channels" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Using glob patterns for specifying samples is useful and quick, but what if we want to specify input files that live in many different directories with very different names?
+And if we want some files to be processed in pairs with other specific files, or with specific parameters?
+For such use cases a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.</p>
+<p>A sample sheet is just a <a href="https://www.wikiwand.com/en/Comma-separated_values">csv</a> file with one row per file to be processed, and with each column specifying either a file or a parameter.
+Create a sample sheet called <code>../nextflow_inputs/samplesheet.csv</code> by running the following command.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;sample,content&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_1.txt,csv_content_1&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_2.txt,csv_content_2&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_3.txt,csv_content_3&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_4.txt,csv_content_4&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_5.txt,csv_content_5&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_6.txt,csv_content_6&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_7.txt,csv_content_7&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_8.txt,csv_content_8&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span></code></pre></div>
+<p>Now create a process called <code>append_to_file</code></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>process append_to_file <span class="op">{</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/append_to_file&quot;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>        val my_val</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.appended.txt&quot;</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.appended.txt</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;</span><span class="ss">$my_val</span><span class="st">&quot; &gt;&gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.appended.txt</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>And modify the workflow as follows</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>samplesheet <span class="op">)</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">splitCsv</span><span class="op">(</span> header<span class="op">:</span> <span class="kw">true</span> <span class="op">)</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">set</span><span class="op">{</span> input_ch <span class="op">}</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    input_ch<span class="op">.</span><span class="fu">map</span><span class="op">{</span> it<span class="op">[</span><span class="st">&quot;sample&quot;</span><span class="op">]</span> <span class="op">}.</span><span class="fu">set</span><span class="op">{</span> sample_ch <span class="op">}</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    input_ch<span class="op">.</span><span class="fu">map</span><span class="op">{</span> it<span class="op">[</span><span class="st">&quot;content&quot;</span><span class="op">]</span> <span class="op">}.</span><span class="fu">set</span><span class="op">{</span> content_ch <span class="op">}</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> sample_ch <span class="op">)</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">append_to_file</span><span class="op">(</span> duplicate_lines<span class="op">.</span>out<span class="op">,</span> content_ch <span class="op">)</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>main.nf</code> file should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb34"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/duplicate_lines&quot;</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.appended.txt&quot;</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>process append_to_file <span class="op">{</span></span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/append_to_file&quot;</span></span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a>        val my_val</span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.appended.txt</span></span>
+<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;</span><span class="ss">$my_val</span><span class="st">&quot; &gt;&gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.appended.txt</span></span>
+<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb34-41"><a href="#cb34-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-42"><a href="#cb34-42" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb34-43"><a href="#cb34-43" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>samplesheet <span class="op">)</span></span>
+<span id="cb34-44"><a href="#cb34-44" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">splitCsv</span><span class="op">(</span> header<span class="op">:</span> <span class="kw">true</span> <span class="op">)</span></span>
+<span id="cb34-45"><a href="#cb34-45" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">set</span><span class="op">{</span> input_ch <span class="op">}</span></span>
+<span id="cb34-46"><a href="#cb34-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-47"><a href="#cb34-47" aria-hidden="true" tabindex="-1"></a>    input_ch<span class="op">.</span><span class="fu">map</span><span class="op">{</span> it<span class="op">[</span><span class="st">&quot;sample&quot;</span><span class="op">]</span> <span class="op">}.</span><span class="fu">set</span><span class="op">{</span> sample_ch <span class="op">}</span></span>
+<span id="cb34-48"><a href="#cb34-48" aria-hidden="true" tabindex="-1"></a>    input_ch<span class="op">.</span><span class="fu">map</span><span class="op">{</span> it<span class="op">[</span><span class="st">&quot;content&quot;</span><span class="op">]</span> <span class="op">}.</span><span class="fu">set</span><span class="op">{</span> content_ch <span class="op">}</span></span>
+<span id="cb34-49"><a href="#cb34-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-50"><a href="#cb34-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">duplicate_lines</span><span class="op">(</span> sample_ch <span class="op">)</span></span>
+<span id="cb34-51"><a href="#cb34-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">append_to_file</span><span class="op">(</span> duplicate_lines<span class="op">.</span>out<span class="op">,</span> content_ch <span class="op">)</span></span>
+<span id="cb34-52"><a href="#cb34-52" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now we need to modify the <code>params</code> block in your <code>nextflow.config</code></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>nextflow.config</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb36"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now run again the workflow with <code>nextflow run main.nf</code>.
+This time if you examine the output folder with <code>ls ../nextflow_output/append_to_file</code> you will find a set of files</p>
+<pre><code>set_of_files_1.append_to_file.txt
+set_of_files_2.append_to_file.txt
+set_of_files_3.append_to_file.txt
+set_of_files_4.append_to_file.txt
+set_of_files_5.append_to_file.txt
+set_of_files_6.append_to_file.txt
+set_of_files_7.append_to_file.txt
+set_of_files_8.append_to_file.txt</code></pre>
+<p>Taking as an example the first one, <code>set_of_files_1.append_to_file.txt</code> we would expect it to contain</p>
+<pre><code>This is content of file 1
+This is content of file 1
+csv_content_1</code></pre>
+<p>However, most probably it will contain something like</p>
+<pre><code>This is content of file 1
+This is content of file 1
+csv_content_3</code></pre>
+<p>So the first two lines have the correct number but the last line shows the wrong element! What’s more, the element shown on the last line can be different on each run (try!). We said before that channels are guaranteed to emit elements in the same order that they are received, so we should have the correct matches between files and values. What happened?</p>
+<p>What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process <code>duplicate_lines</code> receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the file are processed in parallel, and for example <code>set_of_files_5.append_to_file.txt</code> could be processed and emitted some milliseconds earlier that <code>set_of_files_1.append_to_file.txt</code>, and so the order would be altered.</p>
+<p>A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in a later section.
+For now, let’s examine what happened in this version of our workflow:</p>
+<ul>
+<li>We created the process <code>append_to_file</code>, which takes in input a file (<code>path my_file</code>) and a value (<code>val my_val</code>). This process copies the content of <code>my_file</code> to <code>${my_file.simpleName}.append_to_file.txt</code> and then appends to the newly created file the content of <code>my_val</code></li>
+<li>We defined the parameter <code>samplesheet</code> in <code>nextflow.config</code></li>
+<li>We modified the workflow so that we use <code>params.samplesheet</code> to create a channel with <code>Channel.fromPath</code></li>
+<li>We applied the operator <code>splitCsv</code> to this channel containing the samplesheet, using the option <code>header: true</code>. This operator reads the file contained in the channel assuming it to be a csv file with an header line. Then it produces in output another channel containing, for each row in the samplesheet, a groovy map (what in Python would be called a <a href="https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_data_structures/Dictionaries">dictionary</a>). This map contains a key for each element in the csv header, and a value corresponding to the value of that column in the current line of the csv file.</li>
+<li>We apply the <code>map</code> operator (<code>.map{ it["sample"] }</code>) to the resulting channel
+<ul>
+<li>The map operator is follwed by a <a href="https://www.wikiwand.com/en/Closure_(computer_programming)">closure</a> (<code>{ it["sample"] }</code>)</li>
+<li>You can think of a closure as an unnamed function (like a lambda function in Python)</li>
+<li>The <code>map</code> operator calls this unnamed function for each element in the channel, and creates another channel containing the respective function outputs</li>
+<li>Closure understand the implicit variable <code>it</code>, which represents whatever imput is given to the function</li>
+<li>If an explicit return statement is not present in the closure, the last evaluated expression is returned by the closure ( <code>it["sample"]</code> in this case)</li>
+</ul></li>
+<li>Since <code>splitCsv</code> created a dictionary for each item in the samplesheet, <code>map{ it["sample"] }</code> replaces that dictionary (<code>it</code> in the closure) with the content of the value contained in it under the key <code>"sample"</code></li>
+<li><code>input_ch</code> is used again in <code>input_ch.map{ it["content"] }.set{ content_ch }</code> to extract the value of <code>content</code> for each sample from the samplesheet
+<ul>
+<li>Channels can be used many times, and each time all the files contained in it are processed. So both <code>input_ch.map{ it["content"] }.set{ content_ch }</code> and <code>input_ch.map{ it["sample"] }.set{ sample_ch }</code> process every element in <code>input_ch</code></li>
+</ul></li>
+<li>We created the channels <code>sample_ch</code> and <code>content_ch</code> using the <code>set</code> operator. They contain respectively the sample files and the <code>content</code> values related to them.
+<ul>
+<li>The order of processing in a channel is guaranteed, so we can be sure that each sample will be paired with the correct <code>content</code> value</li>
+</ul></li>
+<li>We fed <code>sample_ch</code> to <code>duplicate_lines</code></li>
+<li>We fed the output of <code>duplicate_lines</code> to <code>append_to_file</code>, together with the values in <code>content_ch</code></li>
+<li><code>append_to_file</code> appended the value of <code>content_ch</code> to the output of <code>duplicate_lines</code>, creating the final result</li>
+</ul>
+<p>Note that we introduced a new qualifier: <code>val</code>. The <code>val</code> qualifier specifies a value, differently from the <code>path</code> qualifier that specifies a file. If I write <code>val variable_name</code>, then <code>variable_name</code> can contain something like a string or a number, depending on what is fed to the process input.
+It is also possible to manually create value channels using the channel factory <code>Channel.value</code>.
+Take as an example the following</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>workflow<span class="op">{</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Channel</span><span class="op">.</span><span class="fu">value</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">).</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>This would produce a channel containing in order the values 1, 2, and 3. These would then be printed one by one to the terminal by the view operator.</p>
+</div>
+<div id="software-dependencies" class="section level2 hasAnchor" number="2.5">
+<h2 class="hasAnchor"><span class="header-section-number">2.5</span> Software dependencies<a href="#software-dependencies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can do many things with just shell scripts, but for real-word scenarios we would probably need to use some additional library or tool.
+Software dependencies for a process can be specified in Nextflow in two main ways: using <a href="https://www.docker.com/resources/what-container/">software containers</a> or <a href="https://realpython.com/python-virtual-environments-a-primer/">virtual environments</a>.</p>
+<p>A software container is like a shipping container: it is a monolithic block of code and data that contains everything needed to run a specific application, including the operating system (but not the kernel, the host kernel is used). The most popular container engine (the software that is used to actually run a container) is <a href="https://www.docker.com/">Docker</a>. In high-performance clusters, for security reasons Docker is often discouraged or forbidden. A popular alternative container engine used in bioinformatics is <a href="https://sylabs.io/singularity/">Singularity</a>. The good news is that Singularity is also able to run containers created with Docker, so we can consider them equivalent for our purpose.</p>
+<p>For popular tools, a container has most probably already been created by someone and put in a public container registry like <a href="https://hub.docker.com/">DockerHub</a>. In this case, we can provide to Nextflow just a link to the container and it will do the rest.
+If instead we need to use a custom container, we would need to write an appropriate description file for it (called a “Dockerfile”), use it to actually build the container, and then upload the container to DockerHub.
+This last use-case will not be treated in this workshop, and we will limit ourselves to the use of pre-built containers.</p>
+<p>On the other hand, virtual environments are a more lightweight and modifiable alternative to containers.
+They rely on the host operating system but they allow to define additional software.
+Nextflow is compatible with <a href="https://docs.conda.io/en/latest/">Conda</a> environments, and can also use the faster <a href="https://mamba.readthedocs.io/en/latest/index.html">Mamba</a> implementation of Conda.
+It is worth noting that while Conda/Mamba are typically thought of as package managers for Python, they are actually able to install also R packages, the R interpreter itself, stand-alone tools, and even GPU drivers.</p>
+<p>Differently from containers, environments do not need to be pre-built to be used by Nextflow.
+It is possible to just define the software that we need and Nextflow will take care to build an appropriate environment with it.</p>
+<p>Let’s now write a workflow that makes use of containers and virtual environments.</p>
+<p>First download a csv file containing a set of countries, their population, and their area by running the following</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/population_area_by_country.csv</span></code></pre></div>
+<p>Now modify your <code>main.nf</code> file and make it look like this</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    conda <span class="st">&quot;python=3.10.6 pandas=1.5.0&quot;</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Python</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="st">        import pandas</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="st">        df = pandas.read_csv(&quot;</span><span class="ss">${</span>csv_file<span class="ss">}</span><span class="st">&quot;)</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a><span class="st">        df[&quot;density&quot;] = df[&quot;population&quot;] / df[&quot;area&quot;]</span></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a><span class="st">        df.to_csv(&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;)</span></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>process plot_population_by_area <span class="op">{</span></span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/plots&quot;</span></span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>    conda <span class="st">&quot;r-base=4.1.3 r-tidyverse=1.3.2&quot;</span></span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.pdf&quot;</span></span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
+<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
+<span id="cb42-36"><a href="#cb42-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-37"><a href="#cb42-37" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- read_csv(&quot;</span><span class="ss">${</span>csv_file<span class="ss">}</span><span class="st">&quot;)</span></span>
+<span id="cb42-38"><a href="#cb42-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-39"><a href="#cb42-39" aria-hidden="true" tabindex="-1"></a><span class="st">        ggplot(df, aes(x=area, y=population, label=country, size=density)) +</span></span>
+<span id="cb42-40"><a href="#cb42-40" aria-hidden="true" tabindex="-1"></a><span class="st">            geom_text()</span></span>
+<span id="cb42-41"><a href="#cb42-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-42"><a href="#cb42-42" aria-hidden="true" tabindex="-1"></a><span class="st">        ggsave(&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.pdf&quot;)</span></span>
+<span id="cb42-43"><a href="#cb42-43" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb42-44"><a href="#cb42-44" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb42-45"><a href="#cb42-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-46"><a href="#cb42-46" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb42-47"><a href="#cb42-47" aria-hidden="true" tabindex="-1"></a>    input_ch <span class="op">=</span> <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>input <span class="op">)</span></span>
+<span id="cb42-48"><a href="#cb42-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">calculate_population_density</span><span class="op">(</span> input_ch <span class="op">)</span></span>
+<span id="cb42-49"><a href="#cb42-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_population_by_area</span><span class="op">(</span> calculate_population_density<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb42-50"><a href="#cb42-50" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Modify your <code>nextflow.config</code> by adding the following</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>conda <span class="op">{</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// use the faster mamba solver instead of conda</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    useMamba <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>nextflow.config</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb44"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>conda <span class="op">{</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// use the faster mamba solver instead of conda</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    useMamba <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now run the workflow as follows</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input</span> population_area_by_country.csv</span></code></pre></div>
+<p>This time the workflow will take significantly longer to run since Nextflow needs to create two mamba environments.
+However, this will affect only the first run of the workflow, since once an environment is created it can be used multiple times.
+Now open the file <code>../nextflow_output/plots/population_area_by_country.pdf</code>.
+It will contain a plot of the population of different countries versus their area, with the size proportional to their population density.</p>
+<p>Let’s explore what happened:
+- We specified to Nextflow to use mamba instead than conda when using the conda directive (with <code>conda{use.mamba = true}</code> in <code>nextflow.config</code>)
+- As before, we used a command-line flag to pass an input file to the workflow (<code>--input</code>)
+- We used that as an input for the process <code>calculate_population_density</code>, which uses Python code to calculate the population density of a country from its area and total population
+- The output of <code>calculate_population_density</code> is fed to the process <code>plot_population_by_area</code>, which uses R code to produce the plot</p>
+<p>The <code>conda</code> directive used in these processes defines the software dependencies needed, in this case Python and <a href="https://pandas.pydata.org/">Pandas</a> for the first process and R and <a href="https://www.tidyverse.org/">tidyverse</a> for the second process.
+Software versions can be specified with an equal sign after the software name.</p>
+<p>Another thing to note here: the <code>script</code> directive normally interprets the code written in it as bash code, but if an sh-bang (<code>!#</code>) is included in the first line of the script, then the software specified in the sh-bang is used to run the script section (so <code>!#/usr/bin/env Python</code> tells to Nextflow to interpret the script section as Python code).</p>
+<p>A different approach to reach the same goal is to write a separate Python or R script, place it in the <code>bin</code> folder, and then execute it with a bash command in the script directive.</p>
+<p>So for example you can create a file called <code>bin/calculate_population_density.py</code> with the following content</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pandas.read_csv(sys.argv[<span class="dv">1</span>])</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;density&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;population&quot;</span>] <span class="op">/</span> df[<span class="st">&quot;area&quot;</span>]</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>df.to_csv(sys.argv[<span class="dv">2</span>])</span></code></pre></div>
+<p>Make it executable with</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x bin/calculate_population_density.py</span></code></pre></div>
+<p>And change the <code>calculate_population_density</code> process as follows</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    conda <span class="st">&quot;python=3.10.6 pandas=1.5.0&quot;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="st">        ./calculate_population_density.py </span><span class="ss">$csv_file</span><span class="st"> </span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Running the following will yield the same result as before</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input</span> population_area_by_country.csv</span></code></pre></div>
+</div>
+<div id="resource-allocation" class="section level2 hasAnchor" number="2.6">
+<h2 class="hasAnchor"><span class="header-section-number">2.6</span> Resource allocation<a href="#resource-allocation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Resource allocation is a very useful when our workflow is run on a high performance cluster or in the cloud.
+It is possible to specify the amount of <a href="">RAM</a>, the number of <a href="">CPU cores</a>, and the running time required by a process.
+These values are then used by Nextflow to reserve appropriate resources, for example to submit a job to the cluster with the desired requirements.</p>
+<p>Since we do not have a cluster environment available for this workshop, we will not try to implement an actual workflow using resource requirements (we could specify them also for a local workflow, but we would not see any effect).</p>
+<p>An example process specifying resource requirements looks like this</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// this can be in GB, MB, KB, TB, ...</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    memory <span class="st">&quot;2 GB&quot;</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// this can be in second(s), minute(s), hour(s), day(s)</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// it is also possible to use abbreviations such as s, m, h, d</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    time <span class="st">&quot;5 days&quot;</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// just an integer (note that this is not a string)</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    cpus <span class="dv">4</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="st">        ./calculate_population_density.py </span><span class="ss">$csv_file</span><span class="st"> </span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<div id="the-resume-feature" class="section level2 hasAnchor" number="2.7">
+<h2 class="hasAnchor"><span class="header-section-number">2.7</span> The resume feature<a href="#the-resume-feature" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the most powerful aspects of Nextflow is the resume feature.
+This feature can be activated by adding the following to the <code>nextflow.config</code> file</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>resume <span class="op">=</span> <span class="kw">true</span></span></code></pre></div>
+<p>Alternatively, it is also possible to run the Nextflow command with the <code>-resume</code> flag.</p>
+<p>We saw before that each task is executed by Nextflow in its own directory with a long alphanumeric name.
+This name is not random, but it is a 128-bit <a href="https://www.wikiwand.com/en/Hash_function">hash number</a>.
+This number is calculated from the following values:
+- Input files
+- Command line string
+- Container ID
+- Conda environment
+- Environment modules
+- Any executed scripts in the bin directory</p>
+<p>So, any time one of the following features of a process changes, the hash value and hence the working directory changes.</p>
+<p>If a working directory with the same hash value as the one of the task to be executed is found by Nextflow, and this folder contains all the required outputs declared in the <code>output</code> block of the process, and it contains a file called <code>.exitcode</code> containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.</p>
+<p>This feature allows to resume the execution of a previous failed run of a workflow from the last successful task, potentially saving a lot of computing time.
+A more in-depth explanation of the resume feature is available <a href="https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html">here</a>.</p>
+<p>To test the resume feature by ourselves, lets modify our <code>main.nf</code> file as follows</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>process dumb_process <span class="op">{</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output&quot;</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;out.txt&quot;</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a><span class="st">        sleep 120</span></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;Success!&quot; &gt; out.txt</span></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dumb_process</span><span class="op">()</span></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Now you can run the workflow with <code>nextflow run main,nf</code>.
+Our workflow just runs the process <code>dumb_process</code>, which does not take any input and declares a single output file, <code>out.txt</code>.
+This execution will take 2 minutes since the script block of the process <code>dumb_process</code> contains the command <code>sleep 120</code>, which just waits for 2 minutes (120 seconds), before writing the line “Success!” to the file <code>out.txt</code>.
+After the execution is complete, we can see that the line “Success!” is present in the output file by running</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ../nextflow_output/out.txt</span></code></pre></div>
+<p>Now, to test the resume feature run again the workflow</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">-resume</span></span></code></pre></div>
+<p>In this case, the execution will be much quicker since <code>process_dumb</code> is not actually executed, but the cached results obtained before are returned.</p>
+</div>
+<div id="nf-core-pipelines" class="section level2 hasAnchor" number="2.8">
+<h2 class="hasAnchor"><span class="header-section-number">2.8</span> nf-core pipelines<a href="#nf-core-pipelines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="labels" class="section level2 hasAnchor" number="2.9">
+<h2 class="hasAnchor"><span class="header-section-number">2.9</span> Labels<a href="#labels" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="additional-notes" class="section level2 hasAnchor" number="2.10">
+<h2 class="hasAnchor"><span class="header-section-number">2.10</span> Additional notes<a href="#additional-notes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="basic-challenge" class="section level2 hasAnchor" number="2.11">
+<h2 class="hasAnchor"><span class="header-section-number">2.11</span> Basic challenge<a href="#basic-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<!--chapter:end:02-basic_workflow.Rmd-->
+</div>
+</div>
+<div id="a-more-advanced-example" class="section level1 hasAnchor" number="3">
+<h1 class="hasAnchor"><span class="header-section-number">3</span> A more advanced example<a href="#a-more-advanced-example" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="some-more-operators" class="section level2 hasAnchor" number="3.1">
+<h2 class="hasAnchor"><span class="header-section-number">3.1</span> Some more operators<a href="#some-more-operators" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="some-more-directives" class="section level2 hasAnchor" number="3.2">
+<h2 class="hasAnchor"><span class="header-section-number">3.2</span> Some more directives<a href="#some-more-directives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="execution-environments" class="section level2 hasAnchor" number="3.3">
+<h2 class="hasAnchor"><span class="header-section-number">3.3</span> Execution environments<a href="#execution-environments" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="sub-workflows" class="section level2 hasAnchor" number="3.4">
+<h2 class="hasAnchor"><span class="header-section-number">3.4</span> Sub-workflows<a href="#sub-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="nextflow-tower" class="section level2 hasAnchor" number="3.5">
+<h2 class="hasAnchor"><span class="header-section-number">3.5</span> Nextflow tower<a href="#nextflow-tower" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="advanced-challenge" class="section level2 hasAnchor" number="3.6">
+<h2 class="hasAnchor"><span class="header-section-number">3.6</span> Advanced challenge<a href="#advanced-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<!--chapter:end:03-advanced_workflow.Rmd-->
+</div>
+</div>
+<div id="additional-resources" class="section level1 hasAnchor" number="4">
+<h1 class="hasAnchor"><span class="header-section-number">4</span> Additional resources<a href="#additional-resources" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Nextflow documentation:</p>
+<p><a href="https://www.nextflow.io/docs/latest/index.html" class="uri">https://www.nextflow.io/docs/latest/index.html</a></p>
+<p>Nextflow workshop from the Nextflow authors:</p>
+<p><a href="https://www.nextflow.io/blog/2022/learn-nextflow-in-2022.html" class="uri">https://www.nextflow.io/blog/2022/learn-nextflow-in-2022.html</a></p>
+<p>YouTube playlist:</p>
+<p><a href="https://www.youtube.com/playlist?list=PLPZ8WHdZGxmUv4W8ZRlmstkZwhb_fencI" class="uri">https://www.youtube.com/playlist?list=PLPZ8WHdZGxmUv4W8ZRlmstkZwhb_fencI</a></p>
+<p>Post on Medium on Nextflow from 23andMe:</p>
+<p><a href="https://medium.com/23andme-engineering/introduction-to-nextflow-4d0e3b6768d1" class="uri">https://medium.com/23andme-engineering/introduction-to-nextflow-4d0e3b6768d1</a></p>
+<p>Nextflow course on SofwareCarpentries:</p>
+<p><a href="https://carpentries-incubator.github.io/workflows-nextflow/index.html" class="uri">https://carpentries-incubator.github.io/workflows-nextflow/index.html</a></p>
+<p>Other useful links:</p>
+<p><a href="https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html" class="uri">https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html</a></p>
+<!--chapter:end:90-conclusion.Rmd-->
+</div>
+<!--bookdown:body:end-->
+            </section>
+
+          </div>
+        </div>
+      </div>
+<!--bookdown:link_prev-->
+<!--bookdown:link_next-->
+    </div>
+  </div>
+<!--bookdown:config-->
+
+</body>
+
+</html>

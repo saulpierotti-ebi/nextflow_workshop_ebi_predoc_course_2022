@@ -153,12 +153,13 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="2.2" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#creating-channels-and-specifying-pipeline-parameters"><i class="fa fa-check"></i><b>2.2</b> Creating channels and specifying pipeline parameters</a></li>
 <li class="chapter" data-level="2.3" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#multiple-input-files"><i class="fa fa-check"></i><b>2.3</b> Multiple input files</a></li>
 <li class="chapter" data-level="2.4" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#using-a-sample-sheet-and-value-channels"><i class="fa fa-check"></i><b>2.4</b> Using a sample sheet and value channels</a></li>
-<li class="chapter" data-level="2.5" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#software-dependencies-and-resource-allocation"><i class="fa fa-check"></i><b>2.5</b> Software dependencies and resource allocation</a></li>
-<li class="chapter" data-level="2.6" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#the-resume-feature"><i class="fa fa-check"></i><b>2.6</b> The resume feature</a></li>
-<li class="chapter" data-level="2.7" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#using-external-scripts"><i class="fa fa-check"></i><b>2.7</b> Using external scripts</a></li>
+<li class="chapter" data-level="2.5" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#software-dependencies"><i class="fa fa-check"></i><b>2.5</b> Software dependencies</a></li>
+<li class="chapter" data-level="2.6" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#resource-allocation"><i class="fa fa-check"></i><b>2.6</b> Resource allocation</a></li>
+<li class="chapter" data-level="2.7" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#the-resume-feature"><i class="fa fa-check"></i><b>2.7</b> The resume feature</a></li>
 <li class="chapter" data-level="2.8" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#nf-core-pipelines"><i class="fa fa-check"></i><b>2.8</b> nf-core pipelines</a></li>
-<li class="chapter" data-level="2.9" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#additional-notes"><i class="fa fa-check"></i><b>2.9</b> Additional notes</a></li>
-<li class="chapter" data-level="2.10" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#basic-challenge"><i class="fa fa-check"></i><b>2.10</b> Basic challenge</a></li>
+<li class="chapter" data-level="2.9" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#labels"><i class="fa fa-check"></i><b>2.9</b> Labels</a></li>
+<li class="chapter" data-level="2.10" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#additional-notes"><i class="fa fa-check"></i><b>2.10</b> Additional notes</a></li>
+<li class="chapter" data-level="2.11" data-path="a-basic-workflow.html"><a href="a-basic-workflow.html#basic-challenge"><i class="fa fa-check"></i><b>2.11</b> Basic challenge</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="a-more-advanced-example.html"><a href="a-more-advanced-example.html"><i class="fa fa-check"></i><b>3</b> A more advanced example</a>
 <ul>
@@ -535,8 +536,7 @@ This is content of file 1
 csv_content_3</code></pre>
 <p>So the first two lines have the correct number but the last line shows the wrong element! What’s more, the element shown on the last line can be different on each run (try!). We said before that channels are guaranteed to emit elements in the same order that they are received, so we should have the correct matches between files and values. What happened?</p>
 <p>What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process <code>duplicate_lines</code> receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the file are processed in parallel, and for example <code>set_of_files_5.append_to_file.txt</code> could be processed and emitted some milliseconds earlier that <code>set_of_files_1.append_to_file.txt</code>, and so the order would be altered.</p>
-<p>A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in the next section.</p>
-<p>For now, let’s examine what happened in this version of our workflow:</p>
+<p>A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in the next section. For now, let’s examine what happened in this version of our workflow:</p>
 <ul>
 <li>We created the process <code>append_to_file</code>, which takes in input a file (<code>path my_file</code>) and a value (<code>val my_val</code>). This process copies the content of <code>my_file</code> to <code>${my_file.simpleName}.append_to_file.txt</code> and then appends to the newly created file the content of <code>my_val</code></li>
 <li>We defined the parameter <code>samplesheet</code> in <code>nextflow.config</code></li>
@@ -571,23 +571,130 @@ Take as an example the following</p>
 <span id="cb40-3"><a href="a-basic-workflow.html#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>This would produce a channel containing in order the values 1, 2, and 3. These would then be printed one by one to the terminal by the view operator.</p>
 </div>
-<div id="software-dependencies-and-resource-allocation" class="section level2 hasAnchor" number="2.5">
-<h2><span class="header-section-number">2.5</span> Software dependencies and resource allocation<a href="a-basic-workflow.html#software-dependencies-and-resource-allocation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="software-dependencies" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Software dependencies<a href="a-basic-workflow.html#software-dependencies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can do many things with just shell scripts, but for real-word scenarios we would probably need to use some additional library or tool.
+Software dependencies for a process can be specified in Nextflow in two main ways: using <a href="https://www.docker.com/resources/what-container/">software containers</a> or <a href="https://realpython.com/python-virtual-environments-a-primer/">virtual environments</a>.</p>
+<p>A software container is like a shipping container: it is a monolithic block of code and data that contains everything needed to run a specific application, including the operating system (but not the kernel, the host kernel is used). The most popular container engine (the software that is used to actually run a container) is <a href="https://www.docker.com/">Docker</a>. In high-performance clusters, for security reasons Docker is often discouraged or forbidden. A popular alternative container engine used in bioinformatics is <a href="https://sylabs.io/singularity/">Singularity</a>. The good news is that Singularity is also able to run containers created with Docker, so we can consider them equivalent for our purpose.</p>
+<p>For popular tools, a container has most probably already been created by someone and put in a public container registry like <a href="https://hub.docker.com/">DockerHub</a>. In this case, we can provide to Nextflow just a link to the container and it will do the rest.
+If instead we need to use a custom container, we would need to write an appropriate description file for it (called a “Dockerfile”), use it to actually build the container, and then upload the container to DockerHub.
+This last use-case will not be treated in this workshop, and we will limit ourselves to the use of pre-built containers.</p>
+<p>On the other hand, virtual environments are a more lightweight and modifiable alternative to containers.
+They rely on the host operating system but they allow to define additional software.
+Nextflow is compatible with <a href="https://docs.conda.io/en/latest/">Conda</a> environments, and can also use the faster <a href="https://mamba.readthedocs.io/en/latest/index.html">Mamba</a> implementation of Conda.
+It is worth noting that while Conda/Mamba are typically thought of as package managers for Python, they are actually able to install also R packages, the R interpreter itself, stand-alone tools, and even GPU drivers.</p>
+<p>Differently from containers, environments do not need to be pre-built to be used by Nextflow.
+It is possible to just define the software that we need and Nextflow will take care to build an appropriate environment with it.</p>
+<p>Let’s now write a workflow that makes use of containers and virtual environments.</p>
+<p>First download a csv file containing a set of countries, their population, and their area by running the following</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb41-1"><a href="a-basic-workflow.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/population_area_by_country.csv</span></code></pre></div>
+<p>Now modify your <code>main.nf</code> file and make it look like this</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb42-1"><a href="a-basic-workflow.html#cb42-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb42-2"><a href="a-basic-workflow.html#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="a-basic-workflow.html#cb42-3" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
+<span id="cb42-4"><a href="a-basic-workflow.html#cb42-4" aria-hidden="true" tabindex="-1"></a>    conda <span class="st">&quot;python=3.10.6 pandas=1.5.0&quot;</span></span>
+<span id="cb42-5"><a href="a-basic-workflow.html#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="a-basic-workflow.html#cb42-6" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb42-7"><a href="a-basic-workflow.html#cb42-7" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
+<span id="cb42-8"><a href="a-basic-workflow.html#cb42-8" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb42-9"><a href="a-basic-workflow.html#cb42-9" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;</span></span>
+<span id="cb42-10"><a href="a-basic-workflow.html#cb42-10" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb42-11"><a href="a-basic-workflow.html#cb42-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb42-12"><a href="a-basic-workflow.html#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Python</span></span>
+<span id="cb42-13"><a href="a-basic-workflow.html#cb42-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-14"><a href="a-basic-workflow.html#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="st">        import pandas</span></span>
+<span id="cb42-15"><a href="a-basic-workflow.html#cb42-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="a-basic-workflow.html#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="st">        df = pandas.read_csv(&quot;</span><span class="ss">${</span>csv_file<span class="ss">}</span><span class="st">&quot;)</span></span>
+<span id="cb42-17"><a href="a-basic-workflow.html#cb42-17" aria-hidden="true" tabindex="-1"></a><span class="st">        df[&quot;density&quot;] = df[&quot;population&quot;] / df[&quot;area&quot;]</span></span>
+<span id="cb42-18"><a href="a-basic-workflow.html#cb42-18" aria-hidden="true" tabindex="-1"></a><span class="st">        df.to_csv(&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;)</span></span>
+<span id="cb42-19"><a href="a-basic-workflow.html#cb42-19" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb42-20"><a href="a-basic-workflow.html#cb42-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb42-21"><a href="a-basic-workflow.html#cb42-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-22"><a href="a-basic-workflow.html#cb42-22" aria-hidden="true" tabindex="-1"></a>process plot_population_by_area <span class="op">{</span></span>
+<span id="cb42-23"><a href="a-basic-workflow.html#cb42-23" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/plots&quot;</span></span>
+<span id="cb42-24"><a href="a-basic-workflow.html#cb42-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-25"><a href="a-basic-workflow.html#cb42-25" aria-hidden="true" tabindex="-1"></a>    conda <span class="st">&quot;r-base=4.1.3 r-tidyverse=1.3.2&quot;</span></span>
+<span id="cb42-26"><a href="a-basic-workflow.html#cb42-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-27"><a href="a-basic-workflow.html#cb42-27" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb42-28"><a href="a-basic-workflow.html#cb42-28" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
+<span id="cb42-29"><a href="a-basic-workflow.html#cb42-29" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb42-30"><a href="a-basic-workflow.html#cb42-30" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.pdf&quot;</span></span>
+<span id="cb42-31"><a href="a-basic-workflow.html#cb42-31" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb42-32"><a href="a-basic-workflow.html#cb42-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb42-33"><a href="a-basic-workflow.html#cb42-33" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
+<span id="cb42-34"><a href="a-basic-workflow.html#cb42-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-35"><a href="a-basic-workflow.html#cb42-35" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
+<span id="cb42-36"><a href="a-basic-workflow.html#cb42-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-37"><a href="a-basic-workflow.html#cb42-37" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- read_csv(&quot;</span><span class="ss">${</span>csv_file<span class="ss">}</span><span class="st">&quot;)</span></span>
+<span id="cb42-38"><a href="a-basic-workflow.html#cb42-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-39"><a href="a-basic-workflow.html#cb42-39" aria-hidden="true" tabindex="-1"></a><span class="st">        ggplot(df, aes(x=area, y=population, label=country, size=density)) +</span></span>
+<span id="cb42-40"><a href="a-basic-workflow.html#cb42-40" aria-hidden="true" tabindex="-1"></a><span class="st">            geom_text()</span></span>
+<span id="cb42-41"><a href="a-basic-workflow.html#cb42-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-42"><a href="a-basic-workflow.html#cb42-42" aria-hidden="true" tabindex="-1"></a><span class="st">        ggsave(&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.pdf&quot;)</span></span>
+<span id="cb42-43"><a href="a-basic-workflow.html#cb42-43" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb42-44"><a href="a-basic-workflow.html#cb42-44" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb42-45"><a href="a-basic-workflow.html#cb42-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-46"><a href="a-basic-workflow.html#cb42-46" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb42-47"><a href="a-basic-workflow.html#cb42-47" aria-hidden="true" tabindex="-1"></a>    input_ch <span class="op">=</span> <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>input <span class="op">)</span></span>
+<span id="cb42-48"><a href="a-basic-workflow.html#cb42-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">calculate_population_density</span><span class="op">(</span> input_ch <span class="op">)</span></span>
+<span id="cb42-49"><a href="a-basic-workflow.html#cb42-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_population_by_area</span><span class="op">(</span> calculate_population_density<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb42-50"><a href="a-basic-workflow.html#cb42-50" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Now run the workflow as follows</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="a-basic-workflow.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input</span> population_area_by_country.csv</span></code></pre></div>
+<p>This time the workflow will take significantly longer to run since Nextflow needs to create two mamba environments.
+However, this will affect only the first run of the workflow, since once an environment is created it can be used multiple times.
+Now open the file <code>../nextflow_output/plots/population_area_by_country.pdf</code>.
+It will contain a plot of the population of different countries versus their area, with the size proportional to their population density.</p>
+<p>Let’s explore what happened:
+- As before, we used a command-line flag to pass an input file to the workflow (<code>--input</code>)
+- We used that as an input for the process <code>calculate_population_density</code>, which uses Python code to calculate the population density of a country from its area and total population
+- The output of <code>calculate_population_density</code> is fed to the process <code>plot_population_by_area</code>, which uses R code to produce the plot</p>
+<p>The <code>conda</code> directive used in these processes defines the software dependencies needed, in this case Python and <a href="https://pandas.pydata.org/">Pandas</a> for the first process and R and <a href="https://www.tidyverse.org/">tidyverse</a> for the second process.
+Software versions can be specified with an equal sign after the software name.</p>
+<p>Another thing to note here: the <code>script</code> directive normally interprets the code written in it as bash code, but if an sh-bang (<code>!#</code>) is included in the first line of the script, then the software specified in the sh-bang is used to run the script section (so <code>!#/usr/bin/env Python</code> tells to Nextflow to interpret the script section as Python code).</p>
+<p>A different approach to reach the same goal is to write a separate Python or R script, place it in the <code>bin</code> folder, and then execute it with a bash command in the script directive.</p>
+<p>So for example you can create a file called <code>bin/calculate_population_density.py</code> with the following content</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="a-basic-workflow.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas</span>
+<span id="cb44-2"><a href="a-basic-workflow.html#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb44-3"><a href="a-basic-workflow.html#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="a-basic-workflow.html#cb44-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pandas.read_csv(sys.argv[<span class="dv">1</span>])</span>
+<span id="cb44-5"><a href="a-basic-workflow.html#cb44-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;density&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;population&quot;</span>] <span class="op">/</span> df[<span class="st">&quot;area&quot;</span>]</span>
+<span id="cb44-6"><a href="a-basic-workflow.html#cb44-6" aria-hidden="true" tabindex="-1"></a>df.to_csv(sys.argv[<span class="dv">2</span>])</span></code></pre></div>
+<p>Make it executable with</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="a-basic-workflow.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x bin/calculate_population_density.py</span></code></pre></div>
+<p>And change the <code>calculate_population_density</code> process as follows</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb46-1"><a href="a-basic-workflow.html#cb46-1" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
+<span id="cb46-2"><a href="a-basic-workflow.html#cb46-2" aria-hidden="true" tabindex="-1"></a>    conda <span class="st">&quot;python=3.10.6 pandas=1.5.0&quot;</span></span>
+<span id="cb46-3"><a href="a-basic-workflow.html#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="a-basic-workflow.html#cb46-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb46-5"><a href="a-basic-workflow.html#cb46-5" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
+<span id="cb46-6"><a href="a-basic-workflow.html#cb46-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb46-7"><a href="a-basic-workflow.html#cb46-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;</span></span>
+<span id="cb46-8"><a href="a-basic-workflow.html#cb46-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb46-9"><a href="a-basic-workflow.html#cb46-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb46-10"><a href="a-basic-workflow.html#cb46-10" aria-hidden="true" tabindex="-1"></a><span class="st">        ./calculate_population_density.py </span><span class="ss">$csv_file</span><span class="st"> </span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv</span></span>
+<span id="cb46-11"><a href="a-basic-workflow.html#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb46-12"><a href="a-basic-workflow.html#cb46-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Running the following will yield the same result as before</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="a-basic-workflow.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input</span> population_area_by_country.csv</span></code></pre></div>
 </div>
-<div id="the-resume-feature" class="section level2 hasAnchor" number="2.6">
-<h2><span class="header-section-number">2.6</span> The resume feature<a href="a-basic-workflow.html#the-resume-feature" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="resource-allocation" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Resource allocation<a href="a-basic-workflow.html#resource-allocation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
-<div id="using-external-scripts" class="section level2 hasAnchor" number="2.7">
-<h2><span class="header-section-number">2.7</span> Using external scripts<a href="a-basic-workflow.html#using-external-scripts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="the-resume-feature" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> The resume feature<a href="a-basic-workflow.html#the-resume-feature" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
 <div id="nf-core-pipelines" class="section level2 hasAnchor" number="2.8">
 <h2><span class="header-section-number">2.8</span> nf-core pipelines<a href="a-basic-workflow.html#nf-core-pipelines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
-<div id="additional-notes" class="section level2 hasAnchor" number="2.9">
-<h2><span class="header-section-number">2.9</span> Additional notes<a href="a-basic-workflow.html#additional-notes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="labels" class="section level2 hasAnchor" number="2.9">
+<h2><span class="header-section-number">2.9</span> Labels<a href="a-basic-workflow.html#labels" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
-<div id="basic-challenge" class="section level2 hasAnchor" number="2.10">
-<h2><span class="header-section-number">2.10</span> Basic challenge<a href="a-basic-workflow.html#basic-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="additional-notes" class="section level2 hasAnchor" number="2.10">
+<h2><span class="header-section-number">2.10</span> Additional notes<a href="a-basic-workflow.html#additional-notes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="basic-challenge" class="section level2 hasAnchor" number="2.11">
+<h2><span class="header-section-number">2.11</span> Basic challenge<a href="a-basic-workflow.html#basic-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
 </div>

@@ -13,10 +13,11 @@ multiple-processes-and-publication-of-workflow-outputs
 creating-channels-and-specifying-pipeline-parameters
 multiple-input-files
 using-a-sample-sheet-and-value-channels
-software-dependencies-and-resource-allocation
+software-dependencies
+resource-allocation
 the-resume-feature
-using-external-scripts
 nf-core-pipelines
+labels
 additional-notes
 basic-challenge
 a-more-advanced-example
