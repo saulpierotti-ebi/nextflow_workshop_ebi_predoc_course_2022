@@ -1,4 +1,4 @@
-# A more advanced example
+# Advanced features
 
 ## Some more operators
 
@@ -10,4 +10,4 @@
 
 ## Nextflow tower
 
-## Advanced challenge
+# Advanced challenge

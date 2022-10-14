@@ -849,7 +849,7 @@ So if for example we have several processes that need Python and pandas as softw
 Note that the `label` directive can be used to specify many different configurations, not only software requirements.
 For example, we could use it also for memory or time requirements.
 
-## Basic challenge
+# Basic challenge
 
 It's now time to put into practice what you learned today!
 Try to solve the following challenge.

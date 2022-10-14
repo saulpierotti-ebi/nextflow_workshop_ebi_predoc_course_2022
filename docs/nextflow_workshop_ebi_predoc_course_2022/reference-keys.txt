@@ -19,7 +19,7 @@ the-resume-feature
 nf-core-pipelines
 labels
 basic-challenge
-a-more-advanced-example
+advanced-features
 some-more-operators
 some-more-directives
 execution-environments
