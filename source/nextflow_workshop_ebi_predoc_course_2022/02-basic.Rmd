@@ -496,7 +496,7 @@ It is worth noting that while Conda/Mamba are typically thought of as package ma
 Differently from containers, environments do not need to be pre-built to be used by Nextflow.
 It is possible to just define the software that we need and Nextflow will take care to build an appropriate environment with it.
 
-Let's now write a workflow that makes use of containers and virtual environments.
+Let's now write a workflow that makes use of virtual environments.
 
 First download a csv file containing a set of countries, their population, and their area by running the following
 
@@ -598,13 +598,15 @@ Now open the file `../nextflow_output/plots/population_area_by_country.pdf`.
 It will contain a plot of the population of different countries versus their area, with the size proportional to their population density.
 
 Let's explore what happened:
+
   - We specified to Nextflow to use mamba instead than conda when using the conda directive (with `conda{use.mamba = true}` in `nextflow.config`)
-  - As before, we used a command-line flag to pass an input file to the workflow (`--input`)
-  - We used that as an input for the process `calculate_population_density`, which uses Python code to calculate the population density of a country from its area and total population
+  - As before, we used a command-line flag to pass an input file to the workflow (`--input population_area_by_country.csv`)
+  - We used `population_area_by_country.csv` as an input for the process `calculate_population_density`, which uses Python code to calculate the population density of a country from its area and total population
   - The output of `calculate_population_density` is fed to the process `plot_population_by_area`, which uses R code to produce the plot
 
-The `conda` directive used in these processes defines the software dependencies needed, in this case Python and [Pandas](https://pandas.pydata.org/) for the first process and R and [tidyverse](https://www.tidyverse.org/) for the second process.
+The `conda` directive used in these processes defines the software dependencies needed, in this case Python and [pandas](https://pandas.pydata.org/) for the first process and R and [tidyverse](https://www.tidyverse.org/) for the second process.
 Software versions can be specified with an equal sign after the software name.
+Packages are sourced from the repository [Anaconda](https://anaconda.org/).
 
 Another thing to note here: the `script` directive normally interprets the code written in it as bash code, but if an sh-bang (`!#`) is included in the first line of the script, then the software specified in the sh-bang is used to run the script section (so `!#/usr/bin/env Python` tells to Nextflow to interpret the script section as Python code).
 
@@ -650,10 +652,29 @@ Running the following will yield the same result as before
 nextflow run main.nf --input population_area_by_country.csv
 ```
 
+If we wanted to use containers instead than virtual environments for the process `calculate_population_density` to specify our software dependencies, we could have just replaced the line
+
+```groovy
+conda "python=3.10.6 pandas=1.5.0"
+```
+with the line
+
+```groovy
+container "docker://amancevice/pandas"
+```
+
+And then we would need to either set `docker{enabled = true}` or `singularity{enabled = true}` on our `nextflow.config` file, or we could specify the flag  `-with-docker` or `-with-singularity` from the command line.
+A similar approach would work also for the process `plot_population_by_area`, using for example the container `docker:/rocker/tidyverse`.
+
+Note that containers in the format `docker:/username/container` are pulled by Nextflow from DockerHub.
+They can be used either with Docker or Singularity.
+
+
+
 ## Resource allocation
 
-Resource allocation is a very useful when our workflow is run on a high performance cluster or in the cloud.
-It is possible to specify the amount of [RAM](), the number of [CPU cores](), and the running time required by a process.
+Resource allocation is very useful when our workflow is run on a high performance cluster or in the cloud.
+It is possible to specify the amount of [RAM](https://www.wikiwand.com/en/Random-access_memory), the number of [CPU cores](https://www.wikiwand.com/en/Central_processing_unit), and the running time required by a process.
 These values are then used by Nextflow to reserve appropriate resources, for example to submit a job to the cluster with the desired requirements.
 
 Since we do not have a cluster environment available for this workshop, we will not try to implement an actual workflow using resource requirements (we could specify them also for a local workflow, but we would not see any effect).
@@ -695,6 +716,7 @@ Alternatively, it is also possible to run the Nextflow command with the `-resume
 We saw before that each task is executed by Nextflow in its own directory with a long alphanumeric name.
 This name is not random, but it is a 128-bit [hash number](https://www.wikiwand.com/en/Hash_function).
 This number is calculated from the following values:
+
 - Input files
 - Command line string
 - Container ID
@@ -731,7 +753,7 @@ workflow {
 }
 ```
 
-Now you can run the workflow with `nextflow run main,nf`.
+Now you can run the workflow with `nextflow run main.nf`.
 Our workflow just runs the process `dumb_process`, which does not take any input and declares a single output file, `out.txt`.
 This execution will take 2 minutes since the script block of the process `dumb_process` contains the command `sleep 120`, which just waits for 2 minutes (120 seconds), before writing the line "Success!" to the file `out.txt`.
 After the execution is complete, we can see that the line "Success!" is present in the output file by running
@@ -750,8 +772,179 @@ In this case, the execution will be much quicker since `process_dumb` is not act
 
 ## nf-core pipelines
 
+Many of the workflow that we need in our work as bioinformatics are always the same, mapping sequencing reads to a reference and then performing variant calling for example.
+
+For such common use-cases, very efficient Nextflow pipelines are already available, so there is no need to re-invent the wheel.
+Community-curated pipelines can be found on the [nf-core](https://nf-co.re) repository.
+So for example for mapping reads to a reference and then performing variant calling we would use the [`nf-core/sarek`](https://nf-co.re/sarek) pipeline.
+These pipelines follow a standardised format where inputs are declared by the user in a sample sheet.
+You can read each pipeline's documentation in nf-core to learn more about the parameters available and the expected sample sheet.
+
+I cannot make you run an actual nf-core pipeline now since there is not a simple and self-contained pipeline that does not require additional data like sequencing files to be run. However, once you have some files to process and you wrote an appropriate sample sheet, running the pipeline is very easy, for example:
+
+```bash
+nextflow run nf-core/sarek
+```
+
+Note that Nextflow is able to run workflows from [GitHub](https://github.com/), and `nf-core/sarek` in the command above is just a pointer to [this GitHub repository](https://github.com/nf-core/sarek).
+Nextflow takes care of cloning the repository and running the `main.nf` file.
+
+If you want to actually test running a pipeline written by someone else, run the following hello world pipeline:
+
+```bash
+nextflow run nextflow-io/hello
+```
+
+This will just print "Hello World" in different languages to the terminal.
+You can explore the code for this workflow [here](https://github.com/nextflow-io/hello).
+
 ## Labels
 
-## Additional notes
+The `label` directive is used in Nextflow to tag processes to which we want to apply specific configurations.
+So for example going back to the process `calculate_population_density`
+
+```groovy
+process calculate_population_density {
+    conda "python=3.10.6 pandas=1.5.0"
+
+    input:
+        path csv_file
+    output:
+        path "${csv_file.simpleName}.with_density.csv"
+    script:
+        """
+        ./calculate_population_density.py $csv_file ${csv_file.simpleName}.with_density.csv
+        """
+}
+```
+
+Instead than hard-coding the `conda` directive into the process definition, we could have done as follows
+
+```groovy
+process calculate_population_density {
+    label "pandas"
+
+    input:
+        path csv_file
+    output:
+        path "${csv_file.simpleName}.with_density.csv"
+    script:
+        """
+        ./calculate_population_density.py $csv_file ${csv_file.simpleName}.with_density.csv
+        """
+}
+```
+
+And then in the `nextflow.config` we could have written
+
+```groovy
+withLabel:pandas {
+    conda = "python=3.10.6 pandas=1.5.0"
+}
+```
+
+This may seem of little benefit for a single process, but if we have many processes with similar requirements, using the `label` directive allows us to specify such requirements only once and in a central location.
+So if for example we have several processes that need Python and pandas as software requirements, and we specified the requirements using the label directive, we can change the version of pandas used just by modifying what we wrote in the `nextflow.config` file, instead than having to modify the definition of many processes.
+
+Note that the `label` directive can be used to specify many different configurations, not only software requirements.
+For example, we could use it also for memory or time requirements.
 
 ## Basic challenge
+
+It's now time to put into practice what you learned today!
+Try to solve the following challenge.
+The aim is to write a functioning workflow that takes in input the following sample sheet
+
+```bash
+filename,value,number_of_rows,number_of_columns
+file1.txt,3,10,10
+file2.txt,7,5,45
+file3.txt,a_value,45,1
+file4.txt,trweter,43,9
+file5.txt,109,14,3
+file6.txt,aaa,1,12
+file7.txt,g,96,76
+file8.txt,eew,11,11
+file9.txt,1ww,21,34
+file10.txt,45,8,2
+file11.txt,jh,6,1
+file12.txt,96,1,5
+```
+
+For each file in the sample sheet (under the `filename` column), the workflow should create in output a file with such name and place it in the folder `../nextflow_output/challenge`.
+Each file should contain the content of the column `value` for that file.
+This content should be repeated `number_of_columns` times in the same line, each instance separated by a comma.
+The file should contain `number_of_rows` times the above mentioned row.
+So at the end, each file should be essentially a csv file with `number_of_rows` rows and `number_of_columns` columns, without header, and with each cell containing `value`.
+
+For example, `../nextflow_output/challenge/file1.txt` should contain
+
+```bash
+3,3,3,3,3,3,3,3,3,3
+3,3,3,3,3,3,3,3,3,3
+3,3,3,3,3,3,3,3,3,3
+3,3,3,3,3,3,3,3,3,3
+3,3,3,3,3,3,3,3,3,3
+3,3,3,3,3,3,3,3,3,3
+3,3,3,3,3,3,3,3,3,3
+3,3,3,3,3,3,3,3,3,3
+3,3,3,3,3,3,3,3,3,3
+3,3,3,3,3,3,3,3,3,3
+```
+
+You can use as many or as few processes as you want to achieve this result. The challenge is possible using only the Nextflow features that we discussed, and a bit of bash or Python/R scripting.
+
+You can find the solution to the challenge by disclosing the following block.
+
+<details>
+<summary>Click here to see the solution (`main.nf` file)</summary>
+```groovy
+nextflow.enable.dsl = 2
+
+process create_matrix {
+    conda "r-base r-tidyverse"
+
+    publishDir "../nextflow_output/challenge"
+
+    input:
+        tuple(
+            val(outname),
+            val(fill_value),
+            val(nrows),
+            val(ncols)
+        )
+    output:
+        path "$outname"
+
+    script:
+        """
+        #!/usr/bin/env Rscript
+
+        library("tidyverse")
+
+        content <- rep("$fill_value", ${ncols}*${nrows})
+        mat <- matrix(content, ${nrows}, ${ncols})
+
+        df <- as.tibble(mat)
+
+        write_csv(df, "${outname}", col_names=FALSE)
+        """
+
+
+}
+
+workflow {
+    Channel.fromPath( params.input )
+        .splitCsv(header: true)
+        .map{
+            [ it["filename"], it["value"], it["number_of_rows"], it["number_of_columns"] ]
+        }
+        .set{ input_ch }
+
+    create_matrix( input_ch )
+}
+
+```
+</details>
+
+The solution can be run with the f

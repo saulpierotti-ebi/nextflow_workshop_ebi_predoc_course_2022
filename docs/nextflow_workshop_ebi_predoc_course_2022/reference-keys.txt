@@ -18,7 +18,6 @@ resource-allocation
 the-resume-feature
 nf-core-pipelines
 labels
-additional-notes
 basic-challenge
 a-more-advanced-example
 some-more-operators
