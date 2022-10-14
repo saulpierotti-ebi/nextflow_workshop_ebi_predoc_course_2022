@@ -404,19 +404,19 @@ set_of_files_8.duplicated.txt</code></pre>
 And if we want some files to be processed in pairs with other specific files, or with specific parameters?
 For such use cases a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.</p>
 <p>A sample sheet is just a <a href="https://www.wikiwand.com/en/Comma-separated_values">csv</a> file with one row per file to be processed, and with each column specifying either a file or a parameter.
-Create a sample sheet called <code>../nextflow_inputs/samplesheet.csv</code> with the following content</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="a-basic-workflow.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sample,content</span></span>
-<span id="cb31-2"><a href="a-basic-workflow.html#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">../nextflow_inputs/set_of_files_1.txt,</span><span class="st">&quot;csv input 1&quot;</span></span>
-<span id="cb31-3"><a href="a-basic-workflow.html#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="ex">../nextflow_inputs/set_of_files_2.txt,</span><span class="st">&quot;csv input 2&quot;</span></span>
-<span id="cb31-4"><a href="a-basic-workflow.html#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="ex">../nextflow_inputs/set_of_files_3.txt,</span><span class="st">&quot;csv input 3&quot;</span></span>
-<span id="cb31-5"><a href="a-basic-workflow.html#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="ex">../nextflow_inputs/set_of_files_4.txt,</span><span class="st">&quot;csv input 4&quot;</span></span>
-<span id="cb31-6"><a href="a-basic-workflow.html#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="ex">../nextflow_inputs/set_of_files_5.txt,</span><span class="st">&quot;csv input 5&quot;</span></span>
-<span id="cb31-7"><a href="a-basic-workflow.html#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="ex">../nextflow_inputs/set_of_files_6.txt,</span><span class="st">&quot;csv input 6&quot;</span></span>
-<span id="cb31-8"><a href="a-basic-workflow.html#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="ex">../nextflow_inputs/set_of_files_7.txt,</span><span class="st">&quot;csv input 7&quot;</span></span>
-<span id="cb31-9"><a href="a-basic-workflow.html#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="ex">../nextflow_inputs/set_of_files_8.txt,</span><span class="st">&quot;csv input 8&quot;</span></span></code></pre></div>
+Create a sample sheet called <code>../nextflow_inputs/samplesheet.csv</code> by running the following command.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="a-basic-workflow.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;sample,content&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-2"><a href="a-basic-workflow.html#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_1.txt,csv_content_1&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-3"><a href="a-basic-workflow.html#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_2.txt,csv_content_2&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-4"><a href="a-basic-workflow.html#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_3.txt,csv_content_3&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-5"><a href="a-basic-workflow.html#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_4.txt,csv_content_4&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-6"><a href="a-basic-workflow.html#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_5.txt,csv_content_5&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-7"><a href="a-basic-workflow.html#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_6.txt,csv_content_6&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-8"><a href="a-basic-workflow.html#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_7.txt,csv_content_7&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb31-9"><a href="a-basic-workflow.html#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_8.txt,csv_content_8&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span></code></pre></div>
 <p>Now create a process called <code>append_to_file</code></p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb32-1"><a href="a-basic-workflow.html#cb32-1" aria-hidden="true" tabindex="-1"></a>process append_to_file <span class="op">{</span></span>
-<span id="cb32-2"><a href="a-basic-workflow.html#cb32-2" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/write_text_file&quot;</span></span>
+<span id="cb32-2"><a href="a-basic-workflow.html#cb32-2" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/append_to_file&quot;</span></span>
 <span id="cb32-3"><a href="a-basic-workflow.html#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-4"><a href="a-basic-workflow.html#cb32-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
 <span id="cb32-5"><a href="a-basic-workflow.html#cb32-5" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
@@ -473,7 +473,7 @@ Code
 <span id="cb34-25"><a href="a-basic-workflow.html#cb34-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb34-26"><a href="a-basic-workflow.html#cb34-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-27"><a href="a-basic-workflow.html#cb34-27" aria-hidden="true" tabindex="-1"></a>process append_to_file <span class="op">{</span></span>
-<span id="cb34-28"><a href="a-basic-workflow.html#cb34-28" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/write_text_file&quot;</span></span>
+<span id="cb34-28"><a href="a-basic-workflow.html#cb34-28" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/append_to_file&quot;</span></span>
 <span id="cb34-29"><a href="a-basic-workflow.html#cb34-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-30"><a href="a-basic-workflow.html#cb34-30" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
 <span id="cb34-31"><a href="a-basic-workflow.html#cb34-31" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
@@ -499,11 +499,10 @@ Code
 <span id="cb34-51"><a href="a-basic-workflow.html#cb34-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">append_to_file</span><span class="op">(</span> duplicate_lines<span class="op">.</span>out<span class="op">,</span> content_ch <span class="op">)</span></span>
 <span id="cb34-52"><a href="a-basic-workflow.html#cb34-52" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
-<p>Now we need to add the parameter <code>samplesheet</code> in <code>nextflow.config</code></p>
+<p>Now we need to modify the <code>params</code> block in your <code>nextflow.config</code></p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb35-1"><a href="a-basic-workflow.html#cb35-1" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
-<span id="cb35-2"><a href="a-basic-workflow.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  input_file <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/set_of_files_*.txt&quot;</span></span>
-<span id="cb35-3"><a href="a-basic-workflow.html#cb35-3" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
-<span id="cb35-4"><a href="a-basic-workflow.html#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb35-2"><a href="a-basic-workflow.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
+<span id="cb35-3"><a href="a-basic-workflow.html#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>If you want to see how your <code>nextflow.config</code> should look like at this stage open this hidden section</p>
 <details>
 <summary>
@@ -513,9 +512,8 @@ Code
 <span id="cb36-2"><a href="a-basic-workflow.html#cb36-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span>
 <span id="cb36-3"><a href="a-basic-workflow.html#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-4"><a href="a-basic-workflow.html#cb36-4" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
-<span id="cb36-5"><a href="a-basic-workflow.html#cb36-5" aria-hidden="true" tabindex="-1"></a>  input_file <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/set_of_files_*.txt&quot;</span></span>
-<span id="cb36-6"><a href="a-basic-workflow.html#cb36-6" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
-<span id="cb36-7"><a href="a-basic-workflow.html#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb36-5"><a href="a-basic-workflow.html#cb36-5" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
+<span id="cb36-6"><a href="a-basic-workflow.html#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
 <p>Now run again the workflow with <code>nextflow run main.nf</code>.
 This time if you examine the output folder with <code>ls ../nextflow_output/append_to_file</code> you will find a set of files</p>
@@ -530,11 +528,11 @@ set_of_files_8.append_to_file.txt</code></pre>
 <p>Taking as an example the first one, <code>set_of_files_1.append_to_file.txt</code> it should contain</p>
 <pre><code>This is content of file 1
 This is content of file 1
-csv input 1</code></pre>
+csv_content_1</code></pre>
 <p>While the second one, <code>set_of_files_2.append_to_file.txt</code>, should contain</p>
 <pre><code>This is content of file 2
 This is content of file 2
-csv input 2</code></pre>
+csv_content_2</code></pre>
 <p>Let’s examine what happened:</p>
 <ul>
 <li>We created the process <code>append_to_file</code>, which takes in input a file (<code>path my_file</code>) and a value (<code>val my_val</code>). This process copies the content of <code>my_file</code> to <code>${my_file.simpleName}.append_to_file.txt</code> and then appends to the newly created file the content of <code>my_val</code></li>

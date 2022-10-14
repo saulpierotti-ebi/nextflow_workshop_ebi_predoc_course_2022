@@ -277,26 +277,26 @@ And if we want some files to be processed in pairs with other specific files, or
 For such use cases a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.
 
 A sample sheet is just a [csv](https://www.wikiwand.com/en/Comma-separated_values) file with one row per file to be processed, and with each column specifying either a file or a parameter.
-Create a sample sheet called `../nextflow_inputs/samplesheet.csv` with the following content
+Create a sample sheet called `../nextflow_inputs/samplesheet.csv` by running the following command.
 
 
 ```bash
-sample,content
-../nextflow_inputs/set_of_files_1.txt,"csv input 1"
-../nextflow_inputs/set_of_files_2.txt,"csv input 2"
-../nextflow_inputs/set_of_files_3.txt,"csv input 3"
-../nextflow_inputs/set_of_files_4.txt,"csv input 4"
-../nextflow_inputs/set_of_files_5.txt,"csv input 5"
-../nextflow_inputs/set_of_files_6.txt,"csv input 6"
-../nextflow_inputs/set_of_files_7.txt,"csv input 7"
-../nextflow_inputs/set_of_files_8.txt,"csv input 8"
+echo "sample,content" > ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/set_of_files_1.txt,csv_content_1" >> ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/set_of_files_2.txt,csv_content_2" >> ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/set_of_files_3.txt,csv_content_3" >> ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/set_of_files_4.txt,csv_content_4" >> ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/set_of_files_5.txt,csv_content_5" >> ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/set_of_files_6.txt,csv_content_6" >> ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/set_of_files_7.txt,csv_content_7" >> ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/set_of_files_8.txt,csv_content_8" >> ../nextflow_inputs/samplesheet.csv
 ```
 
 Now create a process called `append_to_file`
 
 ```groovy
 process append_to_file {
-    publishDir "../nextflow_output/write_text_file"
+    publishDir "../nextflow_output/append_to_file"
 
     input:
         path my_file
@@ -359,7 +359,7 @@ process duplicate_lines {
 }
 
 process append_to_file {
-    publishDir "../nextflow_output/write_text_file"
+    publishDir "../nextflow_output/append_to_file"
 
     input:
         path my_file
@@ -387,11 +387,10 @@ workflow {
 ```
 </details>
 
-Now we need to add the parameter `samplesheet` in `nextflow.config`
+Now we need to modify the `params` block in your `nextflow.config`
 
 ```groovy
 params {
-  input_file = "../nextflow_inputs/set_of_files_*.txt"
   samplesheet = "../nextflow_inputs/samplesheet.csv"
 }
 ```
@@ -405,7 +404,6 @@ If you want to see how your `nextflow.config` should look like at this stage ope
 workDir = "../nextflow_workdir"
 
 params {
-  input_file = "../nextflow_inputs/set_of_files_*.txt"
   samplesheet = "../nextflow_inputs/samplesheet.csv"
 }
 ```
@@ -430,7 +428,7 @@ Taking as an example the first one, `set_of_files_1.append_to_file.txt` it shoul
 ```
 This is content of file 1
 This is content of file 1
-csv input 1
+csv_content_1
 ```
 
 While the second one, `set_of_files_2.append_to_file.txt`, should contain
@@ -438,7 +436,7 @@ While the second one, `set_of_files_2.append_to_file.txt`, should contain
 ```
 This is content of file 2
 This is content of file 2
-csv input 2
+csv_content_2
 ```
 
 Let's examine what happened:
