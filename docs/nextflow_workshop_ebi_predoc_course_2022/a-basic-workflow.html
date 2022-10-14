@@ -536,7 +536,8 @@ This is content of file 1
 csv_content_3</code></pre>
 <p>So the first two lines have the correct number but the last line shows the wrong element! What’s more, the element shown on the last line can be different on each run (try!). We said before that channels are guaranteed to emit elements in the same order that they are received, so we should have the correct matches between files and values. What happened?</p>
 <p>What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process <code>duplicate_lines</code> receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the file are processed in parallel, and for example <code>set_of_files_5.append_to_file.txt</code> could be processed and emitted some milliseconds earlier that <code>set_of_files_1.append_to_file.txt</code>, and so the order would be altered.</p>
-<p>A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in the next section. For now, let’s examine what happened in this version of our workflow:</p>
+<p>A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in a later section.
+For now, let’s examine what happened in this version of our workflow:</p>
 <ul>
 <li>We created the process <code>append_to_file</code>, which takes in input a file (<code>path my_file</code>) and a value (<code>val my_val</code>). This process copies the content of <code>my_file</code> to <code>${my_file.simpleName}.append_to_file.txt</code> and then appends to the newly created file the content of <code>my_val</code></li>
 <li>We defined the parameter <code>samplesheet</code> in <code>nextflow.config</code></li>
@@ -639,13 +640,36 @@ It is possible to just define the software that we need and Nextflow will take c
 <span id="cb42-48"><a href="a-basic-workflow.html#cb42-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">calculate_population_density</span><span class="op">(</span> input_ch <span class="op">)</span></span>
 <span id="cb42-49"><a href="a-basic-workflow.html#cb42-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_population_by_area</span><span class="op">(</span> calculate_population_density<span class="op">.</span>out <span class="op">)</span></span>
 <span id="cb42-50"><a href="a-basic-workflow.html#cb42-50" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Modify your <code>nextflow.config</code> by adding the following</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb43-1"><a href="a-basic-workflow.html#cb43-1" aria-hidden="true" tabindex="-1"></a>conda <span class="op">{</span></span>
+<span id="cb43-2"><a href="a-basic-workflow.html#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// use the faster mamba solver instead of conda</span></span>
+<span id="cb43-3"><a href="a-basic-workflow.html#cb43-3" aria-hidden="true" tabindex="-1"></a>    useMamba <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb43-4"><a href="a-basic-workflow.html#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>nextflow.config</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb44"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb44-1"><a href="a-basic-workflow.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb44-2"><a href="a-basic-workflow.html#cb44-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span>
+<span id="cb44-3"><a href="a-basic-workflow.html#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="a-basic-workflow.html#cb44-4" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb44-5"><a href="a-basic-workflow.html#cb44-5" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
+<span id="cb44-6"><a href="a-basic-workflow.html#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb44-7"><a href="a-basic-workflow.html#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="a-basic-workflow.html#cb44-8" aria-hidden="true" tabindex="-1"></a>conda <span class="op">{</span></span>
+<span id="cb44-9"><a href="a-basic-workflow.html#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// use the faster mamba solver instead of conda</span></span>
+<span id="cb44-10"><a href="a-basic-workflow.html#cb44-10" aria-hidden="true" tabindex="-1"></a>    useMamba <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb44-11"><a href="a-basic-workflow.html#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
 <p>Now run the workflow as follows</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="a-basic-workflow.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input</span> population_area_by_country.csv</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="a-basic-workflow.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input</span> population_area_by_country.csv</span></code></pre></div>
 <p>This time the workflow will take significantly longer to run since Nextflow needs to create two mamba environments.
 However, this will affect only the first run of the workflow, since once an environment is created it can be used multiple times.
 Now open the file <code>../nextflow_output/plots/population_area_by_country.pdf</code>.
 It will contain a plot of the population of different countries versus their area, with the size proportional to their population density.</p>
 <p>Let’s explore what happened:
+- We specified to Nextflow to use mamba instead than conda when using the conda directive (with <code>conda{use.mamba = true}</code> in <code>nextflow.config</code>)
 - As before, we used a command-line flag to pass an input file to the workflow (<code>--input</code>)
 - We used that as an input for the process <code>calculate_population_density</code>, which uses Python code to calculate the population density of a country from its area and total population
 - The output of <code>calculate_population_density</code> is fed to the process <code>plot_population_by_area</code>, which uses R code to produce the plot</p>
@@ -654,35 +678,101 @@ Software versions can be specified with an equal sign after the software name.</
 <p>Another thing to note here: the <code>script</code> directive normally interprets the code written in it as bash code, but if an sh-bang (<code>!#</code>) is included in the first line of the script, then the software specified in the sh-bang is used to run the script section (so <code>!#/usr/bin/env Python</code> tells to Nextflow to interpret the script section as Python code).</p>
 <p>A different approach to reach the same goal is to write a separate Python or R script, place it in the <code>bin</code> folder, and then execute it with a bash command in the script directive.</p>
 <p>So for example you can create a file called <code>bin/calculate_population_density.py</code> with the following content</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="a-basic-workflow.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas</span>
-<span id="cb44-2"><a href="a-basic-workflow.html#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb44-3"><a href="a-basic-workflow.html#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-4"><a href="a-basic-workflow.html#cb44-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pandas.read_csv(sys.argv[<span class="dv">1</span>])</span>
-<span id="cb44-5"><a href="a-basic-workflow.html#cb44-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;density&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;population&quot;</span>] <span class="op">/</span> df[<span class="st">&quot;area&quot;</span>]</span>
-<span id="cb44-6"><a href="a-basic-workflow.html#cb44-6" aria-hidden="true" tabindex="-1"></a>df.to_csv(sys.argv[<span class="dv">2</span>])</span></code></pre></div>
-<p>Make it executable with</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="a-basic-workflow.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x bin/calculate_population_density.py</span></code></pre></div>
-<p>And change the <code>calculate_population_density</code> process as follows</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb46-1"><a href="a-basic-workflow.html#cb46-1" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
-<span id="cb46-2"><a href="a-basic-workflow.html#cb46-2" aria-hidden="true" tabindex="-1"></a>    conda <span class="st">&quot;python=3.10.6 pandas=1.5.0&quot;</span></span>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="a-basic-workflow.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas</span>
+<span id="cb46-2"><a href="a-basic-workflow.html#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb46-3"><a href="a-basic-workflow.html#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-4"><a href="a-basic-workflow.html#cb46-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
-<span id="cb46-5"><a href="a-basic-workflow.html#cb46-5" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
-<span id="cb46-6"><a href="a-basic-workflow.html#cb46-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb46-7"><a href="a-basic-workflow.html#cb46-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;</span></span>
-<span id="cb46-8"><a href="a-basic-workflow.html#cb46-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb46-9"><a href="a-basic-workflow.html#cb46-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb46-10"><a href="a-basic-workflow.html#cb46-10" aria-hidden="true" tabindex="-1"></a><span class="st">        ./calculate_population_density.py </span><span class="ss">$csv_file</span><span class="st"> </span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv</span></span>
-<span id="cb46-11"><a href="a-basic-workflow.html#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb46-12"><a href="a-basic-workflow.html#cb46-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb46-4"><a href="a-basic-workflow.html#cb46-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pandas.read_csv(sys.argv[<span class="dv">1</span>])</span>
+<span id="cb46-5"><a href="a-basic-workflow.html#cb46-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;density&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;population&quot;</span>] <span class="op">/</span> df[<span class="st">&quot;area&quot;</span>]</span>
+<span id="cb46-6"><a href="a-basic-workflow.html#cb46-6" aria-hidden="true" tabindex="-1"></a>df.to_csv(sys.argv[<span class="dv">2</span>])</span></code></pre></div>
+<p>Make it executable with</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="a-basic-workflow.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x bin/calculate_population_density.py</span></code></pre></div>
+<p>And change the <code>calculate_population_density</code> process as follows</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb48-1"><a href="a-basic-workflow.html#cb48-1" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
+<span id="cb48-2"><a href="a-basic-workflow.html#cb48-2" aria-hidden="true" tabindex="-1"></a>    conda <span class="st">&quot;python=3.10.6 pandas=1.5.0&quot;</span></span>
+<span id="cb48-3"><a href="a-basic-workflow.html#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="a-basic-workflow.html#cb48-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb48-5"><a href="a-basic-workflow.html#cb48-5" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
+<span id="cb48-6"><a href="a-basic-workflow.html#cb48-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb48-7"><a href="a-basic-workflow.html#cb48-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;</span></span>
+<span id="cb48-8"><a href="a-basic-workflow.html#cb48-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb48-9"><a href="a-basic-workflow.html#cb48-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb48-10"><a href="a-basic-workflow.html#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="st">        ./calculate_population_density.py </span><span class="ss">$csv_file</span><span class="st"> </span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv</span></span>
+<span id="cb48-11"><a href="a-basic-workflow.html#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb48-12"><a href="a-basic-workflow.html#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Running the following will yield the same result as before</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="a-basic-workflow.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input</span> population_area_by_country.csv</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="a-basic-workflow.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input</span> population_area_by_country.csv</span></code></pre></div>
 </div>
 <div id="resource-allocation" class="section level2 hasAnchor" number="2.6">
 <h2><span class="header-section-number">2.6</span> Resource allocation<a href="a-basic-workflow.html#resource-allocation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Resource allocation is a very useful when our workflow is run on a high performance cluster or in the cloud.
+It is possible to specify the amount of <a href="">RAM</a>, the number of <a href="">CPU cores</a>, and the running time required by a process.
+These values are then used by Nextflow to reserve appropriate resources, for example to submit a job to the cluster with the desired requirements.</p>
+<p>Since we do not have a cluster environment available for this workshop, we will not try to implement an actual workflow using resource requirements (we could specify them also for a local workflow, but we would not see any effect).</p>
+<p>An example process specifying resource requirements looks like this</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb50-1"><a href="a-basic-workflow.html#cb50-1" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
+<span id="cb50-2"><a href="a-basic-workflow.html#cb50-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// this can be in GB, MB, KB, TB, ...</span></span>
+<span id="cb50-3"><a href="a-basic-workflow.html#cb50-3" aria-hidden="true" tabindex="-1"></a>    memory <span class="st">&quot;2 GB&quot;</span></span>
+<span id="cb50-4"><a href="a-basic-workflow.html#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// this can be in second(s), minute(s), hour(s), day(s)</span></span>
+<span id="cb50-5"><a href="a-basic-workflow.html#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// it is also possible to use abbreviations such as s, m, h, d</span></span>
+<span id="cb50-6"><a href="a-basic-workflow.html#cb50-6" aria-hidden="true" tabindex="-1"></a>    time <span class="st">&quot;5 days&quot;</span></span>
+<span id="cb50-7"><a href="a-basic-workflow.html#cb50-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// just an integer (note that this is not a string)</span></span>
+<span id="cb50-8"><a href="a-basic-workflow.html#cb50-8" aria-hidden="true" tabindex="-1"></a>    cpus <span class="dv">4</span></span>
+<span id="cb50-9"><a href="a-basic-workflow.html#cb50-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-10"><a href="a-basic-workflow.html#cb50-10" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb50-11"><a href="a-basic-workflow.html#cb50-11" aria-hidden="true" tabindex="-1"></a>        path csv_file</span>
+<span id="cb50-12"><a href="a-basic-workflow.html#cb50-12" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb50-13"><a href="a-basic-workflow.html#cb50-13" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv&quot;</span></span>
+<span id="cb50-14"><a href="a-basic-workflow.html#cb50-14" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb50-15"><a href="a-basic-workflow.html#cb50-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb50-16"><a href="a-basic-workflow.html#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="st">        ./calculate_population_density.py </span><span class="ss">$csv_file</span><span class="st"> </span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv</span></span>
+<span id="cb50-17"><a href="a-basic-workflow.html#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb50-18"><a href="a-basic-workflow.html#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
 <div id="the-resume-feature" class="section level2 hasAnchor" number="2.7">
 <h2><span class="header-section-number">2.7</span> The resume feature<a href="a-basic-workflow.html#the-resume-feature" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the most powerful aspects of Nextflow is the resume feature.
+This feature can be activated by adding the following to the <code>nextflow.config</code> file</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb51-1"><a href="a-basic-workflow.html#cb51-1" aria-hidden="true" tabindex="-1"></a>resume <span class="op">=</span> <span class="kw">true</span></span></code></pre></div>
+<p>Alternatively, it is also possible to run the Nextflow command with the <code>-resume</code> flag.</p>
+<p>We saw before that each task is executed by Nextflow in its own directory with a long alphanumeric name.
+This name is not random, but it is a 128-bit <a href="https://www.wikiwand.com/en/Hash_function">hash number</a>.
+This number is calculated from the following values:
+- Input files
+- Command line string
+- Container ID
+- Conda environment
+- Environment modules
+- Any executed scripts in the bin directory</p>
+<p>So, any time one of the following features of a process changes, the hash value and hence the working directory changes.</p>
+<p>If a working directory with the same hash value as the one of the task to be executed is found by Nextflow, and this folder contains all the required outputs declared in the <code>output</code> block of the process, and it contains a file called <code>.exitcode</code> containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.</p>
+<p>This feature allows to resume the execution of a previous failed run of a workflow from the last successful task, potentially saving a lot of computing time.
+A more in-depth explanation of the resume feature is available <a href="https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html">here</a>.</p>
+<p>To test the resume feature by ourselves, lets modify our <code>main.nf</code> file as follows</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb52-1"><a href="a-basic-workflow.html#cb52-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb52-2"><a href="a-basic-workflow.html#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="a-basic-workflow.html#cb52-3" aria-hidden="true" tabindex="-1"></a>process dumb_process <span class="op">{</span></span>
+<span id="cb52-4"><a href="a-basic-workflow.html#cb52-4" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output&quot;</span></span>
+<span id="cb52-5"><a href="a-basic-workflow.html#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="a-basic-workflow.html#cb52-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb52-7"><a href="a-basic-workflow.html#cb52-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;out.txt&quot;</span></span>
+<span id="cb52-8"><a href="a-basic-workflow.html#cb52-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb52-9"><a href="a-basic-workflow.html#cb52-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb52-10"><a href="a-basic-workflow.html#cb52-10" aria-hidden="true" tabindex="-1"></a><span class="st">        sleep 120</span></span>
+<span id="cb52-11"><a href="a-basic-workflow.html#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;Success!&quot; &gt; out.txt</span></span>
+<span id="cb52-12"><a href="a-basic-workflow.html#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb52-13"><a href="a-basic-workflow.html#cb52-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb52-14"><a href="a-basic-workflow.html#cb52-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-15"><a href="a-basic-workflow.html#cb52-15" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb52-16"><a href="a-basic-workflow.html#cb52-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dumb_process</span><span class="op">()</span></span>
+<span id="cb52-17"><a href="a-basic-workflow.html#cb52-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Now you can run the workflow with <code>nextflow run main,nf</code>.
+Our workflow just runs the process <code>dumb_process</code>, which does not take any input and declares a single output file, <code>out.txt</code>.
+This execution will take 2 minutes since the script block of the process <code>dumb_process</code> contains the command <code>sleep 120</code>, which just waits for 2 minutes (120 seconds), before writing the line “Success!” to the file <code>out.txt</code>.
+After the execution is complete, we can see that the line “Success!” is present in the output file by running</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="a-basic-workflow.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ../nextflow_output/out.txt</span></code></pre></div>
+<p>Now, to test the resume feature run again the workflow</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb54-1"><a href="a-basic-workflow.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">-resume</span></span></code></pre></div>
+<p>In this case, the execution will be much quicker since <code>process_dumb</code> is not actually executed, but the cached results obtained before are returned.</p>
 </div>
 <div id="nf-core-pipelines" class="section level2 hasAnchor" number="2.8">
 <h2><span class="header-section-number">2.8</span> nf-core pipelines<a href="a-basic-workflow.html#nf-core-pipelines" class="anchor-section" aria-label="Anchor link to header"></a></h2>

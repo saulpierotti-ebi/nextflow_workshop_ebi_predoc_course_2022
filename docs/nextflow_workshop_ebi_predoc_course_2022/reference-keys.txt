@@ -8,7 +8,7 @@ general-anatomy-of-a-nextflow-workflow
 nextflow-domain-specific-language-versions
 core-concepts
 your-first-workflow
-a-basic-workflow
+basic-features
 multiple-processes-and-publication-of-workflow-outputs
 creating-channels-and-specifying-pipeline-parameters
 multiple-input-files
