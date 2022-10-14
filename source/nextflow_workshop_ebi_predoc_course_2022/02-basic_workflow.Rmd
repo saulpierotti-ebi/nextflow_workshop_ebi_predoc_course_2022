@@ -302,7 +302,7 @@ process append_to_file {
         path my_file
         val my_val
     output:
-        path "${my_file.simpleName}.duplicated.txt"
+        path "${my_file.simpleName}.appended.txt"
     script:
         """
         cat $my_file > ${my_file.simpleName}.appended.txt
@@ -351,7 +351,7 @@ process duplicate_lines {
     input:
         path my_file
     output:
-        path "${my_file.simpleName}.duplicated.txt"
+        path "${my_file.simpleName}.appended.txt"
     script:
         """
         cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt
@@ -423,7 +423,7 @@ set_of_files_7.append_to_file.txt
 set_of_files_8.append_to_file.txt
 ```
 
-Taking as an example the first one, `set_of_files_1.append_to_file.txt` it should contain
+Taking as an example the first one, `set_of_files_1.append_to_file.txt` we would expect it to contain
 
 ```
 This is content of file 1
@@ -431,15 +431,19 @@ This is content of file 1
 csv_content_1
 ```
 
-While the second one, `set_of_files_2.append_to_file.txt`, should contain
+However, most probably it will contain something like
 
 ```
-This is content of file 2
-This is content of file 2
-csv_content_2
+This is content of file 1
+This is content of file 1
+csv_content_3
 ```
 
-Let's examine what happened:
+So the first two lines have the correct number but the last line shows the wrong element! What's more, the element shown on the last line can be different on each run (try!). We said before that channels are guaranteed to emit elements in the same order that they are received, so we should have the correct matches between files and values. What happened?
+
+What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process `duplicate_lines` receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the file are processed in parallel, and for example `set_of_files_5.append_to_file.txt` could be processed and emitted some milliseconds earlier that `set_of_files_1.append_to_file.txt`, and so the order would be altered.
+
+A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in the next section. For now, let's examine what happened in this version of our workflow:
 
 - We created the process `append_to_file`, which takes in input a file (`path my_file`) and a value (`val my_val`). This process copies the content of `my_file` to `${my_file.simpleName}.append_to_file.txt` and then appends to the newly created file the content of `my_val`
 - We defined the parameter `samplesheet` in `nextflow.config`
@@ -472,7 +476,25 @@ workflow{
 
 This would produce a channel containing in order the values 1, 2, and 3. These would then be printed one by one to the terminal by the view operator.
 
-## Software dependencies and resource allocation
+## Software dependencies
+
+We can do many things with just shell scripts, but for real-word scenarios we would probably need to use some additional library or tool.
+Software dependencies for a process can be specified in Nextflow in two main ways: using [software containers](https://www.docker.com/resources/what-container/) or [virtual environments](https://realpython.com/python-virtual-environments-a-primer/).
+
+A software container is like a shipping container: it is a monolithic block of code and data that contains everything needed to run a specific application, including the operating system (but not the kernel, the host kernel is used). The most popular container engine (the software that is used to actually run a container) is [Docker](https://www.docker.com/). In high-performance clusters, for security reasons Docker is discouraged or forbidden. A popular alternative container engine used in bioinformatics is [Singularity](https://sylabs.io/singularity/). The good news is that Singularity is also able to run containers created with Docker, so we can consider them equivalent for our purpose.
+
+For popular tools, a container has most probably already been created by someone and put in a public container registry like [DockerHub](https://hub.docker.com/). In this case, we can provide to Nextflow just a link to the container and it will do the rest.
+If instead we need to use a custom container, we would need to write an appropriate description file for it (called a "Dockerfile"), use it to actually build the container, and then upload the container to DockerHub.
+This last use-case will not be treated in this workshop, and we will limit ourselves to the use of pre-built containers.
+
+On the other hand, virtual environments are a more lightweight and modifiable alternative to containers.
+They rely on the host operating system but they allow to define additional software.
+Nextflow is compatible with [Conda](https://docs.conda.io/en/latest/) environments, and can also use the faster [Mamba](https://mamba.readthedocs.io/en/latest/index.html) implementation of Conda.
+
+Differently from containers, environments do not need to be pre-built to be used by Nextflow.
+It is possible to just define the software that we need and Nextflow will take care to build an appropriate environment with it.
+
+While Conda/Mamba are typically thought of as package managers for Python, they are actually able to install also R packages, the R interpreter itself, stand-alone tools,
 
 ## The resume feature
 

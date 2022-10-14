@@ -422,7 +422,7 @@ Create a sample sheet called <code>../nextflow_inputs/samplesheet.csv</code> by 
 <span id="cb32-5"><a href="a-basic-workflow.html#cb32-5" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
 <span id="cb32-6"><a href="a-basic-workflow.html#cb32-6" aria-hidden="true" tabindex="-1"></a>        val my_val</span>
 <span id="cb32-7"><a href="a-basic-workflow.html#cb32-7" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb32-8"><a href="a-basic-workflow.html#cb32-8" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb32-8"><a href="a-basic-workflow.html#cb32-8" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.appended.txt&quot;</span></span>
 <span id="cb32-9"><a href="a-basic-workflow.html#cb32-9" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
 <span id="cb32-10"><a href="a-basic-workflow.html#cb32-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
 <span id="cb32-11"><a href="a-basic-workflow.html#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.appended.txt</span></span>
@@ -465,7 +465,7 @@ Code
 <span id="cb34-17"><a href="a-basic-workflow.html#cb34-17" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
 <span id="cb34-18"><a href="a-basic-workflow.html#cb34-18" aria-hidden="true" tabindex="-1"></a>        path my_file</span>
 <span id="cb34-19"><a href="a-basic-workflow.html#cb34-19" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb34-20"><a href="a-basic-workflow.html#cb34-20" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt&quot;</span></span>
+<span id="cb34-20"><a href="a-basic-workflow.html#cb34-20" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;</span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.appended.txt&quot;</span></span>
 <span id="cb34-21"><a href="a-basic-workflow.html#cb34-21" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
 <span id="cb34-22"><a href="a-basic-workflow.html#cb34-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
 <span id="cb34-23"><a href="a-basic-workflow.html#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$my_file</span><span class="st"> </span><span class="ss">$my_file</span><span class="st"> &gt; </span><span class="ss">${</span>my_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.duplicated.txt</span></span>
@@ -525,15 +525,18 @@ set_of_files_5.append_to_file.txt
 set_of_files_6.append_to_file.txt
 set_of_files_7.append_to_file.txt
 set_of_files_8.append_to_file.txt</code></pre>
-<p>Taking as an example the first one, <code>set_of_files_1.append_to_file.txt</code> it should contain</p>
+<p>Taking as an example the first one, <code>set_of_files_1.append_to_file.txt</code> we would expect it to contain</p>
 <pre><code>This is content of file 1
 This is content of file 1
 csv_content_1</code></pre>
-<p>While the second one, <code>set_of_files_2.append_to_file.txt</code>, should contain</p>
-<pre><code>This is content of file 2
-This is content of file 2
-csv_content_2</code></pre>
-<p>Let’s examine what happened:</p>
+<p>However, most probably it will contain something like</p>
+<pre><code>This is content of file 1
+This is content of file 1
+csv_content_3</code></pre>
+<p>So the first two lines have the correct number but the last line shows the wrong element! What’s more, the element shown on the last line can be different on each run (try!). We said before that channels are guaranteed to emit elements in the same order that they are received, so we should have the correct matches between files and values. What happened?</p>
+<p>What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process <code>duplicate_lines</code> receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the file are processed in parallel, and for example <code>set_of_files_5.append_to_file.txt</code> could be processed and emitted some milliseconds earlier that <code>set_of_files_1.append_to_file.txt</code>, and so the order would be altered.</p>
+<p>A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in the next section.</p>
+<p>For now, let’s examine what happened in this version of our workflow:</p>
 <ul>
 <li>We created the process <code>append_to_file</code>, which takes in input a file (<code>path my_file</code>) and a value (<code>val my_val</code>). This process copies the content of <code>my_file</code> to <code>${my_file.simpleName}.append_to_file.txt</code> and then appends to the newly created file the content of <code>my_val</code></li>
 <li>We defined the parameter <code>samplesheet</code> in <code>nextflow.config</code></li>
