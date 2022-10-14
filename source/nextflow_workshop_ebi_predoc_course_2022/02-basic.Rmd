@@ -945,6 +945,10 @@ workflow {
 }
 
 ```
-</details>
 
-The solution can be run with the f
+If the sample sheet is saved as `../nextflow_output/samplesheet.csv`, the solution can be run with the following command
+
+```bash
+nextflow run main.nf --input ../nextflow_output/samplesheet.csv
+```
+</details>

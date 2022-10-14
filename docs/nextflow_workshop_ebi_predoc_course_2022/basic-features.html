@@ -907,7 +907,7 @@ Click here to see the solution (<code>main.nf</code> file)
 <span id="cb64-24"><a href="basic-features.html#cb64-24" aria-hidden="true" tabindex="-1"></a><span class="st">        content &lt;- rep(&quot;</span><span class="ss">$fill_value</span><span class="st">&quot;, </span><span class="ss">${</span>ncols<span class="ss">}</span><span class="st">*</span><span class="ss">${</span>nrows<span class="ss">}</span><span class="st">)</span></span>
 <span id="cb64-25"><a href="basic-features.html#cb64-25" aria-hidden="true" tabindex="-1"></a><span class="st">        mat &lt;- matrix(content, </span><span class="ss">${</span>nrows<span class="ss">}</span><span class="st">, </span><span class="ss">${</span>ncols<span class="ss">}</span><span class="st">)</span></span>
 <span id="cb64-26"><a href="basic-features.html#cb64-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-27"><a href="basic-features.html#cb64-27" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- tibble(mat)</span></span>
+<span id="cb64-27"><a href="basic-features.html#cb64-27" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- as.tibble(mat)</span></span>
 <span id="cb64-28"><a href="basic-features.html#cb64-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-29"><a href="basic-features.html#cb64-29" aria-hidden="true" tabindex="-1"></a><span class="st">        write_csv(df, &quot;</span><span class="ss">${</span>outname<span class="ss">}</span><span class="st">&quot;, col_names=FALSE)</span></span>
 <span id="cb64-30"><a href="basic-features.html#cb64-30" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
@@ -925,6 +925,8 @@ Click here to see the solution (<code>main.nf</code> file)
 <span id="cb64-42"><a href="basic-features.html#cb64-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-43"><a href="basic-features.html#cb64-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">create_matrix</span><span class="op">(</span> input_ch <span class="op">)</span></span>
 <span id="cb64-44"><a href="basic-features.html#cb64-44" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If the sample sheet is saved as <code>../nextflow_output/samplesheet.csv</code>, the solution can be run with the following command</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb65-1"><a href="basic-features.html#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input</span> ../nextflow_output/samplesheet.csv</span></code></pre></div>
 </details>
 
 </div>
