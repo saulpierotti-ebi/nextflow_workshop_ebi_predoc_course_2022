@@ -6,6 +6,90 @@ For this reason, you will find the following section to be a bit different from 
 I will not walk you through complete reproducible examples as I did until now, but I will present small snippets of code that show some specific functionality or practice that I deemed to be useful to know.
 You are supposed to try out by yourself these ideas, and see how they can be applied to your own use-case.
 
+## Process inputs
+
+The input(s) used by a process is defined in its `input:` block, as we saw before.
+The input(s) specified can be of several types.
+We already saw in the basic section of this workshop the `path` and `val` input qualifiers.
+We will see them more in details now, as well as explore some additional input qualifiers.
+
+## Input of type `val`
+
+An input of type `val` just defines a value, that is made available to the process as a variable.
+
+As an example, the following code writes the value "Good morning" to the file called `my_file.txt`.
+
+```
+process say_hello {
+  input:
+    val greeting_sentence
+
+  output:
+    path "my_file.txt"
+
+  script:
+    """
+    echo $greeting_sentence > my_file.txt
+    """
+}
+
+workflow {
+  Channel.value("Good morning").set{ my_ch }
+  say_hello( my_ch )
+}
+```
+
+## Input of type `path`
+
+An input of type `path` stages a file in the working directory of the process, and makes the filename available to the process under the variable declared.
+
+As an example, the following code just reads the file `/path/to/a/file.txt` to the standard output.
+
+```
+process read_file {
+  input:
+    path my_file
+
+  script:
+    """
+    cat $my_file
+    """
+}
+
+workflow {
+  Channel.fromPath("/path/to/a/file.txt").set{ my_ch }
+  read_file( my_ch )
+}
+```
+
+## Input of type `tuple`
+
+An input of type `tuple` can be used when the channel given in input to the process emits lists of elements instead than single elements.
+The elements contained in the list can be of any type, like for example `val` or `path`.
+
+As an example, the following code appends the value "Good morning"  to the file `/path/to/a/file.txt`.
+
+```
+process append_value_to_file {
+  input:
+    tuple(
+      path(my_file),
+      path(my_value)
+    )
+
+  script:
+    """
+    echo $my_value >> $my_file
+    """
+}
+
+workflow {
+  Channel.of( [ "Good morning", /path/to/a/file.txt" ] ).set{ my_ch }
+  append_value_to_file( my_ch )
+}
+```
+
+
 ## The Groovy programming language
 
 Here we will talk about some features of the Groovy programming language, on which Nextflow is based, that can be useful when writing workflows.
@@ -17,14 +101,14 @@ We already introduced closures in previous section, where we used them in conjun
 In general, we can consider a closure as a unnamed function, defined as a statement enclosed in curly brackets.
 The following is a closure
 
-```
+```groovy
 { it[1] }
 ```
 
 We can manually define the inputs and outputs of a closure.
 For example:
 
-```
+```groovy
 {
   x, y ->
   z = x + y
@@ -37,7 +121,7 @@ The definition of inputs is optional, and indeed it is usually skipped.
 If an input is not defined, the implicit variable `it` is used to refer to any input passed to the closure.
 So we could write the following, assuming that a tuple of two elements is passed as an input to the closure
 
-```
+```groovy
 {
   z = it[0] + it[1]
   return z
@@ -47,7 +131,7 @@ So we could write the following, assuming that a tuple of two elements is passed
 What's more, it is possible to also omit the `return` statement from a closure.
 In this case, the last evaluated expression is returned.
 
-```
+```groovy
 { it[0] + it[1] }
 ```
 
@@ -55,8 +139,8 @@ As shown in the previous example, closures can be split on multiple lines or the
 They can contain any valid Groovy code statement.
 For example:
 
-```
-{ if ( it > 1 ) {"small"} else { "big" } }
+```groovy
+{ if ( it < 1 ) {"small"} else { "big" } }
 ```
 
 ### Conditional statements
@@ -65,8 +149,8 @@ Conditional statements in Groovy can be written in several ways.
 The simplest approach is that of a classic if/else statement.
 This can be written, for example, as follows.
 
-```
-if ( x > 1 ) {
+```groovy
+if ( x < 1 ) {
   y = "small"
 } else {
   y = "big"
@@ -75,13 +159,13 @@ if ( x > 1 ) {
 
 A more compact syntax to achieve the same result takes advantage of the ternary operator
 
-```
-y = ( x > 1 ) ? "small" : "big"
+```groovy
+y = ( x < 1 ) ? "small" : "big"
 ```
 
 In case when the return value desired for the `TRUE` case is the statement itself, the Elvis operator can be used
 
-```
+```groovy
 y = my_list ?: "list is empty"
 ```
 
@@ -93,36 +177,228 @@ Besides the `Channel.fromPath` and `Channel.value` channel factories that we saw
 `Channel.of` allows you tu put into a channel any Groovy data structure like lists, hash maps, and so on.
 So takes as an example the following:
 
-```
+```groovy
 Channel.of(
-  ["name": "EBI", "type": "insititute", "location": "UK"],
-  ["name": "GB", "type": "insititute", "location": "Germany"],
+  ["name": "EBI", "type": "institute", "location": "UK"],
+  ["name": "GB", "type": "institute", "location": "Germany"],
 )
 ```
 
 This will create a channel emitting two elements, each of them a Groovy map containing three elements.
+What especially differentiates `Channel.of` from  `Channel.value` is that the latter can contain only a single element.
 
-## Some more operators
+
+## Operators
 
 In the basic section of this workshop, we introduced a few Nextflow operators: `map`, `splitCsv`, `view`.
-Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with a more complex logic.
+Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with a more complex logic.Note that this is not an exhaustive list.
+An exhaustive list can be found [here](https://www.nextflow.io/docs/latest/operator.html#).
+
+
+### The `view` operator
+
+The `view` operator just prints to the terminal the content of the channel, one element per line.
+
+```groovy
+Channel.of(1,2,3).view()
+```
+
+Expected output:
+
+```
+1
+2
+3
+```
 
 ### The `map` operator
 
 The `map` operator can be used to modify the content of a channel on the fly.
 For example, it can be used to extract just some elements from a channel emitting lists.
 
-```
+```groovy
 Channel.of(
-  ["name": "EBI", "type": "insititute", "location": "UK"],
-  ["name": "GB", "type": "insititute", "location": "Germany"],
+  ["name": "EBI", "type": "institute", "location": "UK"],
+  ["name": "GB", "type": "institute", "location": "Germany"],
 )
   .map{ it["name"] }
 ```
 
-## A deeper look at
+Expected output:
 
-## Some more directives
+```
+EBI
+GB
+```
+
+### The `set` operator
+
+The `set` operator creates assigns a name to the channel, given as a closure argument.
+
+```
+Channel.of(1, 2, 3).set{ my_ch }
+```
+
+The above snippets creates a channel called `my_ch` with the values specified.
+
+### The `splitCsv` operator
+
+The `splitCsv` operator is usually used to process a sample sheet.
+It takes a `path` channel containing a csv file and emits each line of the csv as a list of values (or as a hash map if `header: true` is specified).
+
+### The `flatten` operator
+
+The `flatten` operator will take all the elements in a channel and split them in single elements.
+If the channel emits lists or nested lists, they are flattened and each element is emitted independently.
+
+```groovy
+Channel.of(
+    [1, 2, 3],
+    ["aa", "bb", "cc"]
+)
+  .flatten()
+```
+
+Expected output:
+
+```
+1
+2
+3
+aa
+bb
+cc
+```
+
+### The `collect` operator
+
+The `collect` operator is in a way performing the opposite operation of the `flatten` operator.
+It takes all the elements in a channel and collects them in a single list, which is then emitted all at once.
+
+```groovy
+Channel.of(
+    [1, 2, 3],
+    ["aa", "bb", "cc"]
+)
+  .collect()
+```
+
+Expected output:
+
+```
+[1, 2, 3, aa, bb, cc]
+```
+
+### The `filter` operator
+
+The `filter` operator filters the elements of a channel, emitting only the ones for which a condition is satisfied.
+The condition is provided as a closure, with a boolean return value.
+It is also possible to use a regular expression as a test, but we will not treat it here.
+
+```groovy
+Channel.of(1, 2, 3, 4, 5)
+  .filter{ it > 3 }
+```
+
+Expected output:
+
+```
+4
+5
+```
+
+### The `first` operator
+
+The `first` operator just emits the first element of a channel.
+Useful for testing the logic without running the full workflow.
+
+```groovy
+Channel.of(1, 2, 3, 4, 5).first()
+```
+
+Expected output:
+
+```
+1
+```
+
+### The `combine` operator
+
+The combine operator creates the Cartesian product of two channels (all the possible combinations of elements).
+
+```groovy
+Channel.of(1,2,3).set{ ch_1 }
+Channel.of("a", "b", "c").set{ ch_2 }
+
+ch_1.combine(ch_2)
+```
+
+Expected output:
+
+```
+[1, a]
+[2, a]
+[1, b]
+[2, b]
+[3, a]
+[3, b]
+[1, c]
+[2, c]
+[3, c]
+```
+
+The `combine` operator can also be used to join elements that present a matching key from two channels.
+This is achieved by specifying the `by` argument, with an integer specifying the position in the tuple to use as a matching key.
+
+```groovy
+Channel.of(
+  ["key1", 1],
+  ["key2", 2],
+  ["key3", 3],
+).set{ ch_1 }
+
+Channel.of(
+  ["key3", "aa"],
+  ["key1", "bb"],
+  ["key2", "cc"],
+).set{ ch_2 }
+
+ch_1.combine(ch_2, by: 0)
+```
+
+Expected output:
+
+```
+[key1, 1, bb]
+[key3, 3, aa]
+[key2, 2, cc]
+```
+
+### The `groupTuple` operator
+
+The `groupTuple` operator collects the elements of a channel according to a matching key (whose position is specified with the `by` argument).
+
+```groovy
+Channel.of(
+  ["key1", 1],
+  ["key2", 2],
+  ["key1", 3],
+  ["key2", 4],
+  ["key1", 4],
+)
+.groupTuple(by: 0)
+```
+
+Expected output:
+
+```
+[key1, [1, 3, 4]]
+[key2, [2, 4]]
+```
+
+## Directives
+
+
 
 ## Execution environments
 
