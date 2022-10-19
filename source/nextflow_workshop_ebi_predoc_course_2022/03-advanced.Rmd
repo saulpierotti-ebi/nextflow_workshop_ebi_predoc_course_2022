@@ -437,11 +437,111 @@ Expected output:
 [key2, [2, 4]]
 ```
 
+## Implicit variables
+
+Implicit variables in Nextflow are a set of variables that are automatically defined by Nextflow for a process, globally, or in `nextflow.config`.
+They can be accessed to modify the execution of processes and workflows according to their value.
+
+Here just a few implicit variables are presented. For a full description visit [here](https://www.nextflow.io/docs/latest/script.html#implicit-variables).
+
+### Script implicit variables (available in `main.nf`)
+
+- `projectDir`: the directory where the `main.nf` script is located
+- `launchDir`: the directory where Nextflow is executed from
+- `params`: a dictionary containing parameters given via the command line or via `nextflow.config` (like `params.input` that we used in the basic section of this workshop)
+- `workDir`: the working directory where the processes are executed
+
+### Configuration implicit variables (available in `nextflow.config`)
+
+- `launchDir`: the directory where Nextflow is executed from
+- `projectDir`: the directory where the `main.nf` script is located
+
+### Process implicit variables (defined within a process)
+
+All of the process implicit variables are part of the `task` dictionary.
+
+- `task.attempt`: the number of times the task has been retried because of errors (when using `errorStrategy "retry"`)
+- `task.hash`: the hash values of the taks used to define its working directory
+- `task.processes`: the name of the process
+- `task.name`: the name of the task (composed of process name and inputs)
+
 ## Directives
 
+Directives are options that can be applied to processes, affecting their execution in several ways.
+We already saw the `conda`, `container`, `cpu`, `time`, and `memory` directives in the basic section of this workshop.
+Here we will explore them more in detail, together with some additional directives that we did not encounter before.
+
+This list is not exhaustive. For a complete description of Nextflow directives see [here](https://www.nextflow.io/docs/latest/process.html#directives).
+
+### The `conda` directive
+
+The `conda` directive is used to define a conda environment where the script block is run.
+Even when using the faster `mamba` solver instead than `conda`, still the `conda` directive is used to specify the dependencies.
 
 
-## Execution environments
+```
+process {
+  conda "python pandas"
+
+  script:
+    """
+    """
+}
+```
+
+### The `container` directive
+
+The `container` directive defines the container used to run the script block.
+This can be a Docker container, a Singularity container, or other kinds of containers (see [here](https://www.nextflow.io/docs/latest/container.html) for more).
+The container runtime to be used is usually defined in defined in the `nextflow.config` file.
+The container can be local or hosted in a container registry like DockerHub.
+
+```
+process {
+  container "docker://saulpierottiebi/nvtop"
+
+  script:
+    """
+    """
+}
+```
+
+
+### The `cpus`, `memory`, and `time` directives
+
+The `cpus`, `memory`, and `time` directives are used to define the resources required by a process.
+They are able to understand both strings (like `"1 GB"`, or `"2 days"`) and also values in the form `1.GB` or `1.day`.
+The latter expression can also be used in closures to dynamically compute resource requirements (for example, `memory { 2.GB * task.attempt }`, we will see this better when talking of the `errorStrategy` directive).
+
+```
+process {
+  cpus 4
+  memory "1 GB"
+  time "2 days"
+
+  script:
+    """
+    """
+}
+```
+
+### The `label` directive
+
+### The `debug` directive
+
+### The `cache` directive
+
+### The `errorStrategy` directive
+
+### The `publishDir` directive
+
+### The `executor` directive
+
+### The `queue` directive
+
+### The `ext` directive
+
+## Executors
 
 ## Sub-workflows
 
