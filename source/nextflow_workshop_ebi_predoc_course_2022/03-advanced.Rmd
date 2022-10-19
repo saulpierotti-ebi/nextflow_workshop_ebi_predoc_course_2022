@@ -464,6 +464,7 @@ All of the process implicit variables are part of the `task` dictionary.
 - `task.hash`: the hash values of the taks used to define its working directory
 - `task.processes`: the name of the process
 - `task.name`: the name of the task (composed of process name and inputs)
+- `task.exitStatus`: the exit code of the task
 
 ## Directives
 
@@ -510,6 +511,7 @@ process {
 ### The `cpus`, `memory`, and `time` directives
 
 The `cpus`, `memory`, and `time` directives are used to define the resources required by a process.
+These are used for example when scheduling jobs with a batch scheduler in a cluster environment.
 They are able to understand both strings (like `"1 GB"`, or `"2 days"`) and also values in the form `1.GB` or `1.day`.
 The latter expression can also be used in closures to dynamically compute resource requirements (for example, `memory { 2.GB * task.attempt }`, we will see this better when talking of the `errorStrategy` directive).
 
@@ -527,21 +529,153 @@ process {
 
 ### The `label` directive
 
+The `label` directive is used to apply a common set of configurations to a set of processes.
+This allows all the configurations to be defined centrally in `nextflow.config`, instead than being hard-coded in each process definition.
+
+
+```groovy
+process do_something {
+  label "process_long"
+
+  script:
+    """
+    """
+}
+
+process do_something_else {
+  label "process_long"
+
+  script:
+    """
+    """
+}
+```
+
+Any process directive can be included in the `withLabel` code block in `nextflow.config`.
+
+And in `nextflow.config`:
+
+```groovy
+withLabel:process_long {
+  time = "3 days"
+}
+```
+
 ### The `debug` directive
+
+The `debug` directive can be set to the boolean values `true` or `false`.
+If set to `true`, the standard output of the process is shown on the command line during workflows execution.
+As the name suggests, this is useful for debugging particular processes.
+
+```groovy
+process do_something {
+  debug true
+
+  script:
+    """
+    echo "This will be seen in the console"
+    """
+}
+```
 
 ### The `cache` directive
 
+The `cache` directive controls the behaviour of the Nextflow resume system.
+If cache is set to `false`, the process is not cached and it is executed *de novo* each time, even if `resume` is set to `true` globally.
+
+```groovy
+process do_something {
+  cache false
+
+  script:
+    """
+    """
+}
+```
+
 ### The `errorStrategy` directive
+
+The `errorStrategy` directive controls what happens when the exit code of a process is not `0` (when the process terminates with an error).
+Possible values are "terminate", "retry", "finish", and "ignore".
+
+```groovy
+process do_something {
+  errorStrategy "ignore"
+
+  script:
+    """
+    """
+}
+```
+
+It is also possible to use a closure as an argument for the `errorStrategy` directive.
+This allows to obtain a different behaviour with different exit codes.
+Combining the "retry" `errorStrategy` with dynamic resource allocation we can obtain a process that when fails with certain exit codes (for example corresponding to insufficient memory) is retried with more resources.
+
+```groovy
+process do_something {
+  errorStrategy { task.exitStatus == 130 ? "retry" : "terminate" }
+  memory { 10.GB * task.attempt }
+
+  script:
+    """
+    """
+}
+```
+
+Note that the exit codes are platform-dependent so are best defined on a platform dependent basis instead than being hard-coded.
 
 ### The `publishDir` directive
 
-### The `executor` directive
+The `publishDir` directive defines where to copy the outputs of a process following successful execution.
+This is typically used with the final outputs of a workflow that are of interest for further analysis.
+Using the `publishDir` directory, we can obtain all our outputs in a organised directory structure.
 
-### The `queue` directive
+```groovy
+process do_something {
+  publishDir "/my/output/dir"
+
+  output:
+    path "my_file.txt"
+
+  script:
+    """
+    touch my_file.txt
+    """
+}
+```
+
+### The `executor` and `queue` directives
+
+The `executor` directive allows to specify the executor to use for a given process.
+This can be "local" (the default) for local execution, "lsf" for using the batch scheduler [IBM Spectrum LSF](https://www.ibm.com/docs/en/spectrum-lsf), or other values for several other batch schedulers.
+It is even possible to use cloud infrastructures such as [AWS](https://aws.amazon.com/?nc2=h_lg), [Microsoft Azure](https://azure.microsoft.com/en-gb/), or [Google Cloud](https://cloud.google.com/).
+
+Using executors other than the "local" executor is essential for real-world workflows, where the computational resources required often vastly exceed those of a single laptop or even server.
+
+You can read more about different executors for Nextflow [here](https://www.nextflow.io/docs/latest/executor.html#).
+
+The `queue` directive allows you to define which of the batch scheduler queues to submit the process' tasks to.
+The value assigned to the `queue` directive should be a string matching the name of an existing queue.
+
+```groovy
+process do_something {
+  executor "lsf"
+  queue "research"
+
+  script:
+    """
+    """
+}
+```
 
 ### The `ext` directive
 
-## Executors
+## Advanced workflow configuration
+
+### Configuration files
+
+### Configuration profiles
 
 ## Sub-workflows
 

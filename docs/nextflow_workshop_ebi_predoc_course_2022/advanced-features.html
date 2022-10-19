@@ -204,11 +204,14 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="4.7.6" data-path="advanced-features.html"><a href="advanced-features.html#the-cache-directive"><i class="fa fa-check"></i><b>4.7.6</b> The <code>cache</code> directive</a></li>
 <li class="chapter" data-level="4.7.7" data-path="advanced-features.html"><a href="advanced-features.html#the-errorstrategy-directive"><i class="fa fa-check"></i><b>4.7.7</b> The <code>errorStrategy</code> directive</a></li>
 <li class="chapter" data-level="4.7.8" data-path="advanced-features.html"><a href="advanced-features.html#the-publishdir-directive"><i class="fa fa-check"></i><b>4.7.8</b> The <code>publishDir</code> directive</a></li>
-<li class="chapter" data-level="4.7.9" data-path="advanced-features.html"><a href="advanced-features.html#the-executor-directive"><i class="fa fa-check"></i><b>4.7.9</b> The <code>executor</code> directive</a></li>
-<li class="chapter" data-level="4.7.10" data-path="advanced-features.html"><a href="advanced-features.html#the-queue-directive"><i class="fa fa-check"></i><b>4.7.10</b> The <code>queue</code> directive</a></li>
-<li class="chapter" data-level="4.7.11" data-path="advanced-features.html"><a href="advanced-features.html#the-ext-directive"><i class="fa fa-check"></i><b>4.7.11</b> The <code>ext</code> directive</a></li>
+<li class="chapter" data-level="4.7.9" data-path="advanced-features.html"><a href="advanced-features.html#the-executor-and-queue-directives"><i class="fa fa-check"></i><b>4.7.9</b> The <code>executor</code> and <code>queue</code> directives</a></li>
+<li class="chapter" data-level="4.7.10" data-path="advanced-features.html"><a href="advanced-features.html#the-ext-directive"><i class="fa fa-check"></i><b>4.7.10</b> The <code>ext</code> directive</a></li>
 </ul></li>
-<li class="chapter" data-level="4.8" data-path="advanced-features.html"><a href="advanced-features.html#executors"><i class="fa fa-check"></i><b>4.8</b> Executors</a></li>
+<li class="chapter" data-level="4.8" data-path="advanced-features.html"><a href="advanced-features.html#advanced-workflow-configuration"><i class="fa fa-check"></i><b>4.8</b> Advanced workflow configuration</a>
+<ul>
+<li class="chapter" data-level="4.8.1" data-path="advanced-features.html"><a href="advanced-features.html#configuration-files"><i class="fa fa-check"></i><b>4.8.1</b> Configuration files</a></li>
+<li class="chapter" data-level="4.8.2" data-path="advanced-features.html"><a href="advanced-features.html#configuration-profiles"><i class="fa fa-check"></i><b>4.8.2</b> Configuration profiles</a></li>
+</ul></li>
 <li class="chapter" data-level="4.9" data-path="advanced-features.html"><a href="advanced-features.html#sub-workflows"><i class="fa fa-check"></i><b>4.9</b> Sub-workflows</a></li>
 <li class="chapter" data-level="4.10" data-path="advanced-features.html"><a href="advanced-features.html#nextflow-tower"><i class="fa fa-check"></i><b>4.10</b> Nextflow tower</a></li>
 </ul></li>
@@ -575,6 +578,7 @@ They can be accessed to modify the execution of processes and workflows accordin
 <li><code>task.hash</code>: the hash values of the taks used to define its working directory</li>
 <li><code>task.processes</code>: the name of the process</li>
 <li><code>task.name</code>: the name of the task (composed of process name and inputs)</li>
+<li><code>task.exitStatus</code>: the exit code of the task</li>
 </ul>
 </div>
 </div>
@@ -613,6 +617,7 @@ The container can be local or hosted in a container registry like DockerHub.</p>
 <div id="the-cpus-memory-and-time-directives" class="section level3 hasAnchor" number="4.7.3">
 <h3><span class="header-section-number">4.7.3</span> The <code>cpus</code>, <code>memory</code>, and <code>time</code> directives<a href="advanced-features.html#the-cpus-memory-and-time-directives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <code>cpus</code>, <code>memory</code>, and <code>time</code> directives are used to define the resources required by a process.
+These are used for example when scheduling jobs with a batch scheduler in a cluster environment.
 They are able to understand both strings (like <code>"1 GB"</code>, or <code>"2 days"</code>) and also values in the form <code>1.GB</code> or <code>1.day</code>.
 The latter expression can also be used in closures to dynamically compute resource requirements (for example, <code>memory { 2.GB * task.attempt }</code>, we will see this better when talking of the <code>errorStrategy</code> directive).</p>
 <pre><code>process {
@@ -627,31 +632,126 @@ The latter expression can also be used in closures to dynamically compute resour
 </div>
 <div id="the-label-directive" class="section level3 hasAnchor" number="4.7.4">
 <h3><span class="header-section-number">4.7.4</span> The <code>label</code> directive<a href="advanced-features.html#the-label-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>label</code> directive is used to apply a common set of configurations to a set of processes.
+This allows all the configurations to be defined centrally in <code>nextflow.config</code>, instead than being hard-coded in each process definition.</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb101-1"><a href="advanced-features.html#cb101-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
+<span id="cb101-2"><a href="advanced-features.html#cb101-2" aria-hidden="true" tabindex="-1"></a>  label <span class="st">&quot;process_long&quot;</span></span>
+<span id="cb101-3"><a href="advanced-features.html#cb101-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-4"><a href="advanced-features.html#cb101-4" aria-hidden="true" tabindex="-1"></a>  script<span class="op">:</span></span>
+<span id="cb101-5"><a href="advanced-features.html#cb101-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb101-6"><a href="advanced-features.html#cb101-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
+<span id="cb101-7"><a href="advanced-features.html#cb101-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb101-8"><a href="advanced-features.html#cb101-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-9"><a href="advanced-features.html#cb101-9" aria-hidden="true" tabindex="-1"></a>process do_something_else <span class="op">{</span></span>
+<span id="cb101-10"><a href="advanced-features.html#cb101-10" aria-hidden="true" tabindex="-1"></a>  label <span class="st">&quot;process_long&quot;</span></span>
+<span id="cb101-11"><a href="advanced-features.html#cb101-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-12"><a href="advanced-features.html#cb101-12" aria-hidden="true" tabindex="-1"></a>  script<span class="op">:</span></span>
+<span id="cb101-13"><a href="advanced-features.html#cb101-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb101-14"><a href="advanced-features.html#cb101-14" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
+<span id="cb101-15"><a href="advanced-features.html#cb101-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Any process directive can be included in the <code>withLabel</code> code block in <code>nextflow.config</code>.</p>
+<p>And in <code>nextflow.config</code>:</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb102-1"><a href="advanced-features.html#cb102-1" aria-hidden="true" tabindex="-1"></a>withLabel<span class="op">:</span>process_long <span class="op">{</span></span>
+<span id="cb102-2"><a href="advanced-features.html#cb102-2" aria-hidden="true" tabindex="-1"></a>  time <span class="op">=</span> <span class="st">&quot;3 days&quot;</span></span>
+<span id="cb102-3"><a href="advanced-features.html#cb102-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
 <div id="the-debug-directive" class="section level3 hasAnchor" number="4.7.5">
 <h3><span class="header-section-number">4.7.5</span> The <code>debug</code> directive<a href="advanced-features.html#the-debug-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>debug</code> directive can be set to the boolean values <code>true</code> or <code>false</code>.
+If set to <code>true</code>, the standard output of the process is shown on the command line during workflows execution.
+As the name suggests, this is useful for debugging particular processes.</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb103-1"><a href="advanced-features.html#cb103-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
+<span id="cb103-2"><a href="advanced-features.html#cb103-2" aria-hidden="true" tabindex="-1"></a>  debug <span class="kw">true</span></span>
+<span id="cb103-3"><a href="advanced-features.html#cb103-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-4"><a href="advanced-features.html#cb103-4" aria-hidden="true" tabindex="-1"></a>  script<span class="op">:</span></span>
+<span id="cb103-5"><a href="advanced-features.html#cb103-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb103-6"><a href="advanced-features.html#cb103-6" aria-hidden="true" tabindex="-1"></a><span class="st">    echo &quot;This will be seen in the console&quot;</span></span>
+<span id="cb103-7"><a href="advanced-features.html#cb103-7" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
+<span id="cb103-8"><a href="advanced-features.html#cb103-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
 <div id="the-cache-directive" class="section level3 hasAnchor" number="4.7.6">
 <h3><span class="header-section-number">4.7.6</span> The <code>cache</code> directive<a href="advanced-features.html#the-cache-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>cache</code> directive controls the behaviour of the Nextflow resume system.
+If cache is set to <code>false</code>, the process is not cached and it is executed <em>de novo</em> each time, even if <code>resume</code> is set to <code>true</code> globally.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb104-1"><a href="advanced-features.html#cb104-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
+<span id="cb104-2"><a href="advanced-features.html#cb104-2" aria-hidden="true" tabindex="-1"></a>  cache <span class="kw">false</span></span>
+<span id="cb104-3"><a href="advanced-features.html#cb104-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-4"><a href="advanced-features.html#cb104-4" aria-hidden="true" tabindex="-1"></a>  script<span class="op">:</span></span>
+<span id="cb104-5"><a href="advanced-features.html#cb104-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb104-6"><a href="advanced-features.html#cb104-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
+<span id="cb104-7"><a href="advanced-features.html#cb104-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
 <div id="the-errorstrategy-directive" class="section level3 hasAnchor" number="4.7.7">
 <h3><span class="header-section-number">4.7.7</span> The <code>errorStrategy</code> directive<a href="advanced-features.html#the-errorstrategy-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>errorStrategy</code> directive controls what happens when the exit code of a process is not <code>0</code> (when the process terminates with an error).
+Possible values are “terminate”, “retry”, “finish”, and “ignore”.</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb105-1"><a href="advanced-features.html#cb105-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
+<span id="cb105-2"><a href="advanced-features.html#cb105-2" aria-hidden="true" tabindex="-1"></a>  errorStrategy <span class="st">&quot;ignore&quot;</span></span>
+<span id="cb105-3"><a href="advanced-features.html#cb105-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-4"><a href="advanced-features.html#cb105-4" aria-hidden="true" tabindex="-1"></a>  script<span class="op">:</span></span>
+<span id="cb105-5"><a href="advanced-features.html#cb105-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb105-6"><a href="advanced-features.html#cb105-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
+<span id="cb105-7"><a href="advanced-features.html#cb105-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>It is also possible to use a closure as an argument for the <code>errorStrategy</code> directive.
+This allows to obtain a different behaviour with different exit codes.
+Combining the “retry” <code>errorStrategy</code> with dynamic resource allocation we can obtain a process that when fails with certain exit codes (for example corresponding to insufficient memory) is retried with more resources.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb106-1"><a href="advanced-features.html#cb106-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
+<span id="cb106-2"><a href="advanced-features.html#cb106-2" aria-hidden="true" tabindex="-1"></a>  errorStrategy <span class="op">{</span> task<span class="op">.</span>exitStatus <span class="op">==</span> <span class="dv">130</span> <span class="op">?</span> <span class="st">&quot;retry&quot;</span> <span class="op">:</span> <span class="st">&quot;terminate&quot;</span> <span class="op">}</span></span>
+<span id="cb106-3"><a href="advanced-features.html#cb106-3" aria-hidden="true" tabindex="-1"></a>  memory <span class="op">{</span> <span class="fl">10.G</span>B <span class="op">*</span> task<span class="op">.</span>attempt <span class="op">}</span></span>
+<span id="cb106-4"><a href="advanced-features.html#cb106-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-5"><a href="advanced-features.html#cb106-5" aria-hidden="true" tabindex="-1"></a>  script<span class="op">:</span></span>
+<span id="cb106-6"><a href="advanced-features.html#cb106-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb106-7"><a href="advanced-features.html#cb106-7" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
+<span id="cb106-8"><a href="advanced-features.html#cb106-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Note that the exit codes are platform-dependent so are best defined on a platform dependent basis instead than being hard-coded.</p>
 </div>
 <div id="the-publishdir-directive" class="section level3 hasAnchor" number="4.7.8">
 <h3><span class="header-section-number">4.7.8</span> The <code>publishDir</code> directive<a href="advanced-features.html#the-publishdir-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>publishDir</code> directive defines where to copy the outputs of a process following successful execution.
+This is typically used with the final outputs of a workflow that are of interest for further analysis.
+Using the <code>publishDir</code> directory, we can obtain all our outputs in a organised directory structure.</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb107-1"><a href="advanced-features.html#cb107-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
+<span id="cb107-2"><a href="advanced-features.html#cb107-2" aria-hidden="true" tabindex="-1"></a>  publishDir <span class="st">&quot;/my/output/dir&quot;</span></span>
+<span id="cb107-3"><a href="advanced-features.html#cb107-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-4"><a href="advanced-features.html#cb107-4" aria-hidden="true" tabindex="-1"></a>  output<span class="op">:</span></span>
+<span id="cb107-5"><a href="advanced-features.html#cb107-5" aria-hidden="true" tabindex="-1"></a>    path <span class="st">&quot;my_file.txt&quot;</span></span>
+<span id="cb107-6"><a href="advanced-features.html#cb107-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-7"><a href="advanced-features.html#cb107-7" aria-hidden="true" tabindex="-1"></a>  script<span class="op">:</span></span>
+<span id="cb107-8"><a href="advanced-features.html#cb107-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb107-9"><a href="advanced-features.html#cb107-9" aria-hidden="true" tabindex="-1"></a><span class="st">    touch my_file.txt</span></span>
+<span id="cb107-10"><a href="advanced-features.html#cb107-10" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
+<span id="cb107-11"><a href="advanced-features.html#cb107-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
-<div id="the-executor-directive" class="section level3 hasAnchor" number="4.7.9">
-<h3><span class="header-section-number">4.7.9</span> The <code>executor</code> directive<a href="advanced-features.html#the-executor-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="the-executor-and-queue-directives" class="section level3 hasAnchor" number="4.7.9">
+<h3><span class="header-section-number">4.7.9</span> The <code>executor</code> and <code>queue</code> directives<a href="advanced-features.html#the-executor-and-queue-directives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>executor</code> directive allows to specify the executor to use for a given process.
+This can be “local” (the default) for local execution, “lsf” for using the batch scheduler <a href="https://www.ibm.com/docs/en/spectrum-lsf">IBM Spectrum LSF</a>, or other values for several other batch schedulers.
+It is even possible to use cloud infrastructures such as <a href="https://aws.amazon.com/?nc2=h_lg">AWS</a>, <a href="https://azure.microsoft.com/en-gb/">Microsoft Azure</a>, or <a href="https://cloud.google.com/">Google Cloud</a>.</p>
+<p>Using executors other than the “local” executor is essential for real-world workflows, where the computational resources required often vastly exceed those of a single laptop or even server.</p>
+<p>You can read more about different executors for Nextflow <a href="https://www.nextflow.io/docs/latest/executor.html#">here</a>.</p>
+<p>The <code>queue</code> directive allows you to define which of the batch scheduler queues to submit the process’ tasks to.
+The value assigned to the <code>queue</code> directive should be a string matching the name of an existing queue.</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb108-1"><a href="advanced-features.html#cb108-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
+<span id="cb108-2"><a href="advanced-features.html#cb108-2" aria-hidden="true" tabindex="-1"></a>  executor <span class="st">&quot;lsf&quot;</span></span>
+<span id="cb108-3"><a href="advanced-features.html#cb108-3" aria-hidden="true" tabindex="-1"></a>  queue <span class="st">&quot;research&quot;</span></span>
+<span id="cb108-4"><a href="advanced-features.html#cb108-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb108-5"><a href="advanced-features.html#cb108-5" aria-hidden="true" tabindex="-1"></a>  script<span class="op">:</span></span>
+<span id="cb108-6"><a href="advanced-features.html#cb108-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb108-7"><a href="advanced-features.html#cb108-7" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
+<span id="cb108-8"><a href="advanced-features.html#cb108-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
-<div id="the-queue-directive" class="section level3 hasAnchor" number="4.7.10">
-<h3><span class="header-section-number">4.7.10</span> The <code>queue</code> directive<a href="advanced-features.html#the-queue-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-</div>
-<div id="the-ext-directive" class="section level3 hasAnchor" number="4.7.11">
-<h3><span class="header-section-number">4.7.11</span> The <code>ext</code> directive<a href="advanced-features.html#the-ext-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="the-ext-directive" class="section level3 hasAnchor" number="4.7.10">
+<h3><span class="header-section-number">4.7.10</span> The <code>ext</code> directive<a href="advanced-features.html#the-ext-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 </div>
 </div>
-<div id="executors" class="section level2 hasAnchor" number="4.8">
-<h2><span class="header-section-number">4.8</span> Executors<a href="advanced-features.html#executors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="advanced-workflow-configuration" class="section level2 hasAnchor" number="4.8">
+<h2><span class="header-section-number">4.8</span> Advanced workflow configuration<a href="advanced-features.html#advanced-workflow-configuration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="configuration-files" class="section level3 hasAnchor" number="4.8.1">
+<h3><span class="header-section-number">4.8.1</span> Configuration files<a href="advanced-features.html#configuration-files" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="configuration-profiles" class="section level3 hasAnchor" number="4.8.2">
+<h3><span class="header-section-number">4.8.2</span> Configuration profiles<a href="advanced-features.html#configuration-profiles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
 </div>
 <div id="sub-workflows" class="section level2 hasAnchor" number="4.9">
 <h2><span class="header-section-number">4.9</span> Sub-workflows<a href="advanced-features.html#sub-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h2>

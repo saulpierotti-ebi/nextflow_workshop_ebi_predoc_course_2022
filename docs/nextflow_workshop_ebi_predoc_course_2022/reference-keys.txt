@@ -53,10 +53,11 @@ the-debug-directive
 the-cache-directive
 the-errorstrategy-directive
 the-publishdir-directive
-the-executor-directive
-the-queue-directive
+the-executor-and-queue-directives
 the-ext-directive
-executors
+advanced-workflow-configuration
+configuration-files
+configuration-profiles
 sub-workflows
 nextflow-tower
 advanced-challenge
