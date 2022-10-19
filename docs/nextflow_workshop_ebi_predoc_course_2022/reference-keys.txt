@@ -24,6 +24,7 @@ process-inputs
 input-of-type-val
 input-of-type-path
 input-of-type-tuple
+process-outputs
 the-groovy-programming-language
 closures
 conditional-statements

@@ -74,7 +74,7 @@ process append_value_to_file {
   input:
     tuple(
       path(my_file),
-      path(my_value)
+      val(my_value)
     )
 
   script:
@@ -88,6 +88,48 @@ workflow {
   append_value_to_file( my_ch )
 }
 ```
+
+## Process outputs
+
+Process outputs can have similar types to the ones used for process inputs.
+So for example the output of a process can be a `path` variable (a file), a `val` variable (a groovy variable), or a `tuple` of such elements.
+Other output types exist in Nextflow, but we will not treat them here.
+
+Read [here](https://www.nextflow.io/docs/latest/process.html#outputs) for more details.
+
+See the following example:
+
+```groovy
+process append_value_to_file {
+  input:
+    tuple(
+      path(my_file),
+      val(my_value)
+    )
+
+  output:
+    tuple(
+      path(my_file),
+      val(my_value)
+    )
+
+  script:
+    """
+    echo $my_value >> $my_file
+    """
+}
+
+workflow {
+  Channel.of( [ "Good morning", "/path/to/a/file.txt" ] ).set{ my_ch }
+  append_value_to_file( my_ch )
+}
+```
+
+In this example we see the same process as before, but this time we declared an output block.
+The output is of type `tuple`, with two elements contained in it (one of type `path` and the other of type `val`).
+After execution of the process `append_value_to_file`, the channel `append_value_to_file.out` will contain a list of two elements.
+The first element will be the filename given in input, and the second element will be the value given in input.
+Note that the file produced in output by the process will not be the same file given in input to it: it will have been modified in the `script` block by appending `my_value` to it.
 
 ## The Groovy programming language
 
