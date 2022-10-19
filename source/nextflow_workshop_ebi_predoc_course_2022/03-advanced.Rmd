@@ -671,6 +671,22 @@ process do_something {
 
 ### The `ext` directive
 
+The `ext` directive is used for advanced, custom configurations.
+It allows you to define any key-value pair for the process.
+The argument of the `ext` directive should be a closure assigning a variable.
+The custom variables are made available like any other `task` implicit variable in the dictionary `task.ext`.
+
+```groovy
+process do_something {
+  ext { my_var = "my_value" }
+
+  script:
+    """
+    echo $task.ext.my_var
+    """
+}
+```
+
 ## Advanced workflow configuration
 
 ### Configuration files

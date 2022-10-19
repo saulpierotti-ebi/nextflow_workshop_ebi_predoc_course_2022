@@ -742,6 +742,18 @@ The value assigned to the <code>queue</code> directive should be a string matchi
 </div>
 <div id="the-ext-directive" class="section level3 hasAnchor" number="4.7.10">
 <h3><span class="header-section-number">4.7.10</span> The <code>ext</code> directive<a href="advanced-features.html#the-ext-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>ext</code> directive is used for advanced, custom configurations.
+It allows you to define any key-value pair for the process.
+The argument of the <code>ext</code> directive should be a closure assigning a variable.
+The custom variables are made available like any other <code>task</code> implicit variable in the dictionary <code>task.ext</code>.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb109-1"><a href="advanced-features.html#cb109-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
+<span id="cb109-2"><a href="advanced-features.html#cb109-2" aria-hidden="true" tabindex="-1"></a>  ext <span class="op">{</span> my_var <span class="op">=</span> <span class="st">&quot;my_value&quot;</span> <span class="op">}</span></span>
+<span id="cb109-3"><a href="advanced-features.html#cb109-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-4"><a href="advanced-features.html#cb109-4" aria-hidden="true" tabindex="-1"></a>  script<span class="op">:</span></span>
+<span id="cb109-5"><a href="advanced-features.html#cb109-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb109-6"><a href="advanced-features.html#cb109-6" aria-hidden="true" tabindex="-1"></a><span class="st">    echo </span><span class="ss">$task</span><span class="op">.</span><span class="ss">ext</span><span class="op">.</span><span class="ss">my_var</span></span>
+<span id="cb109-7"><a href="advanced-features.html#cb109-7" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
+<span id="cb109-8"><a href="advanced-features.html#cb109-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div id="advanced-workflow-configuration" class="section level2 hasAnchor" number="4.8">
