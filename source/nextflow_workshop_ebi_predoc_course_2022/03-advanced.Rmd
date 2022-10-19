@@ -1,6 +1,126 @@
 # Advanced features
 
+If you are reading the advanced section of this workshop I am assuming that you are already familiar with what are workflows, processes, and operators.
+I am also assuming that you know how a Nextflow workflow is structured and you understand the syntax and logic used in writing and configuring Nextflow pipelines.
+For this reason, you will find the following section to be a bit different from the ones that came before.
+I will not walk you through complete reproducible examples as I did until now, but I will present small snippets of code that show some specific functionality or practice that I deemed to be useful to know.
+You are supposed to try out by yourself these ideas, and see how they can be applied to your own use-case.
+
+## The Groovy programming language
+
+Here we will talk about some features of the Groovy programming language, on which Nextflow is based, that can be useful when writing workflows.
+If you want to test out some Groovy code interactively, head off to [this website](https://groovyconsole.appspot.com/) and paste the code snippets that we will introduce.
+
+### Closures
+
+We already introduced closures in previous section, where we used them in conjunction with the map operator.
+In general, we can consider a closure as a unnamed function, defined as a statement enclosed in curly brackets.
+The following is a closure
+
+```
+{ it[1] }
+```
+
+We can manually define the inputs and outputs of a closure.
+For example:
+
+```
+{
+  x, y ->
+  z = x + y
+  return z
+}
+```
+
+In the above defined example the closure expects two inputs, (`x,y ->`), some operation is performed on them (`z = x + y`), and a value is explicitly returned (`return z`).
+The definition of inputs is optional, and indeed it is usually skipped.
+If an input is not defined, the implicit variable `it` is used to refer to any input passed to the closure.
+So we could write the following, assuming that a tuple of two elements is passed as an input to the closure
+
+```
+{
+  z = it[0] + it[1]
+  return z
+}
+```
+
+What's more, it is possible to also omit the `return` statement from a closure.
+In this case, the last evaluated expression is returned.
+
+```
+{ it[0] + it[1] }
+```
+
+As shown in the previous example, closures can be split on multiple lines or they can be written on a single line.
+They can contain any valid Groovy code statement.
+For example:
+
+```
+{ if ( it > 1 ) {"small"} else { "big" } }
+```
+
+### Conditional statements
+
+Conditional statements in Groovy can be written in several ways.
+The simplest approach is that of a classic if/else statement.
+This can be written, for example, as follows.
+
+```
+if ( x > 1 ) {
+  y = "small"
+} else {
+  y = "big"
+}
+```
+
+A more compact syntax to achieve the same result takes advantage of the ternary operator
+
+```
+y = ( x > 1 ) ? "small" : "big"
+```
+
+In case when the return value desired for the `TRUE` case is the statement itself, the Elvis operator can be used
+
+```
+y = my_list ?: "list is empty"
+```
+
+In the latter case the variable `y` will contain the content of `my_list` if this is not empty, otherwise the string `list is empty`.
+
+## Channel factories
+
+Besides the `Channel.fromPath` and `Channel.value` channel factories that we saw before, another useful Channel factory (especially for debugging purposes) is `Channel.of`.
+`Channel.of` allows you tu put into a channel any Groovy data structure like lists, hash maps, and so on.
+So takes as an example the following:
+
+```
+Channel.of(
+  ["name": "EBI", "type": "insititute", "location": "UK"],
+  ["name": "GB", "type": "insititute", "location": "Germany"],
+)
+```
+
+This will create a channel emitting two elements, each of them a Groovy map containing three elements.
+
 ## Some more operators
+
+In the basic section of this workshop, we introduced a few Nextflow operators: `map`, `splitCsv`, `view`.
+Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with a more complex logic.
+
+### The `map` operator
+
+The `map` operator can be used to modify the content of a channel on the fly.
+For example, it can be used to extract just some elements from a channel emitting lists.
+
+```
+Channel.of(
+  ["name": "EBI", "type": "insititute", "location": "UK"],
+  ["name": "GB", "type": "insititute", "location": "Germany"],
+)
+  .map{ it["name"] }
+```
+
+## A deeper look at
 
 ## Some more directives
 

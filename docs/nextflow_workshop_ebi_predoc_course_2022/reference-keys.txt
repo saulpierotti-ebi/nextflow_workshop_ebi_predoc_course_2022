@@ -20,7 +20,13 @@ nf-core-pipelines
 labels
 basic-challenge
 advanced-features
+the-groovy-programming-language
+closures
+conditional-statements
+channel-factories
 some-more-operators
+the-map-operator
+a-deeper-look-at
 some-more-directives
 execution-environments
 sub-workflows

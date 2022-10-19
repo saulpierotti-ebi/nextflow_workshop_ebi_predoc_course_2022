@@ -23,7 +23,7 @@
 <meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
 
 
-<meta name="date" content="2022-10-14" />
+<meta name="date" content="2022-10-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -162,11 +162,21 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="3" data-path="basic-challenge.html"><a href="basic-challenge.html"><i class="fa fa-check"></i><b>3</b> Basic challenge</a></li>
 <li class="chapter" data-level="4" data-path="advanced-features.html"><a href="advanced-features.html"><i class="fa fa-check"></i><b>4</b> Advanced features</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="advanced-features.html"><a href="advanced-features.html#some-more-operators"><i class="fa fa-check"></i><b>4.1</b> Some more operators</a></li>
-<li class="chapter" data-level="4.2" data-path="advanced-features.html"><a href="advanced-features.html#some-more-directives"><i class="fa fa-check"></i><b>4.2</b> Some more directives</a></li>
-<li class="chapter" data-level="4.3" data-path="advanced-features.html"><a href="advanced-features.html#execution-environments"><i class="fa fa-check"></i><b>4.3</b> Execution environments</a></li>
-<li class="chapter" data-level="4.4" data-path="advanced-features.html"><a href="advanced-features.html#sub-workflows"><i class="fa fa-check"></i><b>4.4</b> Sub-workflows</a></li>
-<li class="chapter" data-level="4.5" data-path="advanced-features.html"><a href="advanced-features.html#nextflow-tower"><i class="fa fa-check"></i><b>4.5</b> Nextflow tower</a></li>
+<li class="chapter" data-level="4.1" data-path="advanced-features.html"><a href="advanced-features.html#the-groovy-programming-language"><i class="fa fa-check"></i><b>4.1</b> The Groovy programming language</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="advanced-features.html"><a href="advanced-features.html#closures"><i class="fa fa-check"></i><b>4.1.1</b> Closures</a></li>
+<li class="chapter" data-level="4.1.2" data-path="advanced-features.html"><a href="advanced-features.html#conditional-statements"><i class="fa fa-check"></i><b>4.1.2</b> Conditional statements</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="advanced-features.html"><a href="advanced-features.html#channel-factories"><i class="fa fa-check"></i><b>4.2</b> Channel factories</a></li>
+<li class="chapter" data-level="4.3" data-path="advanced-features.html"><a href="advanced-features.html#some-more-operators"><i class="fa fa-check"></i><b>4.3</b> Some more operators</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-features.html"><a href="advanced-features.html#the-map-operator"><i class="fa fa-check"></i><b>4.3.1</b> The <code>map</code> operator</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="advanced-features.html"><a href="advanced-features.html#a-deeper-look-at"><i class="fa fa-check"></i><b>4.4</b> A deeper look at</a></li>
+<li class="chapter" data-level="4.5" data-path="advanced-features.html"><a href="advanced-features.html#some-more-directives"><i class="fa fa-check"></i><b>4.5</b> Some more directives</a></li>
+<li class="chapter" data-level="4.6" data-path="advanced-features.html"><a href="advanced-features.html#execution-environments"><i class="fa fa-check"></i><b>4.6</b> Execution environments</a></li>
+<li class="chapter" data-level="4.7" data-path="advanced-features.html"><a href="advanced-features.html#sub-workflows"><i class="fa fa-check"></i><b>4.7</b> Sub-workflows</a></li>
+<li class="chapter" data-level="4.8" data-path="advanced-features.html"><a href="advanced-features.html#nextflow-tower"><i class="fa fa-check"></i><b>4.8</b> Nextflow tower</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="advanced-challenge.html"><a href="advanced-challenge.html"><i class="fa fa-check"></i><b>5</b> Advanced challenge</a></li>
 <li class="chapter" data-level="6" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>6</b> Additional resources</a></li>
@@ -189,20 +199,101 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
             <section class="normal" id="section-">
 <div id="advanced-features" class="section level1 hasAnchor" number="4">
 <h1><span class="header-section-number">4</span> Advanced features<a href="advanced-features.html#advanced-features" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="some-more-operators" class="section level2 hasAnchor" number="4.1">
-<h2><span class="header-section-number">4.1</span> Some more operators<a href="advanced-features.html#some-more-operators" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>If you are reading the advanced section of this workshop I am assuming that you are already familiar with what are workflows, processes, and operators.
+I am also assuming that you know how a Nextflow workflow is structured and you understand the syntax and logic used in writing and configuring Nextflow pipelines.
+For this reason, you will find the following section to be a bit different from the ones that came before.
+I will not walk you through complete reproducible examples as I did until now, but I will present small snippets of code that show some specific functionality or practice that I deemed to be useful to know.
+You are supposed to try out by yourself these ideas, and see how they can be applied to your own use-case.</p>
+<div id="the-groovy-programming-language" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> The Groovy programming language<a href="advanced-features.html#the-groovy-programming-language" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here we will talk about some features of the Groovy programming language, on which Nextflow is based, that can be useful when writing workflows.
+If you want to test out some Groovy code interactively, head off to <a href="https://groovyconsole.appspot.com/">this website</a> and paste the code snippets that we will introduce.</p>
+<div id="closures" class="section level3 hasAnchor" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Closures<a href="advanced-features.html#closures" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We already introduced closures in previous section, where we used them in conjunction with the map operator.
+In general, we can consider a closure as a unnamed function, defined as a statement enclosed in curly brackets.
+The following is a closure</p>
+<pre><code>{ it[1] }</code></pre>
+<p>We can manually define the inputs and outputs of a closure.
+For example:</p>
+<pre><code>{
+  x, y -&gt;
+  z = x + y
+  return z
+}</code></pre>
+<p>In the above defined example the closure expects two inputs, (<code>x,y -&gt;</code>), some operation is performed on them (<code>z = x + y</code>), and a value is explicitly returned (<code>return z</code>).
+The definition of inputs is optional, and indeed it is usually skipped.
+If an input is not defined, the implicit variable <code>it</code> is used to refer to any input passed to the closure.
+So we could write the following, assuming that a tuple of two elements is passed as an input to the closure</p>
+<pre><code>{
+  z = it[0] + it[1]
+  return z
+}</code></pre>
+<p>What’s more, it is possible to also omit the <code>return</code> statement from a closure.
+In this case, the last evaluated expression is returned.</p>
+<pre><code>{ it[0] + it[1] }</code></pre>
+<p>As shown in the previous example, closures can be split on multiple lines or they can be written on a single line.
+They can contain any valid Groovy code statement.
+For example:</p>
+<pre><code>{ if ( it &gt; 1 ) {&quot;small&quot;} else { &quot;big&quot; } }</code></pre>
 </div>
-<div id="some-more-directives" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Some more directives<a href="advanced-features.html#some-more-directives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="conditional-statements" class="section level3 hasAnchor" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Conditional statements<a href="advanced-features.html#conditional-statements" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Conditional statements in Groovy can be written in several ways.
+The simplest approach is that of a classic if/else statement.
+This can be written, for example, as follows.</p>
+<pre><code>if ( x &gt; 1 ) {
+  y = &quot;small&quot;
+} else {
+  y = &quot;big&quot;
+}</code></pre>
+<p>A more compact syntax to achieve the same result takes advantage of the ternary operator</p>
+<pre><code>y = ( x &gt; 1 ) ? &quot;small&quot; : &quot;big&quot;</code></pre>
+<p>In case when the return value desired for the <code>TRUE</code> case is the statement itself, the Elvis operator can be used</p>
+<pre><code>y = my_list ?: &quot;list is empty&quot;</code></pre>
+<p>In the latter case the variable <code>y</code> will contain the content of <code>my_list</code> if this is not empty, otherwise the string <code>list is empty</code>.</p>
 </div>
-<div id="execution-environments" class="section level2 hasAnchor" number="4.3">
-<h2><span class="header-section-number">4.3</span> Execution environments<a href="advanced-features.html#execution-environments" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
-<div id="sub-workflows" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Sub-workflows<a href="advanced-features.html#sub-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="channel-factories" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Channel factories<a href="advanced-features.html#channel-factories" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Besides the <code>Channel.fromPath</code> and <code>Channel.value</code> channel factories that we saw before, another useful Channel factory (especially for debugging purposes) is <code>Channel.of</code>.
+<code>Channel.of</code> allows you tu put into a channel any Groovy data structure like lists, hash maps, and so on.
+So takes as an example the following:</p>
+<pre><code>Channel.of(
+  [&quot;name&quot;: &quot;EBI&quot;, &quot;type&quot;: &quot;insititute&quot;, &quot;location&quot;: &quot;UK&quot;],
+  [&quot;name&quot;: &quot;GB&quot;, &quot;type&quot;: &quot;insititute&quot;, &quot;location&quot;: &quot;Germany&quot;],
+)</code></pre>
+<p>This will create a channel emitting two elements, each of them a Groovy map containing three elements.</p>
 </div>
-<div id="nextflow-tower" class="section level2 hasAnchor" number="4.5">
-<h2><span class="header-section-number">4.5</span> Nextflow tower<a href="advanced-features.html#nextflow-tower" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="some-more-operators" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Some more operators<a href="advanced-features.html#some-more-operators" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the basic section of this workshop, we introduced a few Nextflow operators: <code>map</code>, <code>splitCsv</code>, <code>view</code>.
+Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with a more complex logic.</p>
+<div id="the-map-operator" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> The <code>map</code> operator<a href="advanced-features.html#the-map-operator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>map</code> operator can be used to modify the content of a channel on the fly.
+For example, it can be used to extract just some elements from a channel emitting lists.</p>
+<pre><code>Channel.of(
+  [&quot;name&quot;: &quot;EBI&quot;, &quot;type&quot;: &quot;insititute&quot;, &quot;location&quot;: &quot;UK&quot;],
+  [&quot;name&quot;: &quot;GB&quot;, &quot;type&quot;: &quot;insititute&quot;, &quot;location&quot;: &quot;Germany&quot;],
+)
+  .map{ it[&quot;name&quot;] }</code></pre>
+</div>
+</div>
+<div id="a-deeper-look-at" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> A deeper look at<a href="advanced-features.html#a-deeper-look-at" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="some-more-directives" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Some more directives<a href="advanced-features.html#some-more-directives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="execution-environments" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Execution environments<a href="advanced-features.html#execution-environments" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="sub-workflows" class="section level2 hasAnchor" number="4.7">
+<h2><span class="header-section-number">4.7</span> Sub-workflows<a href="advanced-features.html#sub-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="nextflow-tower" class="section level2 hasAnchor" number="4.8">
+<h2><span class="header-section-number">4.8</span> Nextflow tower<a href="advanced-features.html#nextflow-tower" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
 </div>
             </section>
