@@ -13,13 +13,13 @@ The input(s) specified can be of several types.
 We already saw in the basic section of this workshop the `path` and `val` input qualifiers.
 We will see them more in details now, as well as explore some additional input qualifiers.
 
-## Input of type `val`
+### Input of type `val`
 
 An input of type `val` just defines a value, that is made available to the process as a variable.
 
 As an example, the following code writes the value "Good morning" to the file called `my_file.txt`.
 
-```
+```groovy
 process say_hello {
   input:
     val greeting_sentence
@@ -39,13 +39,13 @@ workflow {
 }
 ```
 
-## Input of type `path`
+### Input of type `path`
 
 An input of type `path` stages a file in the working directory of the process, and makes the filename available to the process under the variable declared.
 
 As an example, the following code just reads the file `/path/to/a/file.txt` to the standard output.
 
-```
+```groovy
 process read_file {
   input:
     path my_file
@@ -62,14 +62,14 @@ workflow {
 }
 ```
 
-## Input of type `tuple`
+### Input of type `tuple`
 
 An input of type `tuple` can be used when the channel given in input to the process emits lists of elements instead than single elements.
 The elements contained in the list can be of any type, like for example `val` or `path`.
 
 As an example, the following code appends the value "Good morning"  to the file `/path/to/a/file.txt`.
 
-```
+```groovy
 process append_value_to_file {
   input:
     tuple(
@@ -84,11 +84,10 @@ process append_value_to_file {
 }
 
 workflow {
-  Channel.of( [ "Good morning", /path/to/a/file.txt" ] ).set{ my_ch }
+  Channel.of( [ "Good morning", "/path/to/a/file.txt" ] ).set{ my_ch }
   append_value_to_file( my_ch )
 }
 ```
-
 
 ## The Groovy programming language
 

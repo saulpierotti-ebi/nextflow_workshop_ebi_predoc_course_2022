@@ -21,6 +21,9 @@ labels
 basic-challenge
 advanced-features
 process-inputs
+input-of-type-val
+input-of-type-path
+input-of-type-tuple
 the-groovy-programming-language
 closures
 conditional-statements
