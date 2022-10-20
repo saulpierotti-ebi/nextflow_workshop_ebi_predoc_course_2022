@@ -841,7 +841,7 @@ You can have a look at an example of the Nextflow Tower interface here below.
 # Advanced challenge
 
 <details>
-<summary>Solution</summary>
+<summary>Click here to see the solution (`main.nf` file)</summary>
 ```groovy
 nextflow.enable.dsl = 2
 
@@ -1017,6 +1017,23 @@ workflow {
     count_by_polarity( count_by_polarity_in_ch )
     aggregate_results( count_by_polarity.out.map{ it[2] }.collect() )
     make_plot( aggregate_results.out )
+}
+```
+</details>
+
+<details>
+<summary>Click here to see the solution (`nextflow.config` file)</summary>
+```groovy
+// you can also put comments in nextflow.config
+workDir = "../nextflow_workdir"
+
+withLabel:r_tidyverse {
+    conda = "r tidyverse"
+}
+
+params {
+  samplesheet = "../nextflow_inputs/samplesheet.csv"
+  polar_apolar_table = "../nextflow_inputs/polar_apolar_table.csv"
 }
 ```
 </details>
