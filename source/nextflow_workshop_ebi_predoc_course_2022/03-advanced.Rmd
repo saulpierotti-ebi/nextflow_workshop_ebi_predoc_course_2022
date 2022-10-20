@@ -689,9 +689,87 @@ process do_something {
 
 ## Advanced workflow configuration
 
-### Configuration files
+We have already explored one of the main locations where Nextflow configurations can be set: the `nextflow.config` file.
+Nextflow actually provides several systems for configuring a workflow, each suited to a specific use-case.
+We will explore them in this section, together with configuration profiles.
+
+### Configuration files and command line parameters
+
+Configuration files can be found in canonical locations, that Nextflow checks automatically.
+Alternatively, it is possible to manually load a configuration file in a custom location when running a workflow, or pass configuration parameters on the command line itself.
+
+A rigid hierarchy of configurations applies, so that in case of conflicting configurations it is predictable which one will be actually used.
+The following configuration modes go from highest to lowest priority:
+
+- Command line parameters (`--some_param`)
+- Parameters provided in a file via the `-params-file` option
+- Manually sourced configuration files via the `-c` option
+- The `nextflow.config` file in the current directory
+- The `nextflow.config` file in the project directory
+- The `$HOME/.nextflow/config` file
+- Values defined in the pipeline script itself (i.e. `main.nf`)
+
+#### Command line parameters
+
+Any parameter passed on the command line with a double dash (`--some_param`) is loaded in the `params` scope in Nextflow (so `--some_param 4` will assigning a value of 4 to the variable `params.some_param`).
+If a value is specified after the command line flag (for example `--some_param 4`), the value is assigned to the parameter.
+If no value is specified (for example `--some_param`), the variable will store the boolean value `true`.
+Since command line parameters have the highest priority in the configuration hierarchy, they are often used to override default parameter values set in `nextflow.config`.
+
+It is important to differentiate workflow command line parameters that are prepended by a double dash `--some_param` from Nextflow runtime parameters which are prepended by a single dash (`-resume`).
+Nextflow runtime parameters are used to modify the behaviour of Nextflow itself and do not affect the parameter space of the workflow.
+
+#### The `nextflow.config` file
+
+This file is automatically sourced by Nextflow and should be placed in the same directory as `main.nf` (another `nextflow.config` file can also be present in the launch directory, but this is rarely used in my experience).
+It is typically used to set workflow-specific configurations that do not depend on the compute environment where the workflow is run, nor on the specific inputs used.
+
+For example, the `nextflow.config` file can be used to set process software dependencies with a `withLabel` code block.
+Another typically usage is that of setting default values for parameters that can be overridden on the command line (as part of a `params` block).
+Profiles corresponding to different use-case scenarios are also often included.
+
+#### The `$HOME/.nextflow/config` file
+
+The `$HOME/.nextflow/config` file is typically used for compute environment-specific configurations, since it is available to all the workflows run on a given system.
+
+So for example we may want our workflows to behave differently on our local laptop versus on a high performance cluster.
+On my own `$HOME/.nextflow/config` on the EBI cluster, I define for example when different queues should be used, I set the executor to IBM Spectrum LSF, and I set the path for the input and output directories.
+
+
+#### Custom configuration files
+
+Custom configuration files can be provided via the `-c config_file_path` option or via the `-params-file params_file_path` option on the command line.
+They have a similar use case to command-line parameters, but they are easier to use when several parameters have to be overridden at once.
+
+#### Parameters hard-coded in the Nextflow script
+
+It is also possible to hard-code parameters in the Nextflow script itself (i.e. in `main.nf`).
+This can be used to achieve more complex configurations with conditional statements.
+Note that parameters set in this way have the lowest priority.
 
 ### Configuration profiles
+
+Configuration profiles are set of configurations that have a collective name and can be optionally activated on the command line.
+They can be written in any of the configuration files we explored before.
+The following code defines a configuration profiles named `cluster`.
+
+```groovy
+profiles {
+  cluster {
+    executor.name = "lsf"
+    executor.queueSize = 500
+    executor.submitRateLimit = "10/1sec"
+    executor.exitReadTimeout = "30 min"
+  }
+}
+```
+
+This profile can be activated by passing the flag `-profile cluster` on the command line.
+Once activated, all the configurations contained in it are applied.
+Several profiles can be defined in the `profiles` block.
+If several profiles need to be activated at the same time, this can be done by concatenating them with commas after the `-profile` option (so if the profiles `foo` and `bar` need to be activated at once, I can write `-profile foo,bar`).
+
+Profiles are particularly useful to set compute environments, software environments (i.e. use conda versus Docker versus Singularity), and particular running modes (think of a workflow that can perform several things, and the profile is used to choose what the workflow should do).
 
 ## Sub-workflows
 

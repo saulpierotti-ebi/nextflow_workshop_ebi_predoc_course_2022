@@ -23,7 +23,7 @@
 <meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
 
 
-<meta name="date" content="2022-10-19" />
+<meta name="date" content="2022-10-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -209,7 +209,7 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="advanced-features.html"><a href="advanced-features.html#advanced-workflow-configuration"><i class="fa fa-check"></i><b>4.8</b> Advanced workflow configuration</a>
 <ul>
-<li class="chapter" data-level="4.8.1" data-path="advanced-features.html"><a href="advanced-features.html#configuration-files"><i class="fa fa-check"></i><b>4.8.1</b> Configuration files</a></li>
+<li class="chapter" data-level="4.8.1" data-path="advanced-features.html"><a href="advanced-features.html#configuration-files-and-command-line-parameters"><i class="fa fa-check"></i><b>4.8.1</b> Configuration files and command line parameters</a></li>
 <li class="chapter" data-level="4.8.2" data-path="advanced-features.html"><a href="advanced-features.html#configuration-profiles"><i class="fa fa-check"></i><b>4.8.2</b> Configuration profiles</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="advanced-features.html"><a href="advanced-features.html#sub-workflows"><i class="fa fa-check"></i><b>4.9</b> Sub-workflows</a></li>
@@ -758,11 +758,77 @@ The custom variables are made available like any other <code>task</code> implici
 </div>
 <div id="advanced-workflow-configuration" class="section level2 hasAnchor" number="4.8">
 <h2><span class="header-section-number">4.8</span> Advanced workflow configuration<a href="advanced-features.html#advanced-workflow-configuration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="configuration-files" class="section level3 hasAnchor" number="4.8.1">
-<h3><span class="header-section-number">4.8.1</span> Configuration files<a href="advanced-features.html#configuration-files" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We have already explored one of the main locations where Nextflow configurations can be set: the <code>nextflow.config</code> file.
+Nextflow actually provides several systems for configuring a workflow, each suited to a specific use-case.
+We will explore them in this section, together with configuration profiles.</p>
+<div id="configuration-files-and-command-line-parameters" class="section level3 hasAnchor" number="4.8.1">
+<h3><span class="header-section-number">4.8.1</span> Configuration files and command line parameters<a href="advanced-features.html#configuration-files-and-command-line-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Configuration files can be found in canonical locations, that Nextflow checks automatically.
+Alternatively, it is possible to manually load a configuration file in a custom location when running a workflow, or pass configuration parameters on the command line itself.</p>
+<p>A rigid hierarchy of configurations applies, so that in case of conflicting configurations it is predictable which one will be actually used.
+The following configuration modes go from highest to lowest priority:</p>
+<ul>
+<li>Command line parameters (<code>--some_param</code>)</li>
+<li>Parameters provided in a file via the <code>-params-file</code> option</li>
+<li>Manually sourced configuration files via the <code>-c</code> option</li>
+<li>The <code>nextflow.config</code> file in the current directory</li>
+<li>The <code>nextflow.config</code> file in the project directory</li>
+<li>The <code>$HOME/.nextflow/config</code> file</li>
+<li>Values defined in the pipeline script itself (i.e. <code>main.nf</code>)</li>
+</ul>
+<div id="command-line-parameters" class="section level4 hasAnchor" number="4.8.1.1">
+<h4><span class="header-section-number">4.8.1.1</span> Command line parameters<a href="advanced-features.html#command-line-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Any parameter passed on the command line with a double dash (<code>--some_param</code>) is loaded in the <code>params</code> scope in Nextflow (so <code>--some_param 4</code> will assigning a value of 4 to the variable <code>params.some_param</code>).
+If a value is specified after the command line flag (for example <code>--some_param 4</code>), the value is assigned to the parameter.
+If no value is specified (for example <code>--some_param</code>), the variable will store the boolean value <code>true</code>.
+Since command line parameters have the highest priority in the configuration hierarchy, they are often used to override default parameter values set in <code>nextflow.config</code>.</p>
+<p>It is important to differentiate workflow command line parameters that are prepended by a double dash <code>--some_param</code> from Nextflow runtime parameters which are prepended by a single dash (<code>-resume</code>).
+Nextflow runtime parameters are used to modify the behaviour of Nextflow itself and do not affect the parameter space of the workflow.</p>
+</div>
+<div id="the-nextflow.config-file" class="section level4 hasAnchor" number="4.8.1.2">
+<h4><span class="header-section-number">4.8.1.2</span> The <code>nextflow.config</code> file<a href="advanced-features.html#the-nextflow.config-file" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>This file is automatically sourced by Nextflow and should be placed in the same directory as <code>main.nf</code> (another <code>nextflow.config</code> file can also be present in the launch directory, but this is rarely used in my experience).
+It is typically used to set workflow-specific configurations that do not depend on the compute environment where the workflow is run, nor on the specific inputs used.</p>
+<p>For example, the <code>nextflow.config</code> file can be used to set process software dependencies with a <code>withLabel</code> code block.
+Another typically usage is that of setting default values for parameters that can be overridden on the command line (as part of a <code>params</code> block).
+Profiles corresponding to different use-case scenarios are also often included.</p>
+</div>
+<div id="the-home.nextflowconfig-file" class="section level4 hasAnchor" number="4.8.1.3">
+<h4><span class="header-section-number">4.8.1.3</span> The <code>$HOME/.nextflow/config</code> file<a href="advanced-features.html#the-home.nextflowconfig-file" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The <code>$HOME/.nextflow/config</code> file is typically used for compute environment-specific configurations, since it is available to all the workflows run on a given system.</p>
+<p>So for example we may want our workflows to behave differently on our local laptop versus on a high performance cluster.
+On my own <code>$HOME/.nextflow/config</code> on the EBI cluster, I define for example when different queues should be used, I set the executor to IBM Spectrum LSF, and I set the path for the input and output directories.</p>
+</div>
+<div id="custom-configuration-files" class="section level4 hasAnchor" number="4.8.1.4">
+<h4><span class="header-section-number">4.8.1.4</span> Custom configuration files<a href="advanced-features.html#custom-configuration-files" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Custom configuration files can be provided via the <code>-c config_file_path</code> option or via the <code>-params-file params_file_path</code> option on the command line.
+They have a similar use case to command-line parameters, but they are easier to use when several parameters have to be overridden at once.</p>
+</div>
+<div id="parameters-hard-coded-in-the-nextflow-script" class="section level4 hasAnchor" number="4.8.1.5">
+<h4><span class="header-section-number">4.8.1.5</span> Parameters hard-coded in the Nextflow script<a href="advanced-features.html#parameters-hard-coded-in-the-nextflow-script" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>It is also possible to hard-code parameters in the Nextflow script itself (i.e. in <code>main.nf</code>).
+This can be used to achieve more complex configurations with conditional statements.
+Note that parameters set in this way have the lowest priority.</p>
+</div>
 </div>
 <div id="configuration-profiles" class="section level3 hasAnchor" number="4.8.2">
 <h3><span class="header-section-number">4.8.2</span> Configuration profiles<a href="advanced-features.html#configuration-profiles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Configuration profiles are set of configurations that have a collective name and can be optionally activated on the command line.
+They can be written in any of the configuration files we explored before.
+The following code defines a configuration profiles named <code>cluster</code>.</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb110-1"><a href="advanced-features.html#cb110-1" aria-hidden="true" tabindex="-1"></a>profiles <span class="op">{</span></span>
+<span id="cb110-2"><a href="advanced-features.html#cb110-2" aria-hidden="true" tabindex="-1"></a>  cluster <span class="op">{</span></span>
+<span id="cb110-3"><a href="advanced-features.html#cb110-3" aria-hidden="true" tabindex="-1"></a>    executor<span class="op">.</span>name <span class="op">=</span> <span class="st">&quot;lsf&quot;</span></span>
+<span id="cb110-4"><a href="advanced-features.html#cb110-4" aria-hidden="true" tabindex="-1"></a>    executor<span class="op">.</span>queueSize <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb110-5"><a href="advanced-features.html#cb110-5" aria-hidden="true" tabindex="-1"></a>    executor<span class="op">.</span>submitRateLimit <span class="op">=</span> <span class="st">&quot;10/1sec&quot;</span></span>
+<span id="cb110-6"><a href="advanced-features.html#cb110-6" aria-hidden="true" tabindex="-1"></a>    executor<span class="op">.</span>exitReadTimeout <span class="op">=</span> <span class="st">&quot;30 min&quot;</span></span>
+<span id="cb110-7"><a href="advanced-features.html#cb110-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb110-8"><a href="advanced-features.html#cb110-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>This profile can be activated by passing the flag <code>-profile cluster</code> on the command line.
+Once activated, all the configurations contained in it are applied.
+Several profiles can be defined in the <code>profiles</code> block.
+If several profiles need to be activated at the same time, this can be done by concatenating them with commas after the <code>-profile</code> option (so if the profiles <code>foo</code> and <code>bar</code> need to be activated at once, I can write <code>-profile foo,bar</code>).</p>
+<p>Profiles are particularly useful to set compute environments, software environments (i.e. use conda versus Docker versus Singularity), and particular running modes (think of a workflow that can perform several things, and the profile is used to choose what the workflow should do).</p>
 </div>
 </div>
 <div id="sub-workflows" class="section level2 hasAnchor" number="4.9">

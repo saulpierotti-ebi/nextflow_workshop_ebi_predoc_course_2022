@@ -56,7 +56,12 @@ the-publishdir-directive
 the-executor-and-queue-directives
 the-ext-directive
 advanced-workflow-configuration
-configuration-files
+configuration-files-and-command-line-parameters
+command-line-parameters
+the-nextflow.config-file
+the-home.nextflowconfig-file
+custom-configuration-files
+parameters-hard-coded-in-the-nextflow-script
 configuration-profiles
 sub-workflows
 nextflow-tower
