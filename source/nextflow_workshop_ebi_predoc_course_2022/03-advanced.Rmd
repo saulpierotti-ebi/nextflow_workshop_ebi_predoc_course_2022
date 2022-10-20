@@ -833,7 +833,9 @@ It is possible to use the Nextflow Tower website (for free) or also on-premises 
 Nextflow Tower communicates with the execution environment via [SSH](https://www.wikiwand.com/en/Secure_Shell) access (if the host is reachable via SSH), or via a ["Tower agent"](https://help.tower.nf/22.3/agent/) that is run on the execution environment itself.
 Nextflow Tower is particularly useful when you are running several pipelines at the same time in different environments to monitor failures and resource usage.
 
-You can have a look at an example Nextflow Tower [here](Nextflow Tower.html).
+You can have a look at an example of the Nextflow Tower interface here below.
+
+![](./nextflow_tower.png )
 
 
 # Advanced challenge
