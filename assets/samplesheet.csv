@@ -1,0 +1,4 @@
+filename,species
+/Users/saul/nextflow_inputs/arabidopsis.tsv,Arabidopsis taliana
+/Users/saul/nextflow_inputs/mouse.tsv,Mus musculus
+/Users/saul/nextflow_inputs/zebrafish.tsv,Danio rerio

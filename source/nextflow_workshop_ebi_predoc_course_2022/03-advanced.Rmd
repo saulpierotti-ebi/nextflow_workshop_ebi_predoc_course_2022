@@ -840,6 +840,21 @@ You can have a look at an example of the Nextflow Tower interface here below.
 
 # Advanced challenge
 
+Create the required sample sheet file by running the following command from your project directory (make sure that the folder `../nextflow_inputs` exists before running the command)
+
+```bash
+echo "filename,species" > ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/arabidopsis.tsv,Arabidopsis taliana" >> ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/mouse.tsv,Mus musculus" >> ../nextflow_inputs/samplesheet.csv
+echo "$(pwd)/../nextflow_inputs/zebrafish.tsv,Danio rerio" >> ../nextflow_inputs/samplesheet.csv
+```
+
+Download the required data files by running the following command
+
+```bash
+wget 
+```
+
 <details>
 <summary>Click here to see the solution (`main.nf` file)</summary>
 ```groovy
