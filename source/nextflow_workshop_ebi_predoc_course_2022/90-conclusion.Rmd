@@ -20,6 +20,10 @@ Nextflow course on SofwareCarpentries:
 
 https://carpentries-incubator.github.io/workflows-nextflow/index.html
 
+The story of Nextflow from its author:
+
+https://elifesciences.org/labs/d193babe/the-story-of-nextflow-building-a-modern-pipeline-orchestrator
+
 Other useful links:
 
 https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html
