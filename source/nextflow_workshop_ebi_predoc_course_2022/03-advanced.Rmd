@@ -835,7 +835,7 @@ Nextflow Tower is particularly useful when you are running several pipelines at 
 
 You can have a look at an example of the Nextflow Tower interface here below.
 
-![](./nextflow_tower.png )
+![](images/nextflow_tower.png )
 
 
 # Advanced challenge

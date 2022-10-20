@@ -1,4 +1,6 @@
 bookdown::gitbook:
+  includes:
+    in_header: header.html
   code_folding: null
   highlight: zenburn
   config:
