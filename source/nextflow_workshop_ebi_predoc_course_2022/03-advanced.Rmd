@@ -852,7 +852,7 @@ echo "$(pwd)/../nextflow_inputs/zebrafish.tsv,Danio rerio" >> ../nextflow_inputs
 Download the required data files by running the following command
 
 ```bash
-wget 
+wget
 ```
 
 <details>
