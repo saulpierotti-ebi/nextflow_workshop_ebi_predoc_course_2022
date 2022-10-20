@@ -849,10 +849,13 @@ echo "$(pwd)/../nextflow_inputs/mouse.tsv,Mus musculus" >> ../nextflow_inputs/sa
 echo "$(pwd)/../nextflow_inputs/zebrafish.tsv,Danio rerio" >> ../nextflow_inputs/samplesheet.csv
 ```
 
-Download the required data files by running the following command
+Download the required data files by running the following command (as before, make sure that the folder `../nextflow_inputs` exists before running the command)
 
 ```bash
-wget
+wget -P ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/arabidopsis.tsv
+wget -P ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/zebrafish.tsv
+wget -P ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/mouse.tsv
+wget -P ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/polar_apolar_table.csv
 ```
 
 <details>
