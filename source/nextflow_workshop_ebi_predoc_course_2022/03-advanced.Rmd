@@ -839,3 +839,184 @@ You can have a look at an example of the Nextflow Tower interface here below.
 
 
 # Advanced challenge
+
+<details>
+<summary>Solution</summary>
+```groovy
+nextflow.enable.dsl = 2
+
+process get_sequences {
+    input:
+        tuple(
+            val(species),
+            path(id_list)
+        )
+
+    output:
+        tuple(
+            val(species),
+            path("*.fasta")
+        )
+
+    script:
+        """
+        cat $id_list \
+            | tail -n +2 \
+            | xargs -I{} wget https://rest.uniprot.org/uniprotkb/{}.fasta
+        """
+}
+
+process count_aa {
+    label "r_tidyverse"
+
+    input:
+        tuple(
+            val(protein),
+            val(species),
+            path(sequence)
+        )
+
+    output:
+        tuple(
+            val(protein),
+            val(species),
+            path("${sequence.simpleName}.aa_counts.csv")
+        )
+
+    script:
+        """
+        #!/usr/bin/env Rscript
+
+        library("tidyverse")
+
+        df <- read_lines("${sequence}", skip=1) %>%
+            paste(collapse = '') %>%
+            strsplit(split = '') %>%
+            table() %>%
+            as_tibble() %>%
+            rename(residue = ".") %>%
+            mutate(
+                freq = n / sum(n),
+                protein = "${protein}",
+                species = "${species}"
+            )
+
+        write_csv(df, "${sequence.simpleName}.aa_counts.csv")
+        """
+}
+
+process count_by_polarity {
+    label "r_tidyverse"
+
+    input:
+        tuple(
+            val(protein),
+            val(species),
+            path(aa_counts),
+            path(polar_apolar_table)
+        )
+
+    output:
+        tuple(
+            val(protein),
+            val(species),
+            path("${aa_counts.simpleName}.polarity_counts.csv")
+        )
+
+    script:
+        """
+        #!/usr/bin/env Rscript
+
+        library("tidyverse")
+
+        pol_table <- read_csv("${polar_apolar_table}") %>%
+            summarise(
+                residue = single_letter_code,
+                polarity
+            )
+
+        df <- read_csv("${aa_counts}") %>%
+            left_join(pol_table) %>%
+            group_by(polarity, species, protein) %>%
+            summarise(freq = sum(freq))
+
+        write_csv(df, "${aa_counts.simpleName}.polarity_counts.csv")
+        """
+}
+
+process aggregate_results {
+    label "r_tidyverse"
+
+    input:
+        path "*.csv"
+
+    output:
+        path "aggregated_polarity_counts.csv"
+
+    script:
+        """
+        #!/usr/bin/env Rscript
+
+        library("tidyverse")
+
+        input_files <- list.files(pattern = "*.csv")
+        df <- map_dfr(input_files, read_csv)
+
+        write_csv(df, "aggregated_polarity_counts.csv")
+        """
+}
+
+process make_plot {
+    label "r_tidyverse"
+    publishDir "../nextflow_output/challenge"
+
+    input:
+        path aggregated_polarity_counts
+
+    output:
+        path "final_plot.pdf"
+
+    script:
+        """
+        #!/usr/bin/env Rscript
+
+        library("tidyverse")
+
+        df <- read_csv("${aggregated_polarity_counts}")
+
+        ggplot(df, aes(x=species, y=freq, color=polarity)) +
+            geom_boxplot()
+
+        ggsave("final_plot.pdf")
+        """
+}
+
+workflow {
+    Channel.fromPath( params.samplesheet ).splitCsv( header: true ).set{ input_ch }
+
+    input_ch.map{ [ it["species"], it["filename"] ] }
+        .set{ get_sequences_in_ch }
+
+    get_sequences( get_sequences_in_ch )
+
+    get_sequences.out
+        .flatMap{
+            def species = it[0]
+            def all_sequences = it[1]
+            all_sequences.collect{ sequence -> [species, sequence] }
+        }
+        // add the sequence name as a value
+        .map{ [ it[1].simpleName ] + it }
+        .set{ count_aa_in_ch }
+
+    count_aa( count_aa_in_ch )
+
+    Channel.fromPath( params.polar_apolar_table ).set{ polar_apolar_table_ch }
+    count_aa.out.combine( polar_apolar_table_ch ).set{ count_by_polarity_in_ch }
+
+    count_by_polarity( count_by_polarity_in_ch )
+    aggregate_results( count_by_polarity.out.map{ it[2] }.collect() )
+    make_plot( aggregate_results.out )
+}
+```
+</details>
