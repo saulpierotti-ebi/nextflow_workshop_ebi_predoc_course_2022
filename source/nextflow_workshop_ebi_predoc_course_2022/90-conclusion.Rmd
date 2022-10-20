@@ -24,6 +24,10 @@ The story of Nextflow from its author:
 
 https://elifesciences.org/labs/d193babe/the-story-of-nextflow-building-a-modern-pipeline-orchestrator
 
+Paper comparing Nextflow to Snakemake and other workflow managers:
+
+https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008622
+
 Other useful links:
 
 https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html

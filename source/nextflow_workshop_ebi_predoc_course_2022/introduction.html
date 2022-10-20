@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>1 Introduction | Nextflow workshop - EBI predoc course 2022</title>
+  <meta name="description" content="1 Introduction | Nextflow workshop - EBI predoc course 2022" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="1 Introduction | Nextflow workshop - EBI predoc course 2022" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="saulpierotti-ebi/saulpierotti-ebi.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="1 Introduction | Nextflow workshop - EBI predoc course 2022" />
+  
+  
+  
+
+<meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
+
+
+<meta name="date" content="2022-10-20" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="basic-features.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link rel="icon" href="images/favicon.ico">
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  { color: #cccccc; background-color: #303030; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffcfaf; } /* Alert */
+code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #dca3a3; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #f0dfaf; } /* ControlFlow */
+code span.ch { color: #dca3a3; } /* Char */
+code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+code span.co { color: #7f9f7f; } /* Comment */
+code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+code span.do { color: #7f9f7f; } /* Documentation */
+code span.dt { color: #dfdfbf; } /* DataType */
+code span.dv { color: #dcdccc; } /* DecVal */
+code span.er { color: #c3bf9f; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #c0bed1; } /* Float */
+code span.fu { color: #efef8f; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+code span.kw { color: #f0dfaf; } /* Keyword */
+code span.op { color: #f0efd0; } /* Operator */
+code span.ot { color: #efef8f; } /* Other */
+code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+code span.sc { color: #dca3a3; } /* SpecialChar */
+code span.ss { color: #cc9393; } /* SpecialString */
+code span.st { color: #cc9393; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #cc9393; } /* VerbatimString */
+code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#prerequisites"><i class="fa fa-check"></i><b>1.1</b> Prerequisites</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#what-is-nextflow"><i class="fa fa-check"></i><b>1.2</b> What is Nextflow?</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#learning-objectives"><i class="fa fa-check"></i><b>1.3</b> Learning objectives</a></li>
+<li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setup</a></li>
+<li class="chapter" data-level="1.5" data-path="introduction.html"><a href="introduction.html#getting-started"><i class="fa fa-check"></i><b>1.5</b> Getting started</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="introduction.html"><a href="introduction.html#general-anatomy-of-a-nextflow-workflow"><i class="fa fa-check"></i><b>1.5.1</b> General anatomy of a Nextflow workflow</a></li>
+<li class="chapter" data-level="1.5.2" data-path="introduction.html"><a href="introduction.html#nextflow-domain-specific-language-versions"><i class="fa fa-check"></i><b>1.5.2</b> Nextflow domain specific language versions</a></li>
+<li class="chapter" data-level="1.5.3" data-path="introduction.html"><a href="introduction.html#core-concepts"><i class="fa fa-check"></i><b>1.5.3</b> Core concepts</a></li>
+<li class="chapter" data-level="1.5.4" data-path="introduction.html"><a href="introduction.html#your-first-workflow"><i class="fa fa-check"></i><b>1.5.4</b> Your first workflow</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="basic-features.html"><a href="basic-features.html"><i class="fa fa-check"></i><b>2</b> Basic features</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="basic-features.html"><a href="basic-features.html#multiple-processes-and-publication-of-workflow-outputs"><i class="fa fa-check"></i><b>2.1</b> Multiple processes and publication of workflow outputs</a></li>
+<li class="chapter" data-level="2.2" data-path="basic-features.html"><a href="basic-features.html#creating-channels-and-specifying-pipeline-parameters"><i class="fa fa-check"></i><b>2.2</b> Creating channels and specifying pipeline parameters</a></li>
+<li class="chapter" data-level="2.3" data-path="basic-features.html"><a href="basic-features.html#multiple-input-files"><i class="fa fa-check"></i><b>2.3</b> Multiple input files</a></li>
+<li class="chapter" data-level="2.4" data-path="basic-features.html"><a href="basic-features.html#using-a-sample-sheet-and-value-channels"><i class="fa fa-check"></i><b>2.4</b> Using a sample sheet and value channels</a></li>
+<li class="chapter" data-level="2.5" data-path="basic-features.html"><a href="basic-features.html#software-dependencies"><i class="fa fa-check"></i><b>2.5</b> Software dependencies</a></li>
+<li class="chapter" data-level="2.6" data-path="basic-features.html"><a href="basic-features.html#resource-allocation"><i class="fa fa-check"></i><b>2.6</b> Resource allocation</a></li>
+<li class="chapter" data-level="2.7" data-path="basic-features.html"><a href="basic-features.html#the-resume-feature"><i class="fa fa-check"></i><b>2.7</b> The resume feature</a></li>
+<li class="chapter" data-level="2.8" data-path="basic-features.html"><a href="basic-features.html#nf-core-pipelines"><i class="fa fa-check"></i><b>2.8</b> nf-core pipelines</a></li>
+<li class="chapter" data-level="2.9" data-path="basic-features.html"><a href="basic-features.html#labels"><i class="fa fa-check"></i><b>2.9</b> Labels</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="basic-challenge.html"><a href="basic-challenge.html"><i class="fa fa-check"></i><b>3</b> Basic challenge</a></li>
+<li class="chapter" data-level="4" data-path="advanced-features.html"><a href="advanced-features.html"><i class="fa fa-check"></i><b>4</b> Advanced features</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="advanced-features.html"><a href="advanced-features.html#process-inputs"><i class="fa fa-check"></i><b>4.1</b> Process inputs</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="advanced-features.html"><a href="advanced-features.html#input-of-type-val"><i class="fa fa-check"></i><b>4.1.1</b> Input of type <code>val</code></a></li>
+<li class="chapter" data-level="4.1.2" data-path="advanced-features.html"><a href="advanced-features.html#input-of-type-path"><i class="fa fa-check"></i><b>4.1.2</b> Input of type <code>path</code></a></li>
+<li class="chapter" data-level="4.1.3" data-path="advanced-features.html"><a href="advanced-features.html#input-of-type-tuple"><i class="fa fa-check"></i><b>4.1.3</b> Input of type <code>tuple</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="advanced-features.html"><a href="advanced-features.html#process-outputs"><i class="fa fa-check"></i><b>4.2</b> Process outputs</a></li>
+<li class="chapter" data-level="4.3" data-path="advanced-features.html"><a href="advanced-features.html#the-groovy-programming-language"><i class="fa fa-check"></i><b>4.3</b> The Groovy programming language</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-features.html"><a href="advanced-features.html#closures"><i class="fa fa-check"></i><b>4.3.1</b> Closures</a></li>
+<li class="chapter" data-level="4.3.2" data-path="advanced-features.html"><a href="advanced-features.html#conditional-statements"><i class="fa fa-check"></i><b>4.3.2</b> Conditional statements</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="advanced-features.html"><a href="advanced-features.html#channel-factories"><i class="fa fa-check"></i><b>4.4</b> Channel factories</a></li>
+<li class="chapter" data-level="4.5" data-path="advanced-features.html"><a href="advanced-features.html#operators"><i class="fa fa-check"></i><b>4.5</b> Operators</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="advanced-features.html"><a href="advanced-features.html#the-view-operator"><i class="fa fa-check"></i><b>4.5.1</b> The <code>view</code> operator</a></li>
+<li class="chapter" data-level="4.5.2" data-path="advanced-features.html"><a href="advanced-features.html#the-map-operator"><i class="fa fa-check"></i><b>4.5.2</b> The <code>map</code> operator</a></li>
+<li class="chapter" data-level="4.5.3" data-path="advanced-features.html"><a href="advanced-features.html#the-set-operator"><i class="fa fa-check"></i><b>4.5.3</b> The <code>set</code> operator</a></li>
+<li class="chapter" data-level="4.5.4" data-path="advanced-features.html"><a href="advanced-features.html#the-splitcsv-operator"><i class="fa fa-check"></i><b>4.5.4</b> The <code>splitCsv</code> operator</a></li>
+<li class="chapter" data-level="4.5.5" data-path="advanced-features.html"><a href="advanced-features.html#the-flatten-operator"><i class="fa fa-check"></i><b>4.5.5</b> The <code>flatten</code> operator</a></li>
+<li class="chapter" data-level="4.5.6" data-path="advanced-features.html"><a href="advanced-features.html#the-collect-operator"><i class="fa fa-check"></i><b>4.5.6</b> The <code>collect</code> operator</a></li>
+<li class="chapter" data-level="4.5.7" data-path="advanced-features.html"><a href="advanced-features.html#the-filter-operator"><i class="fa fa-check"></i><b>4.5.7</b> The <code>filter</code> operator</a></li>
+<li class="chapter" data-level="4.5.8" data-path="advanced-features.html"><a href="advanced-features.html#the-first-operator"><i class="fa fa-check"></i><b>4.5.8</b> The <code>first</code> operator</a></li>
+<li class="chapter" data-level="4.5.9" data-path="advanced-features.html"><a href="advanced-features.html#the-combine-operator"><i class="fa fa-check"></i><b>4.5.9</b> The <code>combine</code> operator</a></li>
+<li class="chapter" data-level="4.5.10" data-path="advanced-features.html"><a href="advanced-features.html#the-grouptuple-operator"><i class="fa fa-check"></i><b>4.5.10</b> The <code>groupTuple</code> operator</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="advanced-features.html"><a href="advanced-features.html#implicit-variables"><i class="fa fa-check"></i><b>4.6</b> Implicit variables</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="advanced-features.html"><a href="advanced-features.html#script-implicit-variables-available-in-main.nf"><i class="fa fa-check"></i><b>4.6.1</b> Script implicit variables (available in <code>main.nf</code>)</a></li>
+<li class="chapter" data-level="4.6.2" data-path="advanced-features.html"><a href="advanced-features.html#configuration-implicit-variables-available-in-nextflow.config"><i class="fa fa-check"></i><b>4.6.2</b> Configuration implicit variables (available in <code>nextflow.config</code>)</a></li>
+<li class="chapter" data-level="4.6.3" data-path="advanced-features.html"><a href="advanced-features.html#process-implicit-variables-defined-within-a-process"><i class="fa fa-check"></i><b>4.6.3</b> Process implicit variables (defined within a process)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="advanced-features.html"><a href="advanced-features.html#directives"><i class="fa fa-check"></i><b>4.7</b> Directives</a>
+<ul>
+<li class="chapter" data-level="4.7.1" data-path="advanced-features.html"><a href="advanced-features.html#the-conda-directive"><i class="fa fa-check"></i><b>4.7.1</b> The <code>conda</code> directive</a></li>
+<li class="chapter" data-level="4.7.2" data-path="advanced-features.html"><a href="advanced-features.html#the-container-directive"><i class="fa fa-check"></i><b>4.7.2</b> The <code>container</code> directive</a></li>
+<li class="chapter" data-level="4.7.3" data-path="advanced-features.html"><a href="advanced-features.html#the-cpus-memory-and-time-directives"><i class="fa fa-check"></i><b>4.7.3</b> The <code>cpus</code>, <code>memory</code>, and <code>time</code> directives</a></li>
+<li class="chapter" data-level="4.7.4" data-path="advanced-features.html"><a href="advanced-features.html#the-label-directive"><i class="fa fa-check"></i><b>4.7.4</b> The <code>label</code> directive</a></li>
+<li class="chapter" data-level="4.7.5" data-path="advanced-features.html"><a href="advanced-features.html#the-debug-directive"><i class="fa fa-check"></i><b>4.7.5</b> The <code>debug</code> directive</a></li>
+<li class="chapter" data-level="4.7.6" data-path="advanced-features.html"><a href="advanced-features.html#the-cache-directive"><i class="fa fa-check"></i><b>4.7.6</b> The <code>cache</code> directive</a></li>
+<li class="chapter" data-level="4.7.7" data-path="advanced-features.html"><a href="advanced-features.html#the-errorstrategy-directive"><i class="fa fa-check"></i><b>4.7.7</b> The <code>errorStrategy</code> directive</a></li>
+<li class="chapter" data-level="4.7.8" data-path="advanced-features.html"><a href="advanced-features.html#the-publishdir-directive"><i class="fa fa-check"></i><b>4.7.8</b> The <code>publishDir</code> directive</a></li>
+<li class="chapter" data-level="4.7.9" data-path="advanced-features.html"><a href="advanced-features.html#the-executor-and-queue-directives"><i class="fa fa-check"></i><b>4.7.9</b> The <code>executor</code> and <code>queue</code> directives</a></li>
+<li class="chapter" data-level="4.7.10" data-path="advanced-features.html"><a href="advanced-features.html#the-ext-directive"><i class="fa fa-check"></i><b>4.7.10</b> The <code>ext</code> directive</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="advanced-features.html"><a href="advanced-features.html#advanced-workflow-configuration"><i class="fa fa-check"></i><b>4.8</b> Advanced workflow configuration</a>
+<ul>
+<li class="chapter" data-level="4.8.1" data-path="advanced-features.html"><a href="advanced-features.html#configuration-files-and-command-line-parameters"><i class="fa fa-check"></i><b>4.8.1</b> Configuration files and command line parameters</a></li>
+<li class="chapter" data-level="4.8.2" data-path="advanced-features.html"><a href="advanced-features.html#configuration-profiles"><i class="fa fa-check"></i><b>4.8.2</b> Configuration profiles</a></li>
+</ul></li>
+<li class="chapter" data-level="4.9" data-path="advanced-features.html"><a href="advanced-features.html#sub-workflows"><i class="fa fa-check"></i><b>4.9</b> Sub-workflows</a></li>
+<li class="chapter" data-level="4.10" data-path="advanced-features.html"><a href="advanced-features.html#nextflow-tower"><i class="fa fa-check"></i><b>4.10</b> Nextflow Tower</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="advanced-challenge.html"><a href="advanced-challenge.html"><i class="fa fa-check"></i><b>5</b> Advanced challenge</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="advanced-challenge.html"><a href="advanced-challenge.html#setup-1"><i class="fa fa-check"></i><b>5.1</b> Setup</a></li>
+<li class="chapter" data-level="5.2" data-path="advanced-challenge.html"><a href="advanced-challenge.html#solution"><i class="fa fa-check"></i><b>5.2</b> Solution</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i>Additional resources</a></li>
+<li class="chapter" data-level="" data-path="credits.html"><a href="credits.html"><i class="fa fa-check"></i>Credits</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Nextflow workshop - EBI predoc course 2022</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="introduction" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="prerequisites" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Prerequisites<a href="introduction.html#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Familiarity with the Linux shell, as well as basic programming constructs such as for/while loops and if/else statements is assumed.
+Familiarity with at least one scripting language such as <a href="https://www.r-project.org/about.html">R</a> or <a href="https://www.python.org/">Python</a> will be beneficial.
+A basic knowledge of virtual environments and software containers would be helpful.
+Basic knowledge of git beneficial.</p>
+</div>
+<div id="what-is-nextflow" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> What is Nextflow?<a href="introduction.html#what-is-nextflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://www.nextflow.io/index.html">Nextflow</a> is an open-source workflow manager consisting of a domain specific language built as a superset of the <a href="https://groovy-lang.org/">Groovy</a> programming language, which is itself a superset of <a href="https://www.java.com/en/">Java</a>.
+The purpose of Nextflow is to make it easier to coordinate the execution of complex <a href="https://www.wikiwand.com/en/Pipeline_(computing)">data analysis pipelines</a>, and to facilitate the execution of such pipelines in <a href="https://www.wikiwand.com/en/Cloud_computing">cloud environments</a> and <a href="https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster">high-performance clusters</a>.</p>
+<p>In practice, Nextflow allows you to declare how the output of some processes in a pipeline are fed as the input of other processes, leading to the production of a final result.
+In addition, Nextflow allows the specification of software requirements for each process using <a href="https://docs.conda.io/en/latest/">conda</a> environments, <a href="https://www.docker.com/">docker</a> containers, and a variety of other solutions.</p>
+<p>Once a pipeline has been written in Nextflow, it can be easily scaled from a local laptop to a high-performance cluster or cloud environment without any modification, with Nextflow taking care of environment-specific commands (for example, submitting appropriate jobs to a batch scheduler).
+Moreover, the pipeline execution is parallelised if the dependencies among different processes allow it.
+A motivation for using a workflow manager such as Nextflow is also to increase the reproducibility of your data analysis.</p>
+<p>Finally, each processes in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.</p>
+<p>Nextflow is developed and maintained by <a href="https://seqera.io/">Seqera Labs</a>. The project was started in Cedric Notredame’s lab at the Centre for Genomic Regulation (<a href="https://www.crg.eu/">CRG</a>) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use-case, but it is domain-agnostic and can be used for any data-intensive workflow.</p>
+</div>
+<div id="learning-objectives" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Learning objectives<a href="introduction.html#learning-objectives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>After following this tutorial, the learner will be autonomous in using nextflow for their own data analysis.
+They will understand fundamental Nextflow concepts such as processes, workflows, channels, they will be able to write a configuration file to alter the resources allocated for a processes and the software environment of execution, and they will be able to deploy a community-curated pipeline from <a href="https://nf-co.re/">nf-core</a>.</p>
+</div>
+<div id="setup" class="section level2 hasAnchor" number="1.4">
+<h2><span class="header-section-number">1.4</span> Setup<a href="introduction.html#setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Install <a href="https://github.com/conda-forge/miniforge">mamba</a>, a faster alternative to <a href="https://docs.conda.io/en/latest/">conda</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="introduction.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-O</span> <span class="st">&quot;https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-</span><span class="va">$(</span><span class="fu">uname</span><span class="va">)</span><span class="st">-</span><span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span><span class="st">.sh&quot;</span></span>
+<span id="cb1-2"><a href="introduction.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> Mambaforge-<span class="va">$(</span><span class="fu">uname</span><span class="va">)</span>-<span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span>.sh</span></code></pre></div>
+<p>Setup the shell to use mamba</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="introduction.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> init</span></code></pre></div>
+<p>Close and re-open your shell.
+Then, create a mamba environment for installing Nextflow</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="introduction.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> create <span class="at">-n</span> nextflow nextflow</span></code></pre></div>
+<p>Now activate the environment that you just created</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="introduction.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> activate nextflow</span></code></pre></div>
+<p>Create an empty git repository in your GitHub account and clone it locally.
+I will pretend that this repository is called <code>my_repo</code> in this workshop.
+Don’t forget to replace this with the name of your actual repository.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="introduction.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my_repo</span></code></pre></div>
+<p>You can use a text editor of your choice to write Nextflow code.
+For example, you may want to use <a href="https://flight-manual.atom.io/getting-started/sections/installing-atom/">Atom</a>.
+I recommend to add Nextflow language support to Atom by clicking <a href="atom://settings-view/show-package?package=language-nextflow">here</a>.</p>
+<p>Create some essential files that we will be working on inside your new repository</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="introduction.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> main.nf</span>
+<span id="cb6-2"><a href="introduction.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> nextflow.config</span></code></pre></div>
+</div>
+<div id="getting-started" class="section level2 hasAnchor" number="1.5">
+<h2><span class="header-section-number">1.5</span> Getting started<a href="introduction.html#getting-started" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="general-anatomy-of-a-nextflow-workflow" class="section level3 hasAnchor" number="1.5.1">
+<h3><span class="header-section-number">1.5.1</span> General anatomy of a Nextflow workflow<a href="introduction.html#general-anatomy-of-a-nextflow-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A Nextflow workflow is usually represented by a git repository containing all the files describing the workflow logic, configurations, and dependencies.</p>
+<p>Text files containing Nextflow code usually have the <code>.nf</code> extension (i.e. <code>my_file.nf</code>).
+It does not really matter how you name your files, as long as they contain valid Nextflow code, but for consistency the best practice is to call the file describing the workflow as <code>main.nf</code> and place it at the root of your repository.</p>
+<p>The <code>main.nf</code> file can access code from other Nextflow scripts, called sub-workflows, that can have arbitrary names.
+The best practice is to place such additional Nextflow scripts under the folder <code>workflows</code> in the root of the repository.
+So for example an additional Nextflow script could be named <code>workflows/preprocessing.nf</code>.
+We will explore later the usage of sub-workflows, so don’t worry if you don’t understand their purpose yet.</p>
+<p>The configurations for the pipeline need to be placed in a file called <code>nextflow.config</code> at the root of the repository.
+Note that differently from what was said before regarding <code>main.nf</code>, this name is mandatory for Nextflow to properly recognise the file.
+The <code>nextflow.config</code> file can contain for example resource requirements, execution, parameters, and metadata about your workflow.
+We will explore more in depth the usage of configurations files in a later section.</p>
+<p>Scripts (in any language, for example <a href="https://www.r-project.org/about.html">R</a> or <a href="https://www.python.org/">Python</a>) that are used in the execution of specific processes in your pipeline should be placed in the folder <code>bin</code>.
+Scripts placed here are automatically recognise by Nextflow during task execution without the need to specify their full path.</p>
+<p>Additional files needed for your workflow, for example a table containing some metadata for your samples, are usually placed under the folder <code>assets</code>.
+However this is not required and many workflows do not have an <code>assets</code> folder.</p>
+<p>Inputs to the workflow are usually defined in a so-called “sample sheet” that should contain the (preferably) absolute file path to the input files end eventual sample-specific parameters for task execution.
+Best practice is to have your sample sheet formatted as a <a href="https://www.wikiwand.com/en/Comma-separated_values">csv</a> file with an appropriate header.
+Note that the sample sheet is not part of the pipeline itself.
+The absolute path to the sample sheet is usually provided to Nextflow either as a command-line parameter or in the <code>nextflow.config</code> file.</p>
+<p>In order to execute your workflow, you would run (do not do it now, we still need to write the workflow) <code>nextflow run main.nf</code> at the root of your repository if your workflow is in a file named <code>main.nf</code>.
+This would prompt Nextflow to read the <code>main.nf</code> file and eventual sub-workflows, extract the workflow logic from it, load the configurations in <code>nextflow.config</code>, and coordinate the execution of the different steps in your pipeline to produce the final result.</p>
+</div>
+<div id="nextflow-domain-specific-language-versions" class="section level3 hasAnchor" number="1.5.2">
+<h3><span class="header-section-number">1.5.2</span> Nextflow domain specific language versions<a href="introduction.html#nextflow-domain-specific-language-versions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain Specific Language 1 (DSL1).
+A major change in the Nextflow syntax was done by its developers, and the new syntax is referred to as DSL 2.
+In this workshop we will be using exclusively the new DSL2 syntax.</p>
+<p>For this reason, you need to add the following line at the top of your <code>main.nf</code> file:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb7-1"><a href="introduction.html#cb7-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span></code></pre></div>
+<p>So if in the future you will find yourself looking at a Nextflow workflow which is written very differently from what you are used to, it will probably be written according to DSL1 instead of DSL2.</p>
+</div>
+<div id="core-concepts" class="section level3 hasAnchor" number="1.5.3">
+<h3><span class="header-section-number">1.5.3</span> Core concepts<a href="introduction.html#core-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A Nextflow workflow is defined by a set of processes, which execute a single task each, which are coordinate by one or more workflows.
+So for example there may be a processes called <code>align_fastq</code> that takes in input a <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> file and a <a href="https://www.wikiwand.com/en/Reference_genome">reference genome</a> and uses the software <a href="https://github.com/bwa-mem2/bwa-mem2">bwa-mem2</a> to align it, producing an aligned <a href="https://www.sanger.ac.uk/tool/cram/">cram file</a> in output.</p>
+<p>A processes defines as a minimum the command to be executed.
+Outputs are typically defined but may be omitted if the process is run for its side effects.
+Inputs are usually also defined but there may be processes that do not need any input and instead perform a static computation.
+Many additional parameters can be specified for a process, for example the software needed, or how much memory or time is required for its execution.
+We will explore processes and their definition more in detail in a later section.</p>
+<p>If processes determine what is to be executed and how, workflows instead determine the logic of execution and how different processes communicate with each other.
+So for example there may be a workflow called <code>SNP_CALLING</code> that takes a <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> file in input, uses the process <code>align_fastq</code> to obtain an aligned <a href="https://www.sanger.ac.uk/tool/cram/">cram file</a>, then gives that cram file in input to another process called <code>gatk_call</code> that uses it to create a <a href="https://www.wikiwand.com/en/Variant_Call_Format">vcf file</a> containing genetic variants.</p>
+<p>Processes communicate with each other using so-called “channels”, which are unidirectional <a href="https://www.wikiwand.com/en/FIFO_(computing_and_electronics)">First-In-First-Out (FIFO)</a> queues.
+This means that a channel is populated with a set of elements (for example, files) produced by a process in the order in which they are produced.
+Then, these elements are consumed one by one by another process in the same order.
+Several ways to manipulate, merge, and split channel exist, and we will explore them later.
+So for example the workflow that I described above may define an input channel containing the <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> files in input, and a channel connecting the output of <code>align_fastq</code> to the input of <code>gatk_call</code>.
+Note that channels are unidirectional: communication happens only in one direction, from outputs to inputs.</p>
+</div>
+<div id="your-first-workflow" class="section level3 hasAnchor" number="1.5.4">
+<h3><span class="header-section-number">1.5.4</span> Your first workflow<a href="introduction.html#your-first-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now that you know the basics of what a Nextflow workflow is, we will write a simple workflow and we will execute it.</p>
+<p>First of all, open the file <code>main.nf</code> that you created before at the root of your repository in a text editor and add the following to it</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb8-1"><a href="introduction.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb8-2"><a href="introduction.html#cb8-2" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb8-3"><a href="introduction.html#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb8-4"><a href="introduction.html#cb8-4" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb8-5"><a href="introduction.html#cb8-5" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb8-6"><a href="introduction.html#cb8-6" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb8-7"><a href="introduction.html#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb8-8"><a href="introduction.html#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb8-9"><a href="introduction.html#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb8-10"><a href="introduction.html#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-11"><a href="introduction.html#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="introduction.html#cb8-12" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb8-13"><a href="introduction.html#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb8-14"><a href="introduction.html#cb8-14" aria-hidden="true" tabindex="-1"></a>    say_hello<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb8-15"><a href="introduction.html#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>If you want to see how your <code>main.nf</code> should look like at this stage open this hidden section</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb9"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb9-1"><a href="introduction.html#cb9-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb9-2"><a href="introduction.html#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="introduction.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb9-4"><a href="introduction.html#cb9-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb9-5"><a href="introduction.html#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb9-6"><a href="introduction.html#cb9-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb9-7"><a href="introduction.html#cb9-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb9-8"><a href="introduction.html#cb9-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb9-9"><a href="introduction.html#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb9-10"><a href="introduction.html#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb9-11"><a href="introduction.html#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb9-12"><a href="introduction.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-13"><a href="introduction.html#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="introduction.html#cb9-14" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb9-15"><a href="introduction.html#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb9-16"><a href="introduction.html#cb9-16" aria-hidden="true" tabindex="-1"></a>    say_hello<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb9-17"><a href="introduction.html#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</details>
+<p>Now open the file <code>nextflow.config</code> and add the following line</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb10-1"><a href="introduction.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb10-2"><a href="introduction.html#cb10-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span></code></pre></div>
+<p>Now run the workflow executing from the root of your repository the following</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="introduction.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf</span></code></pre></div>
+<p>You should see a bunch of information about your workflow and finally you will see the name of the file we just created, <code>hello_world.txt</code>, appear on your terminal. Note that the full path to the file will be printed in your terminal, which will look something like <code>/home/myname/nextflow_workdir/00/fjdanurew9gihwepw1455idusodhfweioru/hello_world.txt</code>.</p>
+<p>Let’s now examine the code step by step:</p>
+<ul>
+<li>In <code>nextflow.config</code> we declared our working directory to be <code>../nextflow_workdir</code> with the keyword <code>workDir</code>. The working directory is where Nextflow actually stores your files during intermediate processing.</li>
+<li>Lines starting with <code>//</code> define a comment in groovy, and they are ignored.</li>
+<li>The keyword <code>process</code> defines a process, with the statement that follows defining the process name. So <code>process say_hello</code> creates a process named <code>say_hello</code>.</li>
+<li>Curly braces enclose a block of code, so <code>process say_hello {&lt;some code&gt;}</code> is understood by Nextflow as defining <code>&lt;some code&gt;</code> to belong to the process named <code>say_hello</code>.</li>
+<li>The keyword <code>output:</code> when used inside of a process defines the expected outputs that that process should produce. If the declared output is absent at the end of the process’ execution the execution fails.</li>
+<li>Several types of outputs can be defined, and <code>path</code> is one of them. The keyword <code>path</code> defines what comes after it to be a file.</li>
+<li>Output files are named in the output block after the <code>path</code> qualifier. They should be placed inside a string. Strings are enclosed in quotes in groovy (<code>"this is a string"</code>).</li>
+<li>The <code>script:</code> keyword defines the actual command to be executed in the process. The command should be provided as a string. Since commands can be long, here a multi-line string is used. In groovy, multi-line strings are enclosed in three quotes</li>
+</ul>
+<pre><code>&quot;&quot;&quot;
+this is a multi-line string
+it is very long
+&quot;&quot;&quot;</code></pre>
+<ul>
+<li>What is declared in the <code>script:</code> block is executed in the shell by default, so we should write <a href="https://www.wikiwand.com/en/Bash_(Unix_shell)">bash</a> code there
+<ul>
+<li>The command that we wrote, <code>echo "This is the EBI predoc course" &gt; hello_world.txt</code>, creates a file called <code>hello_world.txt</code> containing the string <code>"This is the EBI predoc course"</code></li>
+</ul></li>
+<li>The keyword <code>workflow</code> defines a workflow, that we left unnamed in this case. The last workflow to be written in your <code>main.nf</code> file is automatically executed by Nextflow.
+<ul>
+<li>The workflow that we defined executes the process <code>say_hello</code></li>
+<li>The output of the process <code>say_hello</code> is captured by <code>say_hello.out</code>, which is a channel. In this case it will contain just the file <code>hello_world.txt</code></li>
+<li>The operator <code>view()</code> just echoes to the terminal the content of the channel. In this case it prints <code>hello_world.txt</code> to our shell.</li>
+</ul></li>
+</ul>
+<p>So to put everything together, when you ran <code>nextflow run main.nf</code> Nextflow read the <code>main.nf</code> file, it found the last workflow, which we left unnamed, and executed it.
+Some additional notes:</p>
+<ul>
+<li>It is possible to write <code>path("a_file.txt")</code> or <code>path "a_file.txt"</code>, they are equivalent statements</li>
+<li>There is no need to think about where we are creating our files, Nextflow under the hood creates a private directory for each execution and takes care of moving files around as needed by other processes</li>
+<li>It is common practice to chain different operators on a channel</li>
+<li>It is possible to chain operators on separate lines
+<ul>
+<li>The following is equivalent to <code>say_hello.out.view()</code></li>
+</ul>
+<pre><code>say_hello.out
+  .view()</code></pre></li>
+<li>Note that spaces and <a href="https://www.wikiwand.com/en/Tab_key">tab charachters</a> are just for visual clarity and are not required</li>
+<li>Explore the working directory <code>../nextflow_workdir</code>. It contains a directory with a strange alphanumeric name like <code>00/fjdanurew9gihwepw1455idusodhfweioru</code> (NOTE: yours will have a different name). One different directory like this is created by Nextflow for the execution of each task (a task is an instance of a process, a process is the definition itself, while a task is created each time that process is executed on different inputs).
+<ul>
+<li>Inside the directory with the strange name, you will see the file that we just created, <code>hello_world.txt</code></li>
+<li>Read the content of the file with <code>cat hello_world.txt</code>. You should see <code>This is the EBI predoc course</code> in your terminal.</li>
+</ul></li>
+</ul>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="basic-features.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "night",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/saulpierotti-ebi/saulpierotti-ebi.github.io/blob/main/source/nextflow_workshop_ebi_predoc_course_2022/01-intro.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"info": true
+});
+});
+</script>
+
+</body>
+
+</html>
