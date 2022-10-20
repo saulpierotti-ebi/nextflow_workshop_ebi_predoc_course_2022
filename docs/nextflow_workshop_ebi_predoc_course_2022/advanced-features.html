@@ -213,7 +213,7 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="4.8.2" data-path="advanced-features.html"><a href="advanced-features.html#configuration-profiles"><i class="fa fa-check"></i><b>4.8.2</b> Configuration profiles</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="advanced-features.html"><a href="advanced-features.html#sub-workflows"><i class="fa fa-check"></i><b>4.9</b> Sub-workflows</a></li>
-<li class="chapter" data-level="4.10" data-path="advanced-features.html"><a href="advanced-features.html#nextflow-tower"><i class="fa fa-check"></i><b>4.10</b> Nextflow tower</a></li>
+<li class="chapter" data-level="4.10" data-path="advanced-features.html"><a href="advanced-features.html#nextflow-tower"><i class="fa fa-check"></i><b>4.10</b> Nextflow Tower</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="advanced-challenge.html"><a href="advanced-challenge.html"><i class="fa fa-check"></i><b>5</b> Advanced challenge</a></li>
 <li class="chapter" data-level="6" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i><b>6</b> Additional resources</a></li>
@@ -833,9 +833,57 @@ If several profiles need to be activated at the same time, this can be done by c
 </div>
 <div id="sub-workflows" class="section level2 hasAnchor" number="4.9">
 <h2><span class="header-section-number">4.9</span> Sub-workflows<a href="advanced-features.html#sub-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sub-workflows can be used to modularise a workflow in logic steps.
+So for example a workflow that does germline variant calling on a set of sequencing files can be composed of a sub-workflow that maps the sequencing files to a reference and a sub-workflow that does the variant calling from the mapped sequencing files.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb111-1"><a href="advanced-features.html#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>processes defined here<span class="op">&gt;</span></span>
+<span id="cb111-2"><a href="advanced-features.html#cb111-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-3"><a href="advanced-features.html#cb111-3" aria-hidden="true" tabindex="-1"></a>workflow MAP_TO_REF <span class="op">{</span></span>
+<span id="cb111-4"><a href="advanced-features.html#cb111-4" aria-hidden="true" tabindex="-1"></a>  input<span class="op">:</span></span>
+<span id="cb111-5"><a href="advanced-features.html#cb111-5" aria-hidden="true" tabindex="-1"></a>    fastq_ch</span>
+<span id="cb111-6"><a href="advanced-features.html#cb111-6" aria-hidden="true" tabindex="-1"></a>  main<span class="op">:</span></span>
+<span id="cb111-7"><a href="advanced-features.html#cb111-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">run_bwamem2</span><span class="op">(</span> fastq_ch <span class="op">)</span></span>
+<span id="cb111-8"><a href="advanced-features.html#cb111-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mark_duplicates</span><span class="op">(</span> run_bwamem2<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb111-9"><a href="advanced-features.html#cb111-9" aria-hidden="true" tabindex="-1"></a>  output<span class="op">:</span></span>
+<span id="cb111-10"><a href="advanced-features.html#cb111-10" aria-hidden="true" tabindex="-1"></a>    mark_duplicates<span class="op">.</span>out</span>
+<span id="cb111-11"><a href="advanced-features.html#cb111-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb111-12"><a href="advanced-features.html#cb111-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-13"><a href="advanced-features.html#cb111-13" aria-hidden="true" tabindex="-1"></a>workflow CALL_VARIANTS <span class="op">{</span></span>
+<span id="cb111-14"><a href="advanced-features.html#cb111-14" aria-hidden="true" tabindex="-1"></a>  input<span class="op">:</span></span>
+<span id="cb111-15"><a href="advanced-features.html#cb111-15" aria-hidden="true" tabindex="-1"></a>    mapped_crams_ch</span>
+<span id="cb111-16"><a href="advanced-features.html#cb111-16" aria-hidden="true" tabindex="-1"></a>  main<span class="op">:</span></span>
+<span id="cb111-17"><a href="advanced-features.html#cb111-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gatk_haplotypecaller</span><span class="op">(</span> mapped_crams_ch <span class="op">)</span></span>
+<span id="cb111-18"><a href="advanced-features.html#cb111-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">genomics_db_import</span><span class="op">(</span> gatk_haplotypecaller<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb111-19"><a href="advanced-features.html#cb111-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gatk_genotypegvcfs</span><span class="op">(</span> genomics_db_import<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb111-20"><a href="advanced-features.html#cb111-20" aria-hidden="true" tabindex="-1"></a>  output<span class="op">:</span></span>
+<span id="cb111-21"><a href="advanced-features.html#cb111-21" aria-hidden="true" tabindex="-1"></a>    gatk_genotypegvcfs<span class="op">.</span>out</span>
+<span id="cb111-22"><a href="advanced-features.html#cb111-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb111-23"><a href="advanced-features.html#cb111-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-24"><a href="advanced-features.html#cb111-24" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb111-25"><a href="advanced-features.html#cb111-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAP_TO_REF</span><span class="op">(</span> params<span class="op">.</span>input <span class="op">)</span></span>
+<span id="cb111-26"><a href="advanced-features.html#cb111-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">CALL_VARIANTS</span><span class="op">(</span> MAP_TO_REF<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb111-27"><a href="advanced-features.html#cb111-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Sub-workflows can have an <code>input</code>, a <code>main</code>,and a <code>output</code> block.
+The <code>input</code> block defines the name of one or more channels that are passed as an input to the sub-workflows.
+The <code>output</code> block can define a channel accessible from <code>&lt;WORKFLOW_NAME&gt;.out</code> after execution.
+The <code>main</code> block defines the actual workflow logic in terms of processes to be run and channel manipulations.</p>
+<p>It is also possible to write separate logical steps of the workflow in separate <code>.nf</code> files.
+Such additional files can have any name and are usually put under the folder <code>workflows</code> in the project directory.
+Workflows defined in such files can be accessed from <code>main.nf</code> using an <code>include</code> statement.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb112-1"><a href="advanced-features.html#cb112-1" aria-hidden="true" tabindex="-1"></a>include <span class="op">{</span> PRE_PROCESSING <span class="op">}</span> from <span class="st">&#39;./workflows/pre_processing&#39;</span></span>
+<span id="cb112-2"><a href="advanced-features.html#cb112-2" aria-hidden="true" tabindex="-1"></a>include <span class="op">{</span> DO_SOME_WORK <span class="op">}</span> from <span class="st">&#39;./workflows/important_script.nf&#39;</span></span>
+<span id="cb112-3"><a href="advanced-features.html#cb112-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb112-4"><a href="advanced-features.html#cb112-4" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb112-5"><a href="advanced-features.html#cb112-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">PRE_PROCESSING</span><span class="op">(</span> params<span class="op">.</span>input <span class="op">)</span></span>
+<span id="cb112-6"><a href="advanced-features.html#cb112-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">DO_SOME_WORK</span><span class="op">(</span> PRE_PROCESSING<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb112-7"><a href="advanced-features.html#cb112-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
 <div id="nextflow-tower" class="section level2 hasAnchor" number="4.10">
-<h2><span class="header-section-number">4.10</span> Nextflow tower<a href="advanced-features.html#nextflow-tower" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2><span class="header-section-number">4.10</span> Nextflow Tower<a href="advanced-features.html#nextflow-tower" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://cloud.tower.nf/">Nextflow Tower</a> is a centralised web interface that allows to monitor and launch your Nextflow workflows.
+It is possible to use the Nextflow Tower website (for free) or also on-premises solution are available for institutions (at a price).</p>
+<p>Nextflow Tower communicates with the execution environment via <a href="https://www.wikiwand.com/en/Secure_Shell">SSH</a> access (if the host is reachable via SSH), or via a <a href="https://help.tower.nf/22.3/agent/">“Tower agent”</a> that is run on the execution environment itself.
+Nextflow Tower is particularly useful when you are running several pipelines at the same time in different environments to monitor failures and resource usage.</p>
+<p>You can have a look at an example Nextflow Tower <a href="Nextflow%20Tower.html">here</a>.</p>
 </div>
 </div>
             </section>
