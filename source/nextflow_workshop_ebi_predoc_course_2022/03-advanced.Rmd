@@ -840,6 +840,27 @@ You can have a look at an example of the Nextflow Tower interface here below.
 
 # Advanced challenge
 
+You are given a set of [tsv files](https://www.wikiwand.com/en/Tab-separated_values).
+Each file contains a single column with the header "Entry" containing a set of [UniProt](https://www.uniprot.org/) protein IDs belonging to a single species (different for each file).
+You are given a sample sheet containing a list of animal species and the path to the tsv file containing UniProt IDs for that species.
+Finally, you are given a csv file containing all the natural amino acids found in proteins with their one-letter codes, three-letter codes, common names, and whether they have a polar or apolar side chain.
+Your goal is to produce a box plot showing, for each species, the distribution of the fraction of polar versus apolar amino acids (across the proteins provided).
+You should produce a plot like the one following and place it in the folder `../nextflow_output/challange` (relative to your project directory).
+
+![](images/final_plot.png)
+
+Your input files will be created in the folder `../nextflow_inputs` (after running the commands in the [Setup] section), and you can explore them manually to see their structure.
+You may use any programming language for the task, but you should embed any computational step in a Nextflow process.
+It is preferable if you split the work in as many independent processes as possible, instead than doing everything in a monolithic process.
+
+**Hint:** you can retrieve protein sequences from UniProt programmatically by running the following (replacing `<uniprot-id>` with the actual UniProt ID of the protein you want to download)
+
+```bash
+wget https://rest.uniprot.org/uniprotkb/<uniprot-id>.fasta
+```
+
+## Setup
+
 Create the required sample sheet file by running the following command from your project directory (make sure that the folder `../nextflow_inputs` exists before running the command)
 
 ```bash
@@ -857,6 +878,9 @@ wget -P ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/sa
 wget -P ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/mouse.tsv
 wget -P ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/polar_apolar_table.csv
 ```
+## Solution
+
+You can see the solution to this challenge by expanding the following hidden sections.
 
 <details>
 <summary>Click here to see the solution (`main.nf` file)</summary>

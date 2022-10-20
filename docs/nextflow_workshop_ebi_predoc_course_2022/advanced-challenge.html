@@ -216,7 +216,11 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="4.9" data-path="advanced-features.html"><a href="advanced-features.html#sub-workflows"><i class="fa fa-check"></i><b>4.9</b> Sub-workflows</a></li>
 <li class="chapter" data-level="4.10" data-path="advanced-features.html"><a href="advanced-features.html#nextflow-tower"><i class="fa fa-check"></i><b>4.10</b> Nextflow Tower</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="advanced-challenge.html"><a href="advanced-challenge.html"><i class="fa fa-check"></i><b>5</b> Advanced challenge</a></li>
+<li class="chapter" data-level="5" data-path="advanced-challenge.html"><a href="advanced-challenge.html"><i class="fa fa-check"></i><b>5</b> Advanced challenge</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="advanced-challenge.html"><a href="advanced-challenge.html#setup-1"><i class="fa fa-check"></i><b>5.1</b> Setup</a></li>
+<li class="chapter" data-level="5.2" data-path="advanced-challenge.html"><a href="advanced-challenge.html#solution"><i class="fa fa-check"></i><b>5.2</b> Solution</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="additional-resources.html"><a href="additional-resources.html"><i class="fa fa-check"></i>Additional resources</a></li>
 <li class="chapter" data-level="" data-path="credits.html"><a href="credits.html"><i class="fa fa-check"></i>Credits</a></li>
 </ul>
@@ -238,213 +242,232 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
             <section class="normal" id="section-">
 <div id="advanced-challenge" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">5</span> Advanced challenge<a href="advanced-challenge.html#advanced-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>You are given a set of <a href="https://www.wikiwand.com/en/Tab-separated_values">tsv files</a>.
+Each file contains a single column with the header “Entry” containing a set of <a href="https://www.uniprot.org/">UniProt</a> protein IDs belonging to a single species (different for each file).
+You are given a sample sheet containing a list of animal species and the path to the tsv file containing UniProt IDs for that species.
+Finally, you are given a csv file containing all the natural amino acids found in proteins with their one-letter codes, three-letter codes, common names, and whether they have a polar or apolar side chain.
+Your goal is to produce a box plot showing, for each species, the distribution of the fraction of polar versus apolar amino acids (across the proteins provided).
+You should produce a plot like the one following and place it in the folder <code>../nextflow_output/challange</code> (relative to your project directory).</p>
+<p><img src="images/final_plot.png" /></p>
+<p>Your input files will be created in the folder <code>../nextflow_inputs</code> (after running the commands in the <a href="advanced-challenge.html#setup-1">Setup</a> section), and you can explore them manually to see their structure.
+You may use any programming language for the task, but you should embed any computational step in a Nextflow process.
+It is preferable if you split the work in as many independent processes as possible, instead than doing everything in a monolithic process.</p>
+<p><strong>Hint:</strong> you can retrieve protein sequences from UniProt programmatically by running the following (replacing <code>&lt;uniprot-id&gt;</code> with the actual UniProt ID of the protein you want to download)</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb113-1"><a href="advanced-challenge.html#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://rest.uniprot.org/uniprotkb/<span class="op">&lt;</span>uniprot-id<span class="op">&gt;</span>.fasta</span></code></pre></div>
+<div id="setup-1" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Setup<a href="advanced-challenge.html#setup-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Create the required sample sheet file by running the following command from your project directory (make sure that the folder <code>../nextflow_inputs</code> exists before running the command)</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb113-1"><a href="advanced-challenge.html#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;filename,species&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
-<span id="cb113-2"><a href="advanced-challenge.html#cb113-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/arabidopsis.tsv,Arabidopsis taliana&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
-<span id="cb113-3"><a href="advanced-challenge.html#cb113-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/mouse.tsv,Mus musculus&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
-<span id="cb113-4"><a href="advanced-challenge.html#cb113-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/zebrafish.tsv,Danio rerio&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb114-1"><a href="advanced-challenge.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;filename,species&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb114-2"><a href="advanced-challenge.html#cb114-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/arabidopsis.tsv,Arabidopsis taliana&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb114-3"><a href="advanced-challenge.html#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/mouse.tsv,Mus musculus&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
+<span id="cb114-4"><a href="advanced-challenge.html#cb114-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/zebrafish.tsv,Danio rerio&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span></code></pre></div>
 <p>Download the required data files by running the following command (as before, make sure that the folder <code>../nextflow_inputs</code> exists before running the command)</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb114-1"><a href="advanced-challenge.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/arabidopsis.tsv</span>
-<span id="cb114-2"><a href="advanced-challenge.html#cb114-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/zebrafish.tsv</span>
-<span id="cb114-3"><a href="advanced-challenge.html#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/mouse.tsv</span>
-<span id="cb114-4"><a href="advanced-challenge.html#cb114-4" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/polar_apolar_table.csv</span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb115-1"><a href="advanced-challenge.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/arabidopsis.tsv</span>
+<span id="cb115-2"><a href="advanced-challenge.html#cb115-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/zebrafish.tsv</span>
+<span id="cb115-3"><a href="advanced-challenge.html#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/mouse.tsv</span>
+<span id="cb115-4"><a href="advanced-challenge.html#cb115-4" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> ../nextflow_inputs https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/polar_apolar_table.csv</span></code></pre></div>
+</div>
+<div id="solution" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Solution<a href="advanced-challenge.html#solution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You can see the solution to this challenge by expanding the following hidden sections.</p>
 <details>
 <summary>
 Click here to see the solution (<code>main.nf</code> file)
 </summary>
-<div class="sourceCode" id="cb115"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb115-1"><a href="advanced-challenge.html#cb115-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb115-2"><a href="advanced-challenge.html#cb115-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-3"><a href="advanced-challenge.html#cb115-3" aria-hidden="true" tabindex="-1"></a>process get_sequences <span class="op">{</span></span>
-<span id="cb115-4"><a href="advanced-challenge.html#cb115-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
-<span id="cb115-5"><a href="advanced-challenge.html#cb115-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
-<span id="cb115-6"><a href="advanced-challenge.html#cb115-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
-<span id="cb115-7"><a href="advanced-challenge.html#cb115-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span>id_list<span class="op">)</span></span>
-<span id="cb115-8"><a href="advanced-challenge.html#cb115-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
-<span id="cb115-9"><a href="advanced-challenge.html#cb115-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-10"><a href="advanced-challenge.html#cb115-10" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb115-11"><a href="advanced-challenge.html#cb115-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
-<span id="cb115-12"><a href="advanced-challenge.html#cb115-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
-<span id="cb115-13"><a href="advanced-challenge.html#cb115-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span><span class="st">&quot;*.fasta&quot;</span><span class="op">)</span></span>
-<span id="cb115-14"><a href="advanced-challenge.html#cb115-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
-<span id="cb115-15"><a href="advanced-challenge.html#cb115-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-16"><a href="advanced-challenge.html#cb115-16" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb115-17"><a href="advanced-challenge.html#cb115-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb115-18"><a href="advanced-challenge.html#cb115-18" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$id_list</span><span class="st"> </span><span class="er">\</span></span>
-<span id="cb115-19"><a href="advanced-challenge.html#cb115-19" aria-hidden="true" tabindex="-1"></a><span class="st">            | tail -n +2 </span><span class="er">\</span></span>
-<span id="cb115-20"><a href="advanced-challenge.html#cb115-20" aria-hidden="true" tabindex="-1"></a><span class="st">            | xargs -I{} wget https://rest.uniprot.org/uniprotkb/{}.fasta</span></span>
-<span id="cb115-21"><a href="advanced-challenge.html#cb115-21" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb115-22"><a href="advanced-challenge.html#cb115-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb115-23"><a href="advanced-challenge.html#cb115-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-24"><a href="advanced-challenge.html#cb115-24" aria-hidden="true" tabindex="-1"></a>process count_aa <span class="op">{</span></span>
-<span id="cb115-25"><a href="advanced-challenge.html#cb115-25" aria-hidden="true" tabindex="-1"></a>    label <span class="st">&quot;r_tidyverse&quot;</span></span>
-<span id="cb115-26"><a href="advanced-challenge.html#cb115-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-27"><a href="advanced-challenge.html#cb115-27" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
-<span id="cb115-28"><a href="advanced-challenge.html#cb115-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
-<span id="cb115-29"><a href="advanced-challenge.html#cb115-29" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>protein<span class="op">),</span></span>
-<span id="cb115-30"><a href="advanced-challenge.html#cb115-30" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
-<span id="cb115-31"><a href="advanced-challenge.html#cb115-31" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span>sequence<span class="op">)</span></span>
-<span id="cb115-32"><a href="advanced-challenge.html#cb115-32" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
-<span id="cb115-33"><a href="advanced-challenge.html#cb115-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-34"><a href="advanced-challenge.html#cb115-34" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb115-35"><a href="advanced-challenge.html#cb115-35" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
-<span id="cb115-36"><a href="advanced-challenge.html#cb115-36" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>protein<span class="op">),</span></span>
-<span id="cb115-37"><a href="advanced-challenge.html#cb115-37" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
-<span id="cb115-38"><a href="advanced-challenge.html#cb115-38" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span><span class="st">&quot;</span><span class="ss">${</span>sequence<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.aa_counts.csv&quot;</span><span class="op">)</span></span>
-<span id="cb115-39"><a href="advanced-challenge.html#cb115-39" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
-<span id="cb115-40"><a href="advanced-challenge.html#cb115-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-41"><a href="advanced-challenge.html#cb115-41" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb115-42"><a href="advanced-challenge.html#cb115-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb115-43"><a href="advanced-challenge.html#cb115-43" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
-<span id="cb115-44"><a href="advanced-challenge.html#cb115-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-45"><a href="advanced-challenge.html#cb115-45" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
-<span id="cb115-46"><a href="advanced-challenge.html#cb115-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-47"><a href="advanced-challenge.html#cb115-47" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- read_lines(&quot;</span><span class="ss">${</span>sequence<span class="ss">}</span><span class="st">&quot;, skip=1) %&gt;%</span></span>
-<span id="cb115-48"><a href="advanced-challenge.html#cb115-48" aria-hidden="true" tabindex="-1"></a><span class="st">            paste(collapse = &#39;&#39;) %&gt;%</span></span>
-<span id="cb115-49"><a href="advanced-challenge.html#cb115-49" aria-hidden="true" tabindex="-1"></a><span class="st">            strsplit(split = &#39;&#39;) %&gt;%</span></span>
-<span id="cb115-50"><a href="advanced-challenge.html#cb115-50" aria-hidden="true" tabindex="-1"></a><span class="st">            table() %&gt;%</span></span>
-<span id="cb115-51"><a href="advanced-challenge.html#cb115-51" aria-hidden="true" tabindex="-1"></a><span class="st">            as_tibble() %&gt;%</span></span>
-<span id="cb115-52"><a href="advanced-challenge.html#cb115-52" aria-hidden="true" tabindex="-1"></a><span class="st">            rename(residue = &quot;.&quot;) %&gt;%</span></span>
-<span id="cb115-53"><a href="advanced-challenge.html#cb115-53" aria-hidden="true" tabindex="-1"></a><span class="st">            mutate(</span></span>
-<span id="cb115-54"><a href="advanced-challenge.html#cb115-54" aria-hidden="true" tabindex="-1"></a><span class="st">                freq = n / sum(n),</span></span>
-<span id="cb115-55"><a href="advanced-challenge.html#cb115-55" aria-hidden="true" tabindex="-1"></a><span class="st">                protein = &quot;</span><span class="ss">${</span>protein<span class="ss">}</span><span class="st">&quot;,</span></span>
-<span id="cb115-56"><a href="advanced-challenge.html#cb115-56" aria-hidden="true" tabindex="-1"></a><span class="st">                species = &quot;</span><span class="ss">${</span>species<span class="ss">}</span><span class="st">&quot;</span></span>
-<span id="cb115-57"><a href="advanced-challenge.html#cb115-57" aria-hidden="true" tabindex="-1"></a><span class="st">            )</span></span>
-<span id="cb115-58"><a href="advanced-challenge.html#cb115-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-59"><a href="advanced-challenge.html#cb115-59" aria-hidden="true" tabindex="-1"></a><span class="st">        write_csv(df, &quot;</span><span class="ss">${</span>sequence<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.aa_counts.csv&quot;)</span></span>
-<span id="cb115-60"><a href="advanced-challenge.html#cb115-60" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb115-61"><a href="advanced-challenge.html#cb115-61" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb115-62"><a href="advanced-challenge.html#cb115-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-63"><a href="advanced-challenge.html#cb115-63" aria-hidden="true" tabindex="-1"></a>process count_by_polarity <span class="op">{</span></span>
-<span id="cb115-64"><a href="advanced-challenge.html#cb115-64" aria-hidden="true" tabindex="-1"></a>    label <span class="st">&quot;r_tidyverse&quot;</span></span>
-<span id="cb115-65"><a href="advanced-challenge.html#cb115-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-66"><a href="advanced-challenge.html#cb115-66" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
-<span id="cb115-67"><a href="advanced-challenge.html#cb115-67" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
-<span id="cb115-68"><a href="advanced-challenge.html#cb115-68" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>protein<span class="op">),</span></span>
-<span id="cb115-69"><a href="advanced-challenge.html#cb115-69" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
-<span id="cb115-70"><a href="advanced-challenge.html#cb115-70" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span>aa_counts<span class="op">),</span></span>
-<span id="cb115-71"><a href="advanced-challenge.html#cb115-71" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span>polar_apolar_table<span class="op">)</span></span>
-<span id="cb115-72"><a href="advanced-challenge.html#cb115-72" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
-<span id="cb115-73"><a href="advanced-challenge.html#cb115-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-74"><a href="advanced-challenge.html#cb115-74" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb115-75"><a href="advanced-challenge.html#cb115-75" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
-<span id="cb115-76"><a href="advanced-challenge.html#cb115-76" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>protein<span class="op">),</span></span>
-<span id="cb115-77"><a href="advanced-challenge.html#cb115-77" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
-<span id="cb115-78"><a href="advanced-challenge.html#cb115-78" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span><span class="st">&quot;</span><span class="ss">${</span>aa_counts<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.polarity_counts.csv&quot;</span><span class="op">)</span></span>
-<span id="cb115-79"><a href="advanced-challenge.html#cb115-79" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
-<span id="cb115-80"><a href="advanced-challenge.html#cb115-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-81"><a href="advanced-challenge.html#cb115-81" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb115-82"><a href="advanced-challenge.html#cb115-82" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb115-83"><a href="advanced-challenge.html#cb115-83" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
-<span id="cb115-84"><a href="advanced-challenge.html#cb115-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-85"><a href="advanced-challenge.html#cb115-85" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
-<span id="cb115-86"><a href="advanced-challenge.html#cb115-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-87"><a href="advanced-challenge.html#cb115-87" aria-hidden="true" tabindex="-1"></a><span class="st">        pol_table &lt;- read_csv(&quot;</span><span class="ss">${</span>polar_apolar_table<span class="ss">}</span><span class="st">&quot;) %&gt;%</span></span>
-<span id="cb115-88"><a href="advanced-challenge.html#cb115-88" aria-hidden="true" tabindex="-1"></a><span class="st">            summarise(</span></span>
-<span id="cb115-89"><a href="advanced-challenge.html#cb115-89" aria-hidden="true" tabindex="-1"></a><span class="st">                residue = single_letter_code,</span></span>
-<span id="cb115-90"><a href="advanced-challenge.html#cb115-90" aria-hidden="true" tabindex="-1"></a><span class="st">                polarity</span></span>
-<span id="cb115-91"><a href="advanced-challenge.html#cb115-91" aria-hidden="true" tabindex="-1"></a><span class="st">            )</span></span>
-<span id="cb115-92"><a href="advanced-challenge.html#cb115-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-93"><a href="advanced-challenge.html#cb115-93" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- read_csv(&quot;</span><span class="ss">${</span>aa_counts<span class="ss">}</span><span class="st">&quot;) %&gt;%</span></span>
-<span id="cb115-94"><a href="advanced-challenge.html#cb115-94" aria-hidden="true" tabindex="-1"></a><span class="st">            left_join(pol_table) %&gt;%</span></span>
-<span id="cb115-95"><a href="advanced-challenge.html#cb115-95" aria-hidden="true" tabindex="-1"></a><span class="st">            group_by(polarity, species, protein) %&gt;%</span></span>
-<span id="cb115-96"><a href="advanced-challenge.html#cb115-96" aria-hidden="true" tabindex="-1"></a><span class="st">            summarise(freq = sum(freq))</span></span>
-<span id="cb115-97"><a href="advanced-challenge.html#cb115-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-98"><a href="advanced-challenge.html#cb115-98" aria-hidden="true" tabindex="-1"></a><span class="st">        write_csv(df, &quot;</span><span class="ss">${</span>aa_counts<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.polarity_counts.csv&quot;)</span></span>
-<span id="cb115-99"><a href="advanced-challenge.html#cb115-99" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb115-100"><a href="advanced-challenge.html#cb115-100" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb115-101"><a href="advanced-challenge.html#cb115-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-102"><a href="advanced-challenge.html#cb115-102" aria-hidden="true" tabindex="-1"></a>process aggregate_results <span class="op">{</span></span>
-<span id="cb115-103"><a href="advanced-challenge.html#cb115-103" aria-hidden="true" tabindex="-1"></a>    label <span class="st">&quot;r_tidyverse&quot;</span></span>
-<span id="cb115-104"><a href="advanced-challenge.html#cb115-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-105"><a href="advanced-challenge.html#cb115-105" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
-<span id="cb115-106"><a href="advanced-challenge.html#cb115-106" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;*.csv&quot;</span></span>
-<span id="cb115-107"><a href="advanced-challenge.html#cb115-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-108"><a href="advanced-challenge.html#cb115-108" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb115-109"><a href="advanced-challenge.html#cb115-109" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;aggregated_polarity_counts.csv&quot;</span></span>
-<span id="cb115-110"><a href="advanced-challenge.html#cb115-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-111"><a href="advanced-challenge.html#cb115-111" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb115-112"><a href="advanced-challenge.html#cb115-112" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb115-113"><a href="advanced-challenge.html#cb115-113" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
-<span id="cb115-114"><a href="advanced-challenge.html#cb115-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-115"><a href="advanced-challenge.html#cb115-115" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
-<span id="cb115-116"><a href="advanced-challenge.html#cb115-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-117"><a href="advanced-challenge.html#cb115-117" aria-hidden="true" tabindex="-1"></a><span class="st">        input_files &lt;- list.files(pattern = &quot;*.csv&quot;)</span></span>
-<span id="cb115-118"><a href="advanced-challenge.html#cb115-118" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- map_dfr(input_files, read_csv)</span></span>
-<span id="cb115-119"><a href="advanced-challenge.html#cb115-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-120"><a href="advanced-challenge.html#cb115-120" aria-hidden="true" tabindex="-1"></a><span class="st">        write_csv(df, &quot;aggregated_polarity_counts.csv&quot;)</span></span>
-<span id="cb115-121"><a href="advanced-challenge.html#cb115-121" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb115-122"><a href="advanced-challenge.html#cb115-122" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb115-123"><a href="advanced-challenge.html#cb115-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-124"><a href="advanced-challenge.html#cb115-124" aria-hidden="true" tabindex="-1"></a>process make_plot <span class="op">{</span></span>
-<span id="cb115-125"><a href="advanced-challenge.html#cb115-125" aria-hidden="true" tabindex="-1"></a>    label <span class="st">&quot;r_tidyverse&quot;</span></span>
-<span id="cb115-126"><a href="advanced-challenge.html#cb115-126" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/challenge&quot;</span></span>
-<span id="cb115-127"><a href="advanced-challenge.html#cb115-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-128"><a href="advanced-challenge.html#cb115-128" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
-<span id="cb115-129"><a href="advanced-challenge.html#cb115-129" aria-hidden="true" tabindex="-1"></a>        path aggregated_polarity_counts</span>
-<span id="cb115-130"><a href="advanced-challenge.html#cb115-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-131"><a href="advanced-challenge.html#cb115-131" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb115-132"><a href="advanced-challenge.html#cb115-132" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;final_plot.pdf&quot;</span></span>
-<span id="cb115-133"><a href="advanced-challenge.html#cb115-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-134"><a href="advanced-challenge.html#cb115-134" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb115-135"><a href="advanced-challenge.html#cb115-135" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb115-136"><a href="advanced-challenge.html#cb115-136" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
-<span id="cb115-137"><a href="advanced-challenge.html#cb115-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-138"><a href="advanced-challenge.html#cb115-138" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
-<span id="cb115-139"><a href="advanced-challenge.html#cb115-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-140"><a href="advanced-challenge.html#cb115-140" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- read_csv(&quot;</span><span class="ss">${</span>aggregated_polarity_counts<span class="ss">}</span><span class="st">&quot;)</span></span>
-<span id="cb115-141"><a href="advanced-challenge.html#cb115-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-142"><a href="advanced-challenge.html#cb115-142" aria-hidden="true" tabindex="-1"></a><span class="st">        ggplot(df, aes(x=species, y=freq, color=polarity)) +</span></span>
-<span id="cb115-143"><a href="advanced-challenge.html#cb115-143" aria-hidden="true" tabindex="-1"></a><span class="st">            geom_boxplot()</span></span>
-<span id="cb115-144"><a href="advanced-challenge.html#cb115-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-145"><a href="advanced-challenge.html#cb115-145" aria-hidden="true" tabindex="-1"></a><span class="st">        ggsave(&quot;final_plot.pdf&quot;)</span></span>
-<span id="cb115-146"><a href="advanced-challenge.html#cb115-146" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb115-147"><a href="advanced-challenge.html#cb115-147" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb115-148"><a href="advanced-challenge.html#cb115-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-149"><a href="advanced-challenge.html#cb115-149" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
-<span id="cb115-150"><a href="advanced-challenge.html#cb115-150" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>samplesheet <span class="op">).</span><span class="fu">splitCsv</span><span class="op">(</span> header<span class="op">:</span> <span class="kw">true</span> <span class="op">).</span><span class="fu">set</span><span class="op">{</span> input_ch <span class="op">}</span></span>
-<span id="cb115-151"><a href="advanced-challenge.html#cb115-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-152"><a href="advanced-challenge.html#cb115-152" aria-hidden="true" tabindex="-1"></a>    input_ch<span class="op">.</span><span class="fu">map</span><span class="op">{</span> <span class="op">[</span> it<span class="op">[</span><span class="st">&quot;species&quot;</span><span class="op">],</span> it<span class="op">[</span><span class="st">&quot;filename&quot;</span><span class="op">]</span> <span class="op">]</span> <span class="op">}</span></span>
-<span id="cb115-153"><a href="advanced-challenge.html#cb115-153" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">set</span><span class="op">{</span> get_sequences_in_ch <span class="op">}</span></span>
-<span id="cb115-154"><a href="advanced-challenge.html#cb115-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-155"><a href="advanced-challenge.html#cb115-155" aria-hidden="true" tabindex="-1"></a>    <span class="fu">get_sequences</span><span class="op">(</span> get_sequences_in_ch <span class="op">)</span></span>
-<span id="cb115-156"><a href="advanced-challenge.html#cb115-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-157"><a href="advanced-challenge.html#cb115-157" aria-hidden="true" tabindex="-1"></a>    get_sequences<span class="op">.</span>out</span>
-<span id="cb115-158"><a href="advanced-challenge.html#cb115-158" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">flatMap</span><span class="op">{</span></span>
-<span id="cb115-159"><a href="advanced-challenge.html#cb115-159" aria-hidden="true" tabindex="-1"></a>            <span class="dt">def</span> species <span class="op">=</span> it<span class="op">[</span><span class="dv">0</span><span class="op">]</span></span>
-<span id="cb115-160"><a href="advanced-challenge.html#cb115-160" aria-hidden="true" tabindex="-1"></a>            <span class="dt">def</span> all_sequences <span class="op">=</span> it<span class="op">[</span><span class="dv">1</span><span class="op">]</span></span>
-<span id="cb115-161"><a href="advanced-challenge.html#cb115-161" aria-hidden="true" tabindex="-1"></a>            all_sequences<span class="op">.</span><span class="fu">collect</span><span class="op">{</span> sequence <span class="op">-&gt;</span> <span class="op">[</span>species<span class="op">,</span> sequence<span class="op">]</span> <span class="op">}</span></span>
-<span id="cb115-162"><a href="advanced-challenge.html#cb115-162" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb115-163"><a href="advanced-challenge.html#cb115-163" aria-hidden="true" tabindex="-1"></a>        <span class="co">// add the sequence name as a value</span></span>
-<span id="cb115-164"><a href="advanced-challenge.html#cb115-164" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">map</span><span class="op">{</span> <span class="op">[</span> it<span class="op">[</span><span class="dv">1</span><span class="op">].</span>simpleName <span class="op">]</span> <span class="op">+</span> it <span class="op">}</span></span>
-<span id="cb115-165"><a href="advanced-challenge.html#cb115-165" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">set</span><span class="op">{</span> count_aa_in_ch <span class="op">}</span></span>
-<span id="cb115-166"><a href="advanced-challenge.html#cb115-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-167"><a href="advanced-challenge.html#cb115-167" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count_aa</span><span class="op">(</span> count_aa_in_ch <span class="op">)</span></span>
-<span id="cb115-168"><a href="advanced-challenge.html#cb115-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-169"><a href="advanced-challenge.html#cb115-169" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>polar_apolar_table <span class="op">).</span><span class="fu">set</span><span class="op">{</span> polar_apolar_table_ch <span class="op">}</span></span>
-<span id="cb115-170"><a href="advanced-challenge.html#cb115-170" aria-hidden="true" tabindex="-1"></a>    count_aa<span class="op">.</span>out<span class="op">.</span><span class="fu">combine</span><span class="op">(</span> polar_apolar_table_ch <span class="op">).</span><span class="fu">set</span><span class="op">{</span> count_by_polarity_in_ch <span class="op">}</span></span>
-<span id="cb115-171"><a href="advanced-challenge.html#cb115-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-172"><a href="advanced-challenge.html#cb115-172" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count_by_polarity</span><span class="op">(</span> count_by_polarity_in_ch <span class="op">)</span></span>
-<span id="cb115-173"><a href="advanced-challenge.html#cb115-173" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aggregate_results</span><span class="op">(</span> count_by_polarity<span class="op">.</span>out<span class="op">.</span><span class="fu">map</span><span class="op">{</span> it<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">}.</span><span class="fu">collect</span><span class="op">()</span> <span class="op">)</span></span>
-<span id="cb115-174"><a href="advanced-challenge.html#cb115-174" aria-hidden="true" tabindex="-1"></a>    <span class="fu">make_plot</span><span class="op">(</span> aggregate_results<span class="op">.</span>out <span class="op">)</span></span>
-<span id="cb115-175"><a href="advanced-challenge.html#cb115-175" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb116-1"><a href="advanced-challenge.html#cb116-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb116-2"><a href="advanced-challenge.html#cb116-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-3"><a href="advanced-challenge.html#cb116-3" aria-hidden="true" tabindex="-1"></a>process get_sequences <span class="op">{</span></span>
+<span id="cb116-4"><a href="advanced-challenge.html#cb116-4" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb116-5"><a href="advanced-challenge.html#cb116-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
+<span id="cb116-6"><a href="advanced-challenge.html#cb116-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
+<span id="cb116-7"><a href="advanced-challenge.html#cb116-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span>id_list<span class="op">)</span></span>
+<span id="cb116-8"><a href="advanced-challenge.html#cb116-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb116-9"><a href="advanced-challenge.html#cb116-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-10"><a href="advanced-challenge.html#cb116-10" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb116-11"><a href="advanced-challenge.html#cb116-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
+<span id="cb116-12"><a href="advanced-challenge.html#cb116-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
+<span id="cb116-13"><a href="advanced-challenge.html#cb116-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span><span class="st">&quot;*.fasta&quot;</span><span class="op">)</span></span>
+<span id="cb116-14"><a href="advanced-challenge.html#cb116-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb116-15"><a href="advanced-challenge.html#cb116-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-16"><a href="advanced-challenge.html#cb116-16" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb116-17"><a href="advanced-challenge.html#cb116-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb116-18"><a href="advanced-challenge.html#cb116-18" aria-hidden="true" tabindex="-1"></a><span class="st">        cat </span><span class="ss">$id_list</span><span class="st"> </span><span class="er">\</span></span>
+<span id="cb116-19"><a href="advanced-challenge.html#cb116-19" aria-hidden="true" tabindex="-1"></a><span class="st">            | tail -n +2 </span><span class="er">\</span></span>
+<span id="cb116-20"><a href="advanced-challenge.html#cb116-20" aria-hidden="true" tabindex="-1"></a><span class="st">            | xargs -I{} wget https://rest.uniprot.org/uniprotkb/{}.fasta</span></span>
+<span id="cb116-21"><a href="advanced-challenge.html#cb116-21" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb116-22"><a href="advanced-challenge.html#cb116-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb116-23"><a href="advanced-challenge.html#cb116-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-24"><a href="advanced-challenge.html#cb116-24" aria-hidden="true" tabindex="-1"></a>process count_aa <span class="op">{</span></span>
+<span id="cb116-25"><a href="advanced-challenge.html#cb116-25" aria-hidden="true" tabindex="-1"></a>    label <span class="st">&quot;r_tidyverse&quot;</span></span>
+<span id="cb116-26"><a href="advanced-challenge.html#cb116-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-27"><a href="advanced-challenge.html#cb116-27" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb116-28"><a href="advanced-challenge.html#cb116-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
+<span id="cb116-29"><a href="advanced-challenge.html#cb116-29" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>protein<span class="op">),</span></span>
+<span id="cb116-30"><a href="advanced-challenge.html#cb116-30" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
+<span id="cb116-31"><a href="advanced-challenge.html#cb116-31" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span>sequence<span class="op">)</span></span>
+<span id="cb116-32"><a href="advanced-challenge.html#cb116-32" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb116-33"><a href="advanced-challenge.html#cb116-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-34"><a href="advanced-challenge.html#cb116-34" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb116-35"><a href="advanced-challenge.html#cb116-35" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
+<span id="cb116-36"><a href="advanced-challenge.html#cb116-36" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>protein<span class="op">),</span></span>
+<span id="cb116-37"><a href="advanced-challenge.html#cb116-37" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
+<span id="cb116-38"><a href="advanced-challenge.html#cb116-38" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span><span class="st">&quot;</span><span class="ss">${</span>sequence<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.aa_counts.csv&quot;</span><span class="op">)</span></span>
+<span id="cb116-39"><a href="advanced-challenge.html#cb116-39" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb116-40"><a href="advanced-challenge.html#cb116-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-41"><a href="advanced-challenge.html#cb116-41" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb116-42"><a href="advanced-challenge.html#cb116-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb116-43"><a href="advanced-challenge.html#cb116-43" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
+<span id="cb116-44"><a href="advanced-challenge.html#cb116-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-45"><a href="advanced-challenge.html#cb116-45" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
+<span id="cb116-46"><a href="advanced-challenge.html#cb116-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-47"><a href="advanced-challenge.html#cb116-47" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- read_lines(&quot;</span><span class="ss">${</span>sequence<span class="ss">}</span><span class="st">&quot;, skip=1) %&gt;%</span></span>
+<span id="cb116-48"><a href="advanced-challenge.html#cb116-48" aria-hidden="true" tabindex="-1"></a><span class="st">            paste(collapse = &#39;&#39;) %&gt;%</span></span>
+<span id="cb116-49"><a href="advanced-challenge.html#cb116-49" aria-hidden="true" tabindex="-1"></a><span class="st">            strsplit(split = &#39;&#39;) %&gt;%</span></span>
+<span id="cb116-50"><a href="advanced-challenge.html#cb116-50" aria-hidden="true" tabindex="-1"></a><span class="st">            table() %&gt;%</span></span>
+<span id="cb116-51"><a href="advanced-challenge.html#cb116-51" aria-hidden="true" tabindex="-1"></a><span class="st">            as_tibble() %&gt;%</span></span>
+<span id="cb116-52"><a href="advanced-challenge.html#cb116-52" aria-hidden="true" tabindex="-1"></a><span class="st">            rename(residue = &quot;.&quot;) %&gt;%</span></span>
+<span id="cb116-53"><a href="advanced-challenge.html#cb116-53" aria-hidden="true" tabindex="-1"></a><span class="st">            mutate(</span></span>
+<span id="cb116-54"><a href="advanced-challenge.html#cb116-54" aria-hidden="true" tabindex="-1"></a><span class="st">                freq = n / sum(n),</span></span>
+<span id="cb116-55"><a href="advanced-challenge.html#cb116-55" aria-hidden="true" tabindex="-1"></a><span class="st">                protein = &quot;</span><span class="ss">${</span>protein<span class="ss">}</span><span class="st">&quot;,</span></span>
+<span id="cb116-56"><a href="advanced-challenge.html#cb116-56" aria-hidden="true" tabindex="-1"></a><span class="st">                species = &quot;</span><span class="ss">${</span>species<span class="ss">}</span><span class="st">&quot;</span></span>
+<span id="cb116-57"><a href="advanced-challenge.html#cb116-57" aria-hidden="true" tabindex="-1"></a><span class="st">            )</span></span>
+<span id="cb116-58"><a href="advanced-challenge.html#cb116-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-59"><a href="advanced-challenge.html#cb116-59" aria-hidden="true" tabindex="-1"></a><span class="st">        write_csv(df, &quot;</span><span class="ss">${</span>sequence<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.aa_counts.csv&quot;)</span></span>
+<span id="cb116-60"><a href="advanced-challenge.html#cb116-60" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb116-61"><a href="advanced-challenge.html#cb116-61" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb116-62"><a href="advanced-challenge.html#cb116-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-63"><a href="advanced-challenge.html#cb116-63" aria-hidden="true" tabindex="-1"></a>process count_by_polarity <span class="op">{</span></span>
+<span id="cb116-64"><a href="advanced-challenge.html#cb116-64" aria-hidden="true" tabindex="-1"></a>    label <span class="st">&quot;r_tidyverse&quot;</span></span>
+<span id="cb116-65"><a href="advanced-challenge.html#cb116-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-66"><a href="advanced-challenge.html#cb116-66" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb116-67"><a href="advanced-challenge.html#cb116-67" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
+<span id="cb116-68"><a href="advanced-challenge.html#cb116-68" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>protein<span class="op">),</span></span>
+<span id="cb116-69"><a href="advanced-challenge.html#cb116-69" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
+<span id="cb116-70"><a href="advanced-challenge.html#cb116-70" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span>aa_counts<span class="op">),</span></span>
+<span id="cb116-71"><a href="advanced-challenge.html#cb116-71" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span>polar_apolar_table<span class="op">)</span></span>
+<span id="cb116-72"><a href="advanced-challenge.html#cb116-72" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb116-73"><a href="advanced-challenge.html#cb116-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-74"><a href="advanced-challenge.html#cb116-74" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb116-75"><a href="advanced-challenge.html#cb116-75" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tuple</span><span class="op">(</span></span>
+<span id="cb116-76"><a href="advanced-challenge.html#cb116-76" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>protein<span class="op">),</span></span>
+<span id="cb116-77"><a href="advanced-challenge.html#cb116-77" aria-hidden="true" tabindex="-1"></a>            <span class="fu">val</span><span class="op">(</span>species<span class="op">),</span></span>
+<span id="cb116-78"><a href="advanced-challenge.html#cb116-78" aria-hidden="true" tabindex="-1"></a>            <span class="fu">path</span><span class="op">(</span><span class="st">&quot;</span><span class="ss">${</span>aa_counts<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.polarity_counts.csv&quot;</span><span class="op">)</span></span>
+<span id="cb116-79"><a href="advanced-challenge.html#cb116-79" aria-hidden="true" tabindex="-1"></a>        <span class="op">)</span></span>
+<span id="cb116-80"><a href="advanced-challenge.html#cb116-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-81"><a href="advanced-challenge.html#cb116-81" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb116-82"><a href="advanced-challenge.html#cb116-82" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb116-83"><a href="advanced-challenge.html#cb116-83" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
+<span id="cb116-84"><a href="advanced-challenge.html#cb116-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-85"><a href="advanced-challenge.html#cb116-85" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
+<span id="cb116-86"><a href="advanced-challenge.html#cb116-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-87"><a href="advanced-challenge.html#cb116-87" aria-hidden="true" tabindex="-1"></a><span class="st">        pol_table &lt;- read_csv(&quot;</span><span class="ss">${</span>polar_apolar_table<span class="ss">}</span><span class="st">&quot;) %&gt;%</span></span>
+<span id="cb116-88"><a href="advanced-challenge.html#cb116-88" aria-hidden="true" tabindex="-1"></a><span class="st">            summarise(</span></span>
+<span id="cb116-89"><a href="advanced-challenge.html#cb116-89" aria-hidden="true" tabindex="-1"></a><span class="st">                residue = single_letter_code,</span></span>
+<span id="cb116-90"><a href="advanced-challenge.html#cb116-90" aria-hidden="true" tabindex="-1"></a><span class="st">                polarity</span></span>
+<span id="cb116-91"><a href="advanced-challenge.html#cb116-91" aria-hidden="true" tabindex="-1"></a><span class="st">            )</span></span>
+<span id="cb116-92"><a href="advanced-challenge.html#cb116-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-93"><a href="advanced-challenge.html#cb116-93" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- read_csv(&quot;</span><span class="ss">${</span>aa_counts<span class="ss">}</span><span class="st">&quot;) %&gt;%</span></span>
+<span id="cb116-94"><a href="advanced-challenge.html#cb116-94" aria-hidden="true" tabindex="-1"></a><span class="st">            left_join(pol_table) %&gt;%</span></span>
+<span id="cb116-95"><a href="advanced-challenge.html#cb116-95" aria-hidden="true" tabindex="-1"></a><span class="st">            group_by(polarity, species, protein) %&gt;%</span></span>
+<span id="cb116-96"><a href="advanced-challenge.html#cb116-96" aria-hidden="true" tabindex="-1"></a><span class="st">            summarise(freq = sum(freq))</span></span>
+<span id="cb116-97"><a href="advanced-challenge.html#cb116-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-98"><a href="advanced-challenge.html#cb116-98" aria-hidden="true" tabindex="-1"></a><span class="st">        write_csv(df, &quot;</span><span class="ss">${</span>aa_counts<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.polarity_counts.csv&quot;)</span></span>
+<span id="cb116-99"><a href="advanced-challenge.html#cb116-99" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb116-100"><a href="advanced-challenge.html#cb116-100" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb116-101"><a href="advanced-challenge.html#cb116-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-102"><a href="advanced-challenge.html#cb116-102" aria-hidden="true" tabindex="-1"></a>process aggregate_results <span class="op">{</span></span>
+<span id="cb116-103"><a href="advanced-challenge.html#cb116-103" aria-hidden="true" tabindex="-1"></a>    label <span class="st">&quot;r_tidyverse&quot;</span></span>
+<span id="cb116-104"><a href="advanced-challenge.html#cb116-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-105"><a href="advanced-challenge.html#cb116-105" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb116-106"><a href="advanced-challenge.html#cb116-106" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;*.csv&quot;</span></span>
+<span id="cb116-107"><a href="advanced-challenge.html#cb116-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-108"><a href="advanced-challenge.html#cb116-108" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb116-109"><a href="advanced-challenge.html#cb116-109" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;aggregated_polarity_counts.csv&quot;</span></span>
+<span id="cb116-110"><a href="advanced-challenge.html#cb116-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-111"><a href="advanced-challenge.html#cb116-111" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb116-112"><a href="advanced-challenge.html#cb116-112" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb116-113"><a href="advanced-challenge.html#cb116-113" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
+<span id="cb116-114"><a href="advanced-challenge.html#cb116-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-115"><a href="advanced-challenge.html#cb116-115" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
+<span id="cb116-116"><a href="advanced-challenge.html#cb116-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-117"><a href="advanced-challenge.html#cb116-117" aria-hidden="true" tabindex="-1"></a><span class="st">        input_files &lt;- list.files(pattern = &quot;*.csv&quot;)</span></span>
+<span id="cb116-118"><a href="advanced-challenge.html#cb116-118" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- map_dfr(input_files, read_csv)</span></span>
+<span id="cb116-119"><a href="advanced-challenge.html#cb116-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-120"><a href="advanced-challenge.html#cb116-120" aria-hidden="true" tabindex="-1"></a><span class="st">        write_csv(df, &quot;aggregated_polarity_counts.csv&quot;)</span></span>
+<span id="cb116-121"><a href="advanced-challenge.html#cb116-121" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb116-122"><a href="advanced-challenge.html#cb116-122" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb116-123"><a href="advanced-challenge.html#cb116-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-124"><a href="advanced-challenge.html#cb116-124" aria-hidden="true" tabindex="-1"></a>process make_plot <span class="op">{</span></span>
+<span id="cb116-125"><a href="advanced-challenge.html#cb116-125" aria-hidden="true" tabindex="-1"></a>    label <span class="st">&quot;r_tidyverse&quot;</span></span>
+<span id="cb116-126"><a href="advanced-challenge.html#cb116-126" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/challenge&quot;</span></span>
+<span id="cb116-127"><a href="advanced-challenge.html#cb116-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-128"><a href="advanced-challenge.html#cb116-128" aria-hidden="true" tabindex="-1"></a>    input<span class="op">:</span></span>
+<span id="cb116-129"><a href="advanced-challenge.html#cb116-129" aria-hidden="true" tabindex="-1"></a>        path aggregated_polarity_counts</span>
+<span id="cb116-130"><a href="advanced-challenge.html#cb116-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-131"><a href="advanced-challenge.html#cb116-131" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb116-132"><a href="advanced-challenge.html#cb116-132" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;final_plot.pdf&quot;</span></span>
+<span id="cb116-133"><a href="advanced-challenge.html#cb116-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-134"><a href="advanced-challenge.html#cb116-134" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb116-135"><a href="advanced-challenge.html#cb116-135" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb116-136"><a href="advanced-challenge.html#cb116-136" aria-hidden="true" tabindex="-1"></a><span class="st">        #!/usr/bin/env Rscript</span></span>
+<span id="cb116-137"><a href="advanced-challenge.html#cb116-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-138"><a href="advanced-challenge.html#cb116-138" aria-hidden="true" tabindex="-1"></a><span class="st">        library(&quot;tidyverse&quot;)</span></span>
+<span id="cb116-139"><a href="advanced-challenge.html#cb116-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-140"><a href="advanced-challenge.html#cb116-140" aria-hidden="true" tabindex="-1"></a><span class="st">        df &lt;- read_csv(&quot;</span><span class="ss">${</span>aggregated_polarity_counts<span class="ss">}</span><span class="st">&quot;)</span></span>
+<span id="cb116-141"><a href="advanced-challenge.html#cb116-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-142"><a href="advanced-challenge.html#cb116-142" aria-hidden="true" tabindex="-1"></a><span class="st">        ggplot(df, aes(x=species, y=freq, color=polarity)) +</span></span>
+<span id="cb116-143"><a href="advanced-challenge.html#cb116-143" aria-hidden="true" tabindex="-1"></a><span class="st">            geom_boxplot()</span></span>
+<span id="cb116-144"><a href="advanced-challenge.html#cb116-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-145"><a href="advanced-challenge.html#cb116-145" aria-hidden="true" tabindex="-1"></a><span class="st">        ggsave(&quot;final_plot.pdf&quot;)</span></span>
+<span id="cb116-146"><a href="advanced-challenge.html#cb116-146" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb116-147"><a href="advanced-challenge.html#cb116-147" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb116-148"><a href="advanced-challenge.html#cb116-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-149"><a href="advanced-challenge.html#cb116-149" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb116-150"><a href="advanced-challenge.html#cb116-150" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>samplesheet <span class="op">).</span><span class="fu">splitCsv</span><span class="op">(</span> header<span class="op">:</span> <span class="kw">true</span> <span class="op">).</span><span class="fu">set</span><span class="op">{</span> input_ch <span class="op">}</span></span>
+<span id="cb116-151"><a href="advanced-challenge.html#cb116-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-152"><a href="advanced-challenge.html#cb116-152" aria-hidden="true" tabindex="-1"></a>    input_ch<span class="op">.</span><span class="fu">map</span><span class="op">{</span> <span class="op">[</span> it<span class="op">[</span><span class="st">&quot;species&quot;</span><span class="op">],</span> it<span class="op">[</span><span class="st">&quot;filename&quot;</span><span class="op">]</span> <span class="op">]</span> <span class="op">}</span></span>
+<span id="cb116-153"><a href="advanced-challenge.html#cb116-153" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">set</span><span class="op">{</span> get_sequences_in_ch <span class="op">}</span></span>
+<span id="cb116-154"><a href="advanced-challenge.html#cb116-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-155"><a href="advanced-challenge.html#cb116-155" aria-hidden="true" tabindex="-1"></a>    <span class="fu">get_sequences</span><span class="op">(</span> get_sequences_in_ch <span class="op">)</span></span>
+<span id="cb116-156"><a href="advanced-challenge.html#cb116-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-157"><a href="advanced-challenge.html#cb116-157" aria-hidden="true" tabindex="-1"></a>    get_sequences<span class="op">.</span>out</span>
+<span id="cb116-158"><a href="advanced-challenge.html#cb116-158" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">flatMap</span><span class="op">{</span></span>
+<span id="cb116-159"><a href="advanced-challenge.html#cb116-159" aria-hidden="true" tabindex="-1"></a>            <span class="dt">def</span> species <span class="op">=</span> it<span class="op">[</span><span class="dv">0</span><span class="op">]</span></span>
+<span id="cb116-160"><a href="advanced-challenge.html#cb116-160" aria-hidden="true" tabindex="-1"></a>            <span class="dt">def</span> all_sequences <span class="op">=</span> it<span class="op">[</span><span class="dv">1</span><span class="op">]</span></span>
+<span id="cb116-161"><a href="advanced-challenge.html#cb116-161" aria-hidden="true" tabindex="-1"></a>            all_sequences<span class="op">.</span><span class="fu">collect</span><span class="op">{</span> sequence <span class="op">-&gt;</span> <span class="op">[</span>species<span class="op">,</span> sequence<span class="op">]</span> <span class="op">}</span></span>
+<span id="cb116-162"><a href="advanced-challenge.html#cb116-162" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb116-163"><a href="advanced-challenge.html#cb116-163" aria-hidden="true" tabindex="-1"></a>        <span class="co">// add the sequence name as a value</span></span>
+<span id="cb116-164"><a href="advanced-challenge.html#cb116-164" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">map</span><span class="op">{</span> <span class="op">[</span> it<span class="op">[</span><span class="dv">1</span><span class="op">].</span>simpleName <span class="op">]</span> <span class="op">+</span> it <span class="op">}</span></span>
+<span id="cb116-165"><a href="advanced-challenge.html#cb116-165" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">set</span><span class="op">{</span> count_aa_in_ch <span class="op">}</span></span>
+<span id="cb116-166"><a href="advanced-challenge.html#cb116-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-167"><a href="advanced-challenge.html#cb116-167" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count_aa</span><span class="op">(</span> count_aa_in_ch <span class="op">)</span></span>
+<span id="cb116-168"><a href="advanced-challenge.html#cb116-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-169"><a href="advanced-challenge.html#cb116-169" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Channel</span><span class="op">.</span><span class="fu">fromPath</span><span class="op">(</span> params<span class="op">.</span>polar_apolar_table <span class="op">).</span><span class="fu">set</span><span class="op">{</span> polar_apolar_table_ch <span class="op">}</span></span>
+<span id="cb116-170"><a href="advanced-challenge.html#cb116-170" aria-hidden="true" tabindex="-1"></a>    count_aa<span class="op">.</span>out<span class="op">.</span><span class="fu">combine</span><span class="op">(</span> polar_apolar_table_ch <span class="op">).</span><span class="fu">set</span><span class="op">{</span> count_by_polarity_in_ch <span class="op">}</span></span>
+<span id="cb116-171"><a href="advanced-challenge.html#cb116-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-172"><a href="advanced-challenge.html#cb116-172" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count_by_polarity</span><span class="op">(</span> count_by_polarity_in_ch <span class="op">)</span></span>
+<span id="cb116-173"><a href="advanced-challenge.html#cb116-173" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aggregate_results</span><span class="op">(</span> count_by_polarity<span class="op">.</span>out<span class="op">.</span><span class="fu">map</span><span class="op">{</span> it<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">}.</span><span class="fu">collect</span><span class="op">()</span> <span class="op">)</span></span>
+<span id="cb116-174"><a href="advanced-challenge.html#cb116-174" aria-hidden="true" tabindex="-1"></a>    <span class="fu">make_plot</span><span class="op">(</span> aggregate_results<span class="op">.</span>out <span class="op">)</span></span>
+<span id="cb116-175"><a href="advanced-challenge.html#cb116-175" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
 <details>
 <summary>
 Click here to see the solution (<code>nextflow.config</code> file)
 </summary>
-<div class="sourceCode" id="cb116"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb116-1"><a href="advanced-challenge.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
-<span id="cb116-2"><a href="advanced-challenge.html#cb116-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span>
-<span id="cb116-3"><a href="advanced-challenge.html#cb116-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb116-4"><a href="advanced-challenge.html#cb116-4" aria-hidden="true" tabindex="-1"></a>withLabel<span class="op">:</span>r_tidyverse <span class="op">{</span></span>
-<span id="cb116-5"><a href="advanced-challenge.html#cb116-5" aria-hidden="true" tabindex="-1"></a>    conda <span class="op">=</span> <span class="st">&quot;r tidyverse&quot;</span></span>
-<span id="cb116-6"><a href="advanced-challenge.html#cb116-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb116-7"><a href="advanced-challenge.html#cb116-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb116-8"><a href="advanced-challenge.html#cb116-8" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
-<span id="cb116-9"><a href="advanced-challenge.html#cb116-9" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
-<span id="cb116-10"><a href="advanced-challenge.html#cb116-10" aria-hidden="true" tabindex="-1"></a>  polar_apolar_table <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/polar_apolar_table.csv&quot;</span></span>
-<span id="cb116-11"><a href="advanced-challenge.html#cb116-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb117-1"><a href="advanced-challenge.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb117-2"><a href="advanced-challenge.html#cb117-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span>
+<span id="cb117-3"><a href="advanced-challenge.html#cb117-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-4"><a href="advanced-challenge.html#cb117-4" aria-hidden="true" tabindex="-1"></a>withLabel<span class="op">:</span>r_tidyverse <span class="op">{</span></span>
+<span id="cb117-5"><a href="advanced-challenge.html#cb117-5" aria-hidden="true" tabindex="-1"></a>    conda <span class="op">=</span> <span class="st">&quot;r tidyverse&quot;</span></span>
+<span id="cb117-6"><a href="advanced-challenge.html#cb117-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb117-7"><a href="advanced-challenge.html#cb117-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-8"><a href="advanced-challenge.html#cb117-8" aria-hidden="true" tabindex="-1"></a>params <span class="op">{</span></span>
+<span id="cb117-9"><a href="advanced-challenge.html#cb117-9" aria-hidden="true" tabindex="-1"></a>  samplesheet <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/samplesheet.csv&quot;</span></span>
+<span id="cb117-10"><a href="advanced-challenge.html#cb117-10" aria-hidden="true" tabindex="-1"></a>  polar_apolar_table <span class="op">=</span> <span class="st">&quot;../nextflow_inputs/polar_apolar_table.csv&quot;</span></span>
+<span id="cb117-11"><a href="advanced-challenge.html#cb117-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
 
+</div>
 </div>
             </section>
 

@@ -66,3 +66,5 @@ configuration-profiles
 sub-workflows
 nextflow-tower
 advanced-challenge
+setup-1
+solution
