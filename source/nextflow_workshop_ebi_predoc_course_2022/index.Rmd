@@ -12,7 +12,7 @@ fontsize: 12pt
 site: bookdown::bookdown_site
 ---
 
-# Introduction to the workshop {-}
+# Preface {-}
 
 This workshop aims at introducing you to the world of workflow managers, in particular the workflow manager Nextflow.
 This workshop was written as a practical for the EMBL-EBI predoc course, 2022 cohort.
@@ -20,5 +20,14 @@ I hope that you will find it useful, and in any case I would be happy to hear yo
 You can contact me at [saul@ebi.ac.uk](mailto:saul@ebi.ac.uk).
 
 The workshop is written with an increasing level of difficulty, so feel free to skip what is too easy for you or stop when things become too complex.
+The [introduction section][Introduction] will help you set up all the software needed to follow this workshop.
+The [basic features section][Basic features] will walk you through the fundamental concepts behind workflow managers in general and Nextflow in particular.
+The [advanced features section][Advanced features] will explore some more complex features of Nextflow.
+The [basic challange][Basic challange] and the [advanced challange][Advanced challange] sections contain challenges for you to solve, at different levels of complexity.
 
-Finally, I wanted to point out that in this workshop I am using the words "pipeline" and "workflow" interchangeably, so consider them as equivalent.
+This workshop does not aim at being complete in describing Nextflow functionality.
+If this is what you are looking for the best place to explore is the [Nextflow documentation](https://www.nextflow.io/docs/latest/index.html).
+My objectives in writing this workshop is to present the features of Nextflow that I consider most important to know, and to present them in a way that shows you how you can use them in real-world scenarios.
+As for many topics in coding, there is not a single way for achieving the result that you want.
+Here I am showing you my way of writing Nextflow workflows.
+Many different approaches would be equally valid, and I encourage you to explore what works best for you and develop your own coding style.

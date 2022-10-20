@@ -5,7 +5,7 @@
 Familiarity with the Linux shell, as well as basic programming constructs such as for/while loops and if/else statements is assumed.
 Familiarity with at least one scripting language such as [R](https://www.r-project.org/about.html) or [Python](https://www.python.org/) will be beneficial.
 A basic knowledge of virtual environments and software containers would be helpful.
-Basic knowledge of git is required.
+Basic knowledge of git beneficial.
 
 ## What is Nextflow?
 

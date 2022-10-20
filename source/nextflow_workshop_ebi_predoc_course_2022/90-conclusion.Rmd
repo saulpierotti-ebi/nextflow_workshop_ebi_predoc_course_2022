@@ -1,4 +1,4 @@
-# Additional resources
+# Additional resources {-}
 
 Nextflow documentation:
 
@@ -23,3 +23,7 @@ https://carpentries-incubator.github.io/workflows-nextflow/index.html
 Other useful links:
 
 https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html
+
+# Credits {-}
+
+The Favicon for this website is a derivative work of [DNA_microarray icon](https://bioicons.com/icons/cc-by-sa-3.0/Chemo-_and_Bioinformatics/Guillaume_Paumier/DNA_microarray.svg) by [Guillaume Paumier](https://guillaumepaumier.com/bio/), which is licensed under [CC-BY SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
