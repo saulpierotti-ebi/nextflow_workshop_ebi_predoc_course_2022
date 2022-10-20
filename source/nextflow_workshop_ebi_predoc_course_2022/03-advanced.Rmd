@@ -773,6 +773,60 @@ Profiles are particularly useful to set compute environments, software environme
 
 ## Sub-workflows
 
-## Nextflow tower
+Sub-workflows can be used to modularise a workflow in logic steps.
+So for example a workflow that does germline variant calling on a set of sequencing files can be composed of a sub-workflow that maps the sequencing files to a reference and a sub-workflow that does the variant calling from the mapped sequencing files.
+
+```groovy
+<processes defined here>
+
+workflow MAP_TO_REF {
+  input:
+    fastq_ch
+  main:
+    run_bwamem2( fastq_ch )
+    mark_duplicates( run_bwamem2.out )
+  output:
+    mark_duplicates.out
+}
+
+workflow CALL_VARIANTS {
+  input:
+    mapped_crams_ch
+  main:
+    gatk_haplotypecaller( mapped_crams_ch )
+    genomics_db_import( gatk_haplotypecaller.out )
+    gatk_genotypegvcfs( genomics_db_import.out )
+  output:
+    gatk_genotypegvcfs.out
+}
+
+workflow {
+  MAP_TO_REF( params.input )
+  CALL_VARIANTS( MAP_TO_REF.out )
+}
+```
+
+Sub-workflows can have an `input`, a `main`,and a `output` block.
+The `input` block defines the name of one or more channels that are passed as an input to the sub-workflows.
+The `output` block can define a channel accessible from `<WORKFLOW_NAME>.out` after execution.
+The `main` block defines the actual workflow logic in terms of processes to be run and channel manipulations.
+
+It is also possible to write separate logical steps of the workflow in separate `.nf` files.
+Such additional files can have any name and are usually put under the folder `workflows` in the project directory.
+Workflows defined in such files can be accessed from `main.nf` using an `include` statement.
+
+```groovy
+include { PRE_PROCESSING } from './workflows/pre_processing'
+include { DO_SOME_WORK } from './workflows/important_script.nf'
+
+workflow {
+  PRE_PROCESSING( params.input )
+  DO_SOME_WORK( PRE_PROCESSING.out )
+}
+```
+
+## Nextflow Tower
+
+Nextflow Tower
 
 # Advanced challenge
