@@ -301,9 +301,9 @@ Code
 </details>
 <p>Now run again the workflow with <code>nextflow run main.nf</code>.
 This time your workflow will not print anything since we omitted the <code>view()</code> operator.
-However, if you type in your terminal the following</p>
+However, if you read the output file content with this command</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="basic-features.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ../nextflow_output/duplicate_lines/hello_world.duplicated.txt</span></code></pre></div>
-<p>You should see the following</p>
+<p>You should see the following output in your terminal</p>
 <pre><code>This is the EBI predoc course
 This is the EBI predoc course</code></pre>
 <p>So as you see, the content of the <code>hello_world.txt</code> file that we created before has been duplicated so that it appears twice and it has been placed on a new file, <code>../nextflow_output/duplicate_lines/hello_world.duplicated.txt</code>.</p>

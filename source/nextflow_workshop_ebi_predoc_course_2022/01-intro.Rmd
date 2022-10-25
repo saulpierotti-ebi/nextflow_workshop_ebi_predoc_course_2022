@@ -100,7 +100,7 @@ The best practice is to have your sample sheet formatted as a [CSV](https://www.
 Note that the sample sheet is not part of the pipeline itself.
 The absolute path to the sample sheet is usually provided to Nextflow either as a command-line parameter or in the `nextflow.config` file.
 
-To execute your workflow, you would run (do not do it now, we still need to write the workflow) `nextflow run main.nf` at the root of your repository if your workflow is in a file named `main.nf`.
+To execute your workflow, you would run `nextflow run main.nf` at the root of your repository if your workflow is in a file named `main.nf`.
 This would prompt Nextflow to read the `main.nf` file and eventual sub-workflows, extract the workflow logic from it, load the configurations in `nextflow.config`, and coordinate the execution of the different steps in your pipeline to produce the final result.
 
 ### Nextflow domain-specific language versions

@@ -70,13 +70,13 @@ workflow {
 
 Now run again the workflow with `nextflow run main.nf`.
 This time your workflow will not print anything since we omitted the `view()` operator.
-However, if you type in your terminal the following
+However, if you read the output file content with this command
 
 ```bash
 cat ../nextflow_output/duplicate_lines/hello_world.duplicated.txt
 ```
 
-You should see the following
+You should see the following output in your terminal
 
 ```
 This is the EBI predoc course

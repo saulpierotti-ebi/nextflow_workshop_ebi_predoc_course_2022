@@ -312,7 +312,7 @@ However, this is not required and many workflows do not have an <code>assets</co
 The best practice is to have your sample sheet formatted as a <a href="https://www.wikiwand.com/en/Comma-separated_values">CSV</a> file with an appropriate header.
 Note that the sample sheet is not part of the pipeline itself.
 The absolute path to the sample sheet is usually provided to Nextflow either as a command-line parameter or in the <code>nextflow.config</code> file.</p>
-<p>To execute your workflow, you would run (do not do it now, we still need to write the workflow) <code>nextflow run main.nf</code> at the root of your repository if your workflow is in a file named <code>main.nf</code>.
+<p>To execute your workflow, you would run <code>nextflow run main.nf</code> at the root of your repository if your workflow is in a file named <code>main.nf</code>.
 This would prompt Nextflow to read the <code>main.nf</code> file and eventual sub-workflows, extract the workflow logic from it, load the configurations in <code>nextflow.config</code>, and coordinate the execution of the different steps in your pipeline to produce the final result.</p>
 </div>
 <div id="nextflow-domain-specific-language-versions" class="section level3 hasAnchor" number="1.5.2">
