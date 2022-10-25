@@ -87,9 +87,9 @@ So as you see, the content of the `hello_world.txt` file that we created before 
 
 Let's analyse what happened this time:
 
-- We created another process called `duplicate_lines` which duplicates a given file thanks to its `script` command `cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt`
-- `duplicate_lines` declares an `input:` block. The input block is similar to the output block that we saw before in that it can use the `path` qualifier to declare the input to be a file. However, what comes after `path` does not need to be a real filename, it is just a variable name (note that it is not quoted). Nextflow replaces that variable with the real name of the file given in input.
-- In the script and output blocks we can refer to the inputs by specifying `$my_file`. Note that we need to use the same name used in the input declaration.
+- We created another process called `duplicate_lines` which duplicates a given file thanks to its `script:` block containing the command `cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt`
+- The process `duplicate_lines` declares an `input:` block. The input block is similar to the output block that we saw before in that it can use the `path` qualifier to declare the input to be a file. However, what comes after `path` does not need to be a real filename, it is just a variable name (note that it is not quoted). Nextflow replaces that variable with the real name of the file given in input.
+- In the script and output blocks we can refer to the inputs by specifying the variable `$my_file`. Note that we need to use the same name used in the input declaration.
   - It is possible to enclose the variable name in curly braces to demark it from other text. So `${my_file}` is equivalent to `$my_file`.
   - We applied the operator `simpleName` to the variable `$my_file` by writing `${my_file.simpleName}`. This removes the path and the extension from `my_file`, so that we can use it to name our output file (if `$my_file` contains the value `"/some/path/hello_world.txt"`, then `${my_file.simpleName}` contains only `hello_world`).
 - We used a new directive in the process `duplicate_lines`, called `publishDir`. This specifies the folder where the output of the process should be placed at the end of the execution. This is usually done to put the final outputs of your workflow in a meaningful directory structure. In our case, `publishDir "../nextflow_output/duplicate_lines"` places `${my_file.simpleName}.duplicated.txt` in the folder `../nextflow_output/duplicate_lines`
