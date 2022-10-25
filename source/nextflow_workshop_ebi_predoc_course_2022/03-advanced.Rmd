@@ -853,12 +853,17 @@ You should produce a plot like the one following and place it in the folder `../
 Your input files will be created in the folder `../nextflow_inputs` (after running the commands in the [Setup] section), and you can explore them manually to see their structure.
 You may use any programming language for the task, but you should embed any computational step in a Nextflow process.
 It is preferable if you split the work into as many independent processes as possible, instead of doing everything in a monolithic process.
+It may be needed to use some functionality of the Groovy language and Nextflow that we did not discuss in order to complete this challenge.
 
-**Hint:** you can retrieve protein sequences from UniProt programmatically by running the following (replacing `<uniprot-id>` with the actual UniProt ID of the protein you want to download)
-
+<details>
+<summary>Click here to see some hints</summary>
+**Hint 1:** you can retrieve protein sequences from UniProt programmatically by running the following (replacing `<uniprot-id>` with the actual UniProt ID of the protein you want to download)
 ```bash
 wget https://rest.uniprot.org/uniprotkb/<uniprot-id>.fasta
 ```
+
+**Hint 2:** you may want to look up the [`flatMap` channel operator](https://www.nextflow.io/docs/latest/operator.html#flatmap) and the [`collect` method for Groovy lists](http://docs.groovy-lang.org/2.4.3/html/groovy-jdk/java/util/Collection.html#collect())
+</details>
 
 ## Setup
 

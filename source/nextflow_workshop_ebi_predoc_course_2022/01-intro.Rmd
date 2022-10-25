@@ -13,12 +13,11 @@ Basic knowledge of git is beneficial.
 The purpose of Nextflow is to make it easier to coordinate the execution of complex [data analysis pipelines](https://www.wikiwand.com/en/Pipeline_(computing)) and to facilitate the execution of such pipelines in [cloud environments](https://www.wikiwand.com/en/Cloud_computing) and [high-performance clusters](https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster).
 
 In practice, Nextflow allows you to declare how the output of some processes in a pipeline is fed as the input to other processes, leading to the production of a final result.
-In addition, Nextflow allows the specification of software requirements for each process using [conda](https://docs.conda.io/en/latest/) environments, [docker](https://www.docker.com/) containers, and a variety of other solutions.
+In addition, Nextflow allows the specification of software requirements for each process using [Conda](https://docs.conda.io/en/latest/) environments, [Docker](https://www.docker.com/) containers, and a variety of other solutions.
 
 Once a pipeline has been written in Nextflow, it can be easily scaled from a local laptop to a high-performance cluster or cloud environment without any modification, with Nextflow taking care of environment-specific commands (for example, submitting appropriate jobs to a batch scheduler).
 Moreover, the pipeline execution is parallelised if the dependencies among different processes allow it.
 A motivation for using a workflow manager such as Nextflow is also to increase the reproducibility of your data analysis.
-
 Finally, each process in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.
 
 Nextflow is developed and maintained by [Seqera Labs](https://seqera.io/). The project was started in Cedric Notredame's lab at the Centre for Genomic Regulation ([CRG](https://www.crg.eu/)) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use case, but it is domain-agnostic and can be used for any data-intensive workflow.
@@ -32,24 +31,17 @@ They will be able to deploy a community-curated pipeline from [nf-core](https://
 
 ## Setup
 
-Install [mamba](https://github.com/conda-forge/miniforge), a faster alternative to [conda](https://docs.conda.io/en/latest/)
+Install [Mamba](https://github.com/conda-forge/miniforge), a faster alternative to [Conda](https://docs.conda.io/en/latest/)
 
 ```bash
 curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
 bash Mambaforge-$(uname)-$(uname -m).sh
 ```
-
-Setup the shell to use mamba
-
-```bash
-mamba init
-```
-
 Close and re-open your shell.
 Then, create a mamba environment for installing Nextflow
 
 ```bash
-mamba create -n nextflow nextflow
+mamba create -c bioconda -n nextflow nextflow
 ```
 
 Now activate the environment that you just created
@@ -68,7 +60,7 @@ cd my_repo
 ```
 
 You can use a text editor of your choice to write Nextflow code.
-For example, you may want to use [Atom](https://flight-manual.atom.io/getting-started/sections/installing-atom/).
+For example, you may want to use [Atom](https://atom.io/).
 I recommend to add Nextflow language support to Atom by clicking [here](atom://settings-view/show-package?package=language-nextflow).
 
 Create some essential files that we will be working on inside your new repository
@@ -104,7 +96,7 @@ Additional files needed for your workflow, such as a table containing some metad
 However, this is not required and many workflows do not have an `assets` folder.
 
 Inputs to the workflow are usually defined in a so-called "sample sheet" that should contain the (preferably) absolute file path to the input files end eventual sample-specific parameters for task execution.
-The best practice is to have your sample sheet formatted as a [csv](https://www.wikiwand.com/en/Comma-separated_values) file with an appropriate header.
+The best practice is to have your sample sheet formatted as a [CSV](https://www.wikiwand.com/en/Comma-separated_values) file with an appropriate header.
 Note that the sample sheet is not part of the pipeline itself.
 The absolute path to the sample sheet is usually provided to Nextflow either as a command-line parameter or in the `nextflow.config` file.
 

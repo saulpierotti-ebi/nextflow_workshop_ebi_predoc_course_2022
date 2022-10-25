@@ -254,11 +254,11 @@ Basic knowledge of git is beneficial.</p>
 <p><a href="https://www.nextflow.io/index.html">Nextflow</a> is an open-source workflow manager consisting of a domain-specific language built as a superset of the <a href="https://groovy-lang.org/">Groovy</a> programming language, which is itself a superset of <a href="https://www.java.com/en/">Java</a>.
 The purpose of Nextflow is to make it easier to coordinate the execution of complex <a href="https://www.wikiwand.com/en/Pipeline_(computing)">data analysis pipelines</a> and to facilitate the execution of such pipelines in <a href="https://www.wikiwand.com/en/Cloud_computing">cloud environments</a> and <a href="https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster">high-performance clusters</a>.</p>
 <p>In practice, Nextflow allows you to declare how the output of some processes in a pipeline is fed as the input to other processes, leading to the production of a final result.
-In addition, Nextflow allows the specification of software requirements for each process using <a href="https://docs.conda.io/en/latest/">conda</a> environments, <a href="https://www.docker.com/">docker</a> containers, and a variety of other solutions.</p>
+In addition, Nextflow allows the specification of software requirements for each process using <a href="https://docs.conda.io/en/latest/">Conda</a> environments, <a href="https://www.docker.com/">Docker</a> containers, and a variety of other solutions.</p>
 <p>Once a pipeline has been written in Nextflow, it can be easily scaled from a local laptop to a high-performance cluster or cloud environment without any modification, with Nextflow taking care of environment-specific commands (for example, submitting appropriate jobs to a batch scheduler).
 Moreover, the pipeline execution is parallelised if the dependencies among different processes allow it.
-A motivation for using a workflow manager such as Nextflow is also to increase the reproducibility of your data analysis.</p>
-<p>Finally, each process in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.</p>
+A motivation for using a workflow manager such as Nextflow is also to increase the reproducibility of your data analysis.
+Finally, each process in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.</p>
 <p>Nextflow is developed and maintained by <a href="https://seqera.io/">Seqera Labs</a>. The project was started in Cedric Notredame’s lab at the Centre for Genomic Regulation (<a href="https://www.crg.eu/">CRG</a>) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use case, but it is domain-agnostic and can be used for any data-intensive workflow.</p>
 </div>
 <div id="learning-objectives" class="section level2 hasAnchor" number="1.3">
@@ -270,26 +270,24 @@ They will be able to deploy a community-curated pipeline from <a href="https://n
 </div>
 <div id="setup" class="section level2 hasAnchor" number="1.4">
 <h2><span class="header-section-number">1.4</span> Setup<a href="introduction.html#setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Install <a href="https://github.com/conda-forge/miniforge">mamba</a>, a faster alternative to <a href="https://docs.conda.io/en/latest/">conda</a></p>
+<p>Install <a href="https://github.com/conda-forge/miniforge">Mamba</a>, a faster alternative to <a href="https://docs.conda.io/en/latest/">Conda</a></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="introduction.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-O</span> <span class="st">&quot;https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-</span><span class="va">$(</span><span class="fu">uname</span><span class="va">)</span><span class="st">-</span><span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span><span class="st">.sh&quot;</span></span>
 <span id="cb1-2"><a href="introduction.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> Mambaforge-<span class="va">$(</span><span class="fu">uname</span><span class="va">)</span>-<span class="va">$(</span><span class="fu">uname</span> <span class="at">-m</span><span class="va">)</span>.sh</span></code></pre></div>
-<p>Setup the shell to use mamba</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="introduction.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> init</span></code></pre></div>
 <p>Close and re-open your shell.
 Then, create a mamba environment for installing Nextflow</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="introduction.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> create <span class="at">-n</span> nextflow nextflow</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="introduction.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> create <span class="at">-c</span> bioconda <span class="at">-n</span> nextflow nextflow</span></code></pre></div>
 <p>Now activate the environment that you just created</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="introduction.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> activate nextflow</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="introduction.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> activate nextflow</span></code></pre></div>
 <p>Create an empty git repository in your GitHub account and clone it locally.
 I will pretend that this repository is called <code>my_repo</code> in this workshop.
 Don’t forget to replace this with the name of your actual repository.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="introduction.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my_repo</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="introduction.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my_repo</span></code></pre></div>
 <p>You can use a text editor of your choice to write Nextflow code.
-For example, you may want to use <a href="https://flight-manual.atom.io/getting-started/sections/installing-atom/">Atom</a>.
+For example, you may want to use <a href="https://atom.io/">Atom</a>.
 I recommend to add Nextflow language support to Atom by clicking <a href="atom://settings-view/show-package?package=language-nextflow">here</a>.</p>
 <p>Create some essential files that we will be working on inside your new repository</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="introduction.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> main.nf</span>
-<span id="cb6-2"><a href="introduction.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> nextflow.config</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="introduction.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> main.nf</span>
+<span id="cb5-2"><a href="introduction.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> nextflow.config</span></code></pre></div>
 </div>
 <div id="getting-started" class="section level2 hasAnchor" number="1.5">
 <h2><span class="header-section-number">1.5</span> Getting started<a href="introduction.html#getting-started" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -311,7 +309,7 @@ Scripts placed here are automatically recognised by Nextflow during task executi
 <p>Additional files needed for your workflow, such as a table containing some metadata for your samples, are usually placed under the folder <code>assets</code>.
 However, this is not required and many workflows do not have an <code>assets</code> folder.</p>
 <p>Inputs to the workflow are usually defined in a so-called “sample sheet” that should contain the (preferably) absolute file path to the input files end eventual sample-specific parameters for task execution.
-The best practice is to have your sample sheet formatted as a <a href="https://www.wikiwand.com/en/Comma-separated_values">csv</a> file with an appropriate header.
+The best practice is to have your sample sheet formatted as a <a href="https://www.wikiwand.com/en/Comma-separated_values">CSV</a> file with an appropriate header.
 Note that the sample sheet is not part of the pipeline itself.
 The absolute path to the sample sheet is usually provided to Nextflow either as a command-line parameter or in the <code>nextflow.config</code> file.</p>
 <p>To execute your workflow, you would run (do not do it now, we still need to write the workflow) <code>nextflow run main.nf</code> at the root of your repository if your workflow is in a file named <code>main.nf</code>.
@@ -323,7 +321,7 @@ This would prompt Nextflow to read the <code>main.nf</code> file and eventual su
 A major change in the Nextflow syntax was done by its developers, and the new syntax is referred to as DSL 2.
 In this workshop, we will be using exclusively the new DSL2 syntax.</p>
 <p>For this reason, you need to add the following line at the top of your <code>main.nf</code> file:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb7-1"><a href="introduction.html#cb7-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb6-1"><a href="introduction.html#cb6-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span></code></pre></div>
 <p>So if in the future you will find yourself looking at a Nextflow workflow which is written very differently from what you are used to, it will probably be written according to DSL1 instead of DSL2.</p>
 </div>
 <div id="core-concepts" class="section level3 hasAnchor" number="1.5.3">
@@ -348,49 +346,49 @@ Note that channels are unidirectional: communication happens only in one directi
 <h3><span class="header-section-number">1.5.4</span> Your first workflow<a href="introduction.html#your-first-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Now that you know the basics of what a Nextflow workflow is, we will write a simple workflow and we will execute it.</p>
 <p>First of all, open the file <code>main.nf</code> that you created before at the root of your repository in a text editor and add the following to it</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb8-1"><a href="introduction.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
-<span id="cb8-2"><a href="introduction.html#cb8-2" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
-<span id="cb8-3"><a href="introduction.html#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
-<span id="cb8-4"><a href="introduction.html#cb8-4" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb8-5"><a href="introduction.html#cb8-5" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
-<span id="cb8-6"><a href="introduction.html#cb8-6" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb8-7"><a href="introduction.html#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb8-8"><a href="introduction.html#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
-<span id="cb8-9"><a href="introduction.html#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb8-10"><a href="introduction.html#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb8-11"><a href="introduction.html#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="introduction.html#cb8-12" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
-<span id="cb8-13"><a href="introduction.html#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
-<span id="cb8-14"><a href="introduction.html#cb8-14" aria-hidden="true" tabindex="-1"></a>    say_hello<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
-<span id="cb8-15"><a href="introduction.html#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb7-1"><a href="introduction.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb7-2"><a href="introduction.html#cb7-2" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb7-3"><a href="introduction.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb7-4"><a href="introduction.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb7-5"><a href="introduction.html#cb7-5" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb7-6"><a href="introduction.html#cb7-6" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb7-7"><a href="introduction.html#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb7-8"><a href="introduction.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb7-9"><a href="introduction.html#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb7-10"><a href="introduction.html#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-11"><a href="introduction.html#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="introduction.html#cb7-12" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb7-13"><a href="introduction.html#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb7-14"><a href="introduction.html#cb7-14" aria-hidden="true" tabindex="-1"></a>    say_hello<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb7-15"><a href="introduction.html#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>If you want to see how your <code>main.nf</code> should look like at this stage open this hidden section</p>
 <details>
 <summary>
 Code
 </summary>
-<div class="sourceCode" id="cb9"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb9-1"><a href="introduction.html#cb9-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb9-2"><a href="introduction.html#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="introduction.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
-<span id="cb9-4"><a href="introduction.html#cb9-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
-<span id="cb9-5"><a href="introduction.html#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
-<span id="cb9-6"><a href="introduction.html#cb9-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
-<span id="cb9-7"><a href="introduction.html#cb9-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
-<span id="cb9-8"><a href="introduction.html#cb9-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
-<span id="cb9-9"><a href="introduction.html#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb9-10"><a href="introduction.html#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
-<span id="cb9-11"><a href="introduction.html#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
-<span id="cb9-12"><a href="introduction.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-13"><a href="introduction.html#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-14"><a href="introduction.html#cb9-14" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
-<span id="cb9-15"><a href="introduction.html#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
-<span id="cb9-16"><a href="introduction.html#cb9-16" aria-hidden="true" tabindex="-1"></a>    say_hello<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
-<span id="cb9-17"><a href="introduction.html#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb8-1"><a href="introduction.html#cb8-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb8-2"><a href="introduction.html#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="introduction.html#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">// this is a comment</span></span>
+<span id="cb8-4"><a href="introduction.html#cb8-4" aria-hidden="true" tabindex="-1"></a>process say_hello <span class="op">{</span></span>
+<span id="cb8-5"><a href="introduction.html#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// comments can be written anywhere</span></span>
+<span id="cb8-6"><a href="introduction.html#cb8-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">:</span></span>
+<span id="cb8-7"><a href="introduction.html#cb8-7" aria-hidden="true" tabindex="-1"></a>        path <span class="st">&quot;hello_world.txt&quot;</span></span>
+<span id="cb8-8"><a href="introduction.html#cb8-8" aria-hidden="true" tabindex="-1"></a>    script<span class="op">:</span></span>
+<span id="cb8-9"><a href="introduction.html#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb8-10"><a href="introduction.html#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="st">        echo &quot;This is the EBI predoc course&quot; &gt; hello_world.txt</span></span>
+<span id="cb8-11"><a href="introduction.html#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
+<span id="cb8-12"><a href="introduction.html#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-13"><a href="introduction.html#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="introduction.html#cb8-14" aria-hidden="true" tabindex="-1"></a>workflow <span class="op">{</span></span>
+<span id="cb8-15"><a href="introduction.html#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">say_hello</span><span class="op">()</span></span>
+<span id="cb8-16"><a href="introduction.html#cb8-16" aria-hidden="true" tabindex="-1"></a>    say_hello<span class="op">.</span>out<span class="op">.</span><span class="fu">view</span><span class="op">()</span></span>
+<span id="cb8-17"><a href="introduction.html#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
 <p>Now open the file <code>nextflow.config</code> and add the following line</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb10-1"><a href="introduction.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
-<span id="cb10-2"><a href="introduction.html#cb10-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb9-1"><a href="introduction.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// you can also put comments in nextflow.config</span></span>
+<span id="cb9-2"><a href="introduction.html#cb9-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span></code></pre></div>
 <p>Now run the workflow executing from the root of your repository the following</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="introduction.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="introduction.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf</span></code></pre></div>
 <p>You should see a bunch of information about your workflow appear on your terminal followed by the name of the file we just created, <code>hello_world.txt</code>.
 Note that the full path to the file will be printed in your terminal, which will look something like <code>/home/myname/nextflow_workdir/00/fjdanurew9gihwepw1455idusodhfweioru/hello_world.txt</code>.</p>
 <p>Let’s now examine the code step by step:</p>
