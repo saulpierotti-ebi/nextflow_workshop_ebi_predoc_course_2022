@@ -143,7 +143,7 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <li class="chapter" data-level="1.5" data-path="introduction.html"><a href="introduction.html#getting-started"><i class="fa fa-check"></i><b>1.5</b> Getting started</a>
 <ul>
 <li class="chapter" data-level="1.5.1" data-path="introduction.html"><a href="introduction.html#general-anatomy-of-a-nextflow-workflow"><i class="fa fa-check"></i><b>1.5.1</b> General anatomy of a Nextflow workflow</a></li>
-<li class="chapter" data-level="1.5.2" data-path="introduction.html"><a href="introduction.html#nextflow-domain-specific-language-versions"><i class="fa fa-check"></i><b>1.5.2</b> Nextflow domain specific language versions</a></li>
+<li class="chapter" data-level="1.5.2" data-path="introduction.html"><a href="introduction.html#nextflow-domain-specific-language-versions"><i class="fa fa-check"></i><b>1.5.2</b> Nextflow domain-specific language versions</a></li>
 <li class="chapter" data-level="1.5.3" data-path="introduction.html"><a href="introduction.html#core-concepts"><i class="fa fa-check"></i><b>1.5.3</b> Core concepts</a></li>
 <li class="chapter" data-level="1.5.4" data-path="introduction.html"><a href="introduction.html#your-first-workflow"><i class="fa fa-check"></i><b>1.5.4</b> Your first workflow</a></li>
 </ul></li>
@@ -246,25 +246,27 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 <h2><span class="header-section-number">1.1</span> Prerequisites<a href="introduction.html#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Familiarity with the Linux shell, as well as basic programming constructs such as for/while loops and if/else statements is assumed.
 Familiarity with at least one scripting language such as <a href="https://www.r-project.org/about.html">R</a> or <a href="https://www.python.org/">Python</a> will be beneficial.
-A basic knowledge of virtual environments and software containers would be helpful.
-Basic knowledge of git beneficial.</p>
+Basic knowledge of virtual environments and software containers would be helpful.
+Basic knowledge of git is beneficial.</p>
 </div>
 <div id="what-is-nextflow" class="section level2 hasAnchor" number="1.2">
 <h2><span class="header-section-number">1.2</span> What is Nextflow?<a href="introduction.html#what-is-nextflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://www.nextflow.io/index.html">Nextflow</a> is an open-source workflow manager consisting of a domain specific language built as a superset of the <a href="https://groovy-lang.org/">Groovy</a> programming language, which is itself a superset of <a href="https://www.java.com/en/">Java</a>.
-The purpose of Nextflow is to make it easier to coordinate the execution of complex <a href="https://www.wikiwand.com/en/Pipeline_(computing)">data analysis pipelines</a>, and to facilitate the execution of such pipelines in <a href="https://www.wikiwand.com/en/Cloud_computing">cloud environments</a> and <a href="https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster">high-performance clusters</a>.</p>
-<p>In practice, Nextflow allows you to declare how the output of some processes in a pipeline are fed as the input of other processes, leading to the production of a final result.
+<p><a href="https://www.nextflow.io/index.html">Nextflow</a> is an open-source workflow manager consisting of a domain-specific language built as a superset of the <a href="https://groovy-lang.org/">Groovy</a> programming language, which is itself a superset of <a href="https://www.java.com/en/">Java</a>.
+The purpose of Nextflow is to make it easier to coordinate the execution of complex <a href="https://www.wikiwand.com/en/Pipeline_(computing)">data analysis pipelines</a> and to facilitate the execution of such pipelines in <a href="https://www.wikiwand.com/en/Cloud_computing">cloud environments</a> and <a href="https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster">high-performance clusters</a>.</p>
+<p>In practice, Nextflow allows you to declare how the output of some processes in a pipeline is fed as the input to other processes, leading to the production of a final result.
 In addition, Nextflow allows the specification of software requirements for each process using <a href="https://docs.conda.io/en/latest/">conda</a> environments, <a href="https://www.docker.com/">docker</a> containers, and a variety of other solutions.</p>
 <p>Once a pipeline has been written in Nextflow, it can be easily scaled from a local laptop to a high-performance cluster or cloud environment without any modification, with Nextflow taking care of environment-specific commands (for example, submitting appropriate jobs to a batch scheduler).
 Moreover, the pipeline execution is parallelised if the dependencies among different processes allow it.
 A motivation for using a workflow manager such as Nextflow is also to increase the reproducibility of your data analysis.</p>
-<p>Finally, each processes in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.</p>
-<p>Nextflow is developed and maintained by <a href="https://seqera.io/">Seqera Labs</a>. The project was started in Cedric Notredame’s lab at the Centre for Genomic Regulation (<a href="https://www.crg.eu/">CRG</a>) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use-case, but it is domain-agnostic and can be used for any data-intensive workflow.</p>
+<p>Finally, each process in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.</p>
+<p>Nextflow is developed and maintained by <a href="https://seqera.io/">Seqera Labs</a>. The project was started in Cedric Notredame’s lab at the Centre for Genomic Regulation (<a href="https://www.crg.eu/">CRG</a>) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use case, but it is domain-agnostic and can be used for any data-intensive workflow.</p>
 </div>
 <div id="learning-objectives" class="section level2 hasAnchor" number="1.3">
 <h2><span class="header-section-number">1.3</span> Learning objectives<a href="introduction.html#learning-objectives" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>After following this tutorial, the learner will be autonomous in using nextflow for their own data analysis.
-They will understand fundamental Nextflow concepts such as processes, workflows, channels, they will be able to write a configuration file to alter the resources allocated for a processes and the software environment of execution, and they will be able to deploy a community-curated pipeline from <a href="https://nf-co.re/">nf-core</a>.</p>
+<p>After following this tutorial, the learner will be autonomous in using Nextflow for their own data analysis.
+They will understand fundamental Nextflow concepts such as processes, workflows, and channels.
+They will be able to write a configuration file to alter the resources allocated for a process and the software environment of execution.
+They will be able to deploy a community-curated pipeline from <a href="https://nf-co.re/">nf-core</a>.</p>
 </div>
 <div id="setup" class="section level2 hasAnchor" number="1.4">
 <h2><span class="header-section-number">1.4</span> Setup<a href="introduction.html#setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -295,50 +297,50 @@ I recommend to add Nextflow language support to Atom by clicking <a href="atom:/
 <h3><span class="header-section-number">1.5.1</span> General anatomy of a Nextflow workflow<a href="introduction.html#general-anatomy-of-a-nextflow-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A Nextflow workflow is usually represented by a git repository containing all the files describing the workflow logic, configurations, and dependencies.</p>
 <p>Text files containing Nextflow code usually have the <code>.nf</code> extension (i.e. <code>my_file.nf</code>).
-It does not really matter how you name your files, as long as they contain valid Nextflow code, but for consistency the best practice is to call the file describing the workflow as <code>main.nf</code> and place it at the root of your repository.</p>
+It does not matter how you name your files, as long as they contain valid Nextflow code, but for consistency, the best practice is to call the file describing the workflow as <code>main.nf</code> and place it at the root of your repository.</p>
 <p>The <code>main.nf</code> file can access code from other Nextflow scripts, called sub-workflows, that can have arbitrary names.
-The best practice is to place such additional Nextflow scripts under the folder <code>workflows</code> in the root of the repository.
+The best practice is to place such additional Nextflow scripts under the folder <code>workflows</code> at the root of the repository.
 So for example an additional Nextflow script could be named <code>workflows/preprocessing.nf</code>.
 We will explore later the usage of sub-workflows, so don’t worry if you don’t understand their purpose yet.</p>
 <p>The configurations for the pipeline need to be placed in a file called <code>nextflow.config</code> at the root of the repository.
 Note that differently from what was said before regarding <code>main.nf</code>, this name is mandatory for Nextflow to properly recognise the file.
 The <code>nextflow.config</code> file can contain for example resource requirements, execution, parameters, and metadata about your workflow.
-We will explore more in depth the usage of configurations files in a later section.</p>
+We will explore in-depth the usage of configuration files in a later section.</p>
 <p>Scripts (in any language, for example <a href="https://www.r-project.org/about.html">R</a> or <a href="https://www.python.org/">Python</a>) that are used in the execution of specific processes in your pipeline should be placed in the folder <code>bin</code>.
-Scripts placed here are automatically recognise by Nextflow during task execution without the need to specify their full path.</p>
-<p>Additional files needed for your workflow, for example a table containing some metadata for your samples, are usually placed under the folder <code>assets</code>.
-However this is not required and many workflows do not have an <code>assets</code> folder.</p>
+Scripts placed here are automatically recognised by Nextflow during task execution without the need to specify their full path.</p>
+<p>Additional files needed for your workflow, such as a table containing some metadata for your samples, are usually placed under the folder <code>assets</code>.
+However, this is not required and many workflows do not have an <code>assets</code> folder.</p>
 <p>Inputs to the workflow are usually defined in a so-called “sample sheet” that should contain the (preferably) absolute file path to the input files end eventual sample-specific parameters for task execution.
-Best practice is to have your sample sheet formatted as a <a href="https://www.wikiwand.com/en/Comma-separated_values">csv</a> file with an appropriate header.
+The best practice is to have your sample sheet formatted as a <a href="https://www.wikiwand.com/en/Comma-separated_values">csv</a> file with an appropriate header.
 Note that the sample sheet is not part of the pipeline itself.
 The absolute path to the sample sheet is usually provided to Nextflow either as a command-line parameter or in the <code>nextflow.config</code> file.</p>
-<p>In order to execute your workflow, you would run (do not do it now, we still need to write the workflow) <code>nextflow run main.nf</code> at the root of your repository if your workflow is in a file named <code>main.nf</code>.
+<p>To execute your workflow, you would run (do not do it now, we still need to write the workflow) <code>nextflow run main.nf</code> at the root of your repository if your workflow is in a file named <code>main.nf</code>.
 This would prompt Nextflow to read the <code>main.nf</code> file and eventual sub-workflows, extract the workflow logic from it, load the configurations in <code>nextflow.config</code>, and coordinate the execution of the different steps in your pipeline to produce the final result.</p>
 </div>
 <div id="nextflow-domain-specific-language-versions" class="section level3 hasAnchor" number="1.5.2">
-<h3><span class="header-section-number">1.5.2</span> Nextflow domain specific language versions<a href="introduction.html#nextflow-domain-specific-language-versions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain Specific Language 1 (DSL1).
+<h3><span class="header-section-number">1.5.2</span> Nextflow domain-specific language versions<a href="introduction.html#nextflow-domain-specific-language-versions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain-Specific Language 1 (DSL1).
 A major change in the Nextflow syntax was done by its developers, and the new syntax is referred to as DSL 2.
-In this workshop we will be using exclusively the new DSL2 syntax.</p>
+In this workshop, we will be using exclusively the new DSL2 syntax.</p>
 <p>For this reason, you need to add the following line at the top of your <code>main.nf</code> file:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb7-1"><a href="introduction.html#cb7-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span></code></pre></div>
 <p>So if in the future you will find yourself looking at a Nextflow workflow which is written very differently from what you are used to, it will probably be written according to DSL1 instead of DSL2.</p>
 </div>
 <div id="core-concepts" class="section level3 hasAnchor" number="1.5.3">
 <h3><span class="header-section-number">1.5.3</span> Core concepts<a href="introduction.html#core-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>A Nextflow workflow is defined by a set of processes, which execute a single task each, which are coordinate by one or more workflows.
-So for example there may be a processes called <code>align_fastq</code> that takes in input a <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> file and a <a href="https://www.wikiwand.com/en/Reference_genome">reference genome</a> and uses the software <a href="https://github.com/bwa-mem2/bwa-mem2">bwa-mem2</a> to align it, producing an aligned <a href="https://www.sanger.ac.uk/tool/cram/">cram file</a> in output.</p>
-<p>A processes defines as a minimum the command to be executed.
+<p>A Nextflow workflow is composed of a set of processes, which execute a single task each, which are coordinated by one or more workflows.
+So for example there may be a process called <code>align_fastq</code> that takes in input a <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> file and a <a href="https://www.wikiwand.com/en/Reference_genome">reference genome</a> and uses the software <a href="https://github.com/bwa-mem2/bwa-mem2">bwa-mem2</a> to align it, producing an aligned <a href="https://www.sanger.ac.uk/tool/cram/">cram file</a> in output.</p>
+<p>A process defines as a minimum the command to be executed.
 Outputs are typically defined but may be omitted if the process is run for its side effects.
 Inputs are usually also defined but there may be processes that do not need any input and instead perform a static computation.
-Many additional parameters can be specified for a process, for example the software needed, or how much memory or time is required for its execution.
+Many additional parameters can be specified for a process, such as the software needed, or how much memory or time is required for its execution.
 We will explore processes and their definition more in detail in a later section.</p>
 <p>If processes determine what is to be executed and how, workflows instead determine the logic of execution and how different processes communicate with each other.
 So for example there may be a workflow called <code>SNP_CALLING</code> that takes a <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> file in input, uses the process <code>align_fastq</code> to obtain an aligned <a href="https://www.sanger.ac.uk/tool/cram/">cram file</a>, then gives that cram file in input to another process called <code>gatk_call</code> that uses it to create a <a href="https://www.wikiwand.com/en/Variant_Call_Format">vcf file</a> containing genetic variants.</p>
 <p>Processes communicate with each other using so-called “channels”, which are unidirectional <a href="https://www.wikiwand.com/en/FIFO_(computing_and_electronics)">First-In-First-Out (FIFO)</a> queues.
 This means that a channel is populated with a set of elements (for example, files) produced by a process in the order in which they are produced.
 Then, these elements are consumed one by one by another process in the same order.
-Several ways to manipulate, merge, and split channel exist, and we will explore them later.
+Several ways to manipulate, merge, and split channels exist, and we will explore them later.
 So for example the workflow that I described above may define an input channel containing the <a href="https://www.wikiwand.com/en/FASTQ_format">fastq</a> files in input, and a channel connecting the output of <code>align_fastq</code> to the input of <code>gatk_call</code>.
 Note that channels are unidirectional: communication happens only in one direction, from outputs to inputs.</p>
 </div>
@@ -389,14 +391,15 @@ Code
 <span id="cb10-2"><a href="introduction.html#cb10-2" aria-hidden="true" tabindex="-1"></a>workDir <span class="op">=</span> <span class="st">&quot;../nextflow_workdir&quot;</span></span></code></pre></div>
 <p>Now run the workflow executing from the root of your repository the following</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="introduction.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf</span></code></pre></div>
-<p>You should see a bunch of information about your workflow and finally you will see the name of the file we just created, <code>hello_world.txt</code>, appear on your terminal. Note that the full path to the file will be printed in your terminal, which will look something like <code>/home/myname/nextflow_workdir/00/fjdanurew9gihwepw1455idusodhfweioru/hello_world.txt</code>.</p>
+<p>You should see a bunch of information about your workflow appear on your terminal followed by the name of the file we just created, <code>hello_world.txt</code>.
+Note that the full path to the file will be printed in your terminal, which will look something like <code>/home/myname/nextflow_workdir/00/fjdanurew9gihwepw1455idusodhfweioru/hello_world.txt</code>.</p>
 <p>Let’s now examine the code step by step:</p>
 <ul>
-<li>In <code>nextflow.config</code> we declared our working directory to be <code>../nextflow_workdir</code> with the keyword <code>workDir</code>. The working directory is where Nextflow actually stores your files during intermediate processing.</li>
+<li>In <code>nextflow.config</code> we declared our working directory to be <code>../nextflow_workdir</code> with the keyword <code>workDir</code>. The working directory is where Nextflow stores your files during intermediate processing.</li>
 <li>Lines starting with <code>//</code> define a comment in groovy, and they are ignored.</li>
 <li>The keyword <code>process</code> defines a process, with the statement that follows defining the process name. So <code>process say_hello</code> creates a process named <code>say_hello</code>.</li>
 <li>Curly braces enclose a block of code, so <code>process say_hello {&lt;some code&gt;}</code> is understood by Nextflow as defining <code>&lt;some code&gt;</code> to belong to the process named <code>say_hello</code>.</li>
-<li>The keyword <code>output:</code> when used inside of a process defines the expected outputs that that process should produce. If the declared output is absent at the end of the process’ execution the execution fails.</li>
+<li>The keyword <code>output:</code> when used inside of a process defines the expected outputs that that process should produce. If the declared output is absent at the end of the process execution the execution fails.</li>
 <li>Several types of outputs can be defined, and <code>path</code> is one of them. The keyword <code>path</code> defines what comes after it to be a file.</li>
 <li>Output files are named in the output block after the <code>path</code> qualifier. They should be placed inside a string. Strings are enclosed in quotes in groovy (<code>"this is a string"</code>).</li>
 <li>The <code>script:</code> keyword defines the actual command to be executed in the process. The command should be provided as a string. Since commands can be long, here a multi-line string is used. In groovy, multi-line strings are enclosed in three quotes</li>
@@ -413,8 +416,8 @@ it is very long
 <li>The keyword <code>workflow</code> defines a workflow, that we left unnamed in this case. The last workflow to be written in your <code>main.nf</code> file is automatically executed by Nextflow.
 <ul>
 <li>The workflow that we defined executes the process <code>say_hello</code></li>
-<li>The output of the process <code>say_hello</code> is captured by <code>say_hello.out</code>, which is a channel. In this case it will contain just the file <code>hello_world.txt</code></li>
-<li>The operator <code>view()</code> just echoes to the terminal the content of the channel. In this case it prints <code>hello_world.txt</code> to our shell.</li>
+<li>The output of the process <code>say_hello</code> is captured by <code>say_hello.out</code>, which is a channel. In this case, it will contain just the file <code>hello_world.txt</code></li>
+<li>The operator <code>view()</code> just echoes to the terminal the content of the channel. In this case, it prints <code>hello_world.txt</code> to our shell.</li>
 </ul></li>
 </ul>
 <p>So to put everything together, when you ran <code>nextflow run main.nf</code> Nextflow read the <code>main.nf</code> file, it found the last workflow, which we left unnamed, and executed it.
@@ -430,7 +433,7 @@ Some additional notes:</p>
 <pre><code>say_hello.out
   .view()</code></pre></li>
 <li>Note that spaces and <a href="https://www.wikiwand.com/en/Tab_key">tab charachters</a> are just for visual clarity and are not required</li>
-<li>Explore the working directory <code>../nextflow_workdir</code>. It contains a directory with a strange alphanumeric name like <code>00/fjdanurew9gihwepw1455idusodhfweioru</code> (NOTE: yours will have a different name). One different directory like this is created by Nextflow for the execution of each task (a task is an instance of a process, a process is the definition itself, while a task is created each time that process is executed on different inputs).
+<li>Explore the working directory <code>../nextflow_workdir</code>. It contains a directory with a strange alphanumeric name like <code>00/fjdanurew9gihwepw1455idusodhfweioru</code> (NOTE: yours will have a different name). One different directory like this is created by Nextflow for the execution of each task (each time a process is executed on a set of inputs, such execution is defined as a task).
 <ul>
 <li>Inside the directory with the strange name, you will see the file that we just created, <code>hello_world.txt</code></li>
 <li>Read the content of the file with <code>cat hello_world.txt</code>. You should see <code>This is the EBI predoc course</code> in your terminal.</li>

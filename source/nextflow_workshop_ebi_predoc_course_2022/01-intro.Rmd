@@ -4,29 +4,31 @@
 
 Familiarity with the Linux shell, as well as basic programming constructs such as for/while loops and if/else statements is assumed.
 Familiarity with at least one scripting language such as [R](https://www.r-project.org/about.html) or [Python](https://www.python.org/) will be beneficial.
-A basic knowledge of virtual environments and software containers would be helpful.
-Basic knowledge of git beneficial.
+Basic knowledge of virtual environments and software containers would be helpful.
+Basic knowledge of git is beneficial.
 
 ## What is Nextflow?
 
-[Nextflow](https://www.nextflow.io/index.html) is an open-source workflow manager consisting of a domain specific language built as a superset of the [Groovy](https://groovy-lang.org/) programming language, which is itself a superset of [Java](https://www.java.com/en/).
-The purpose of Nextflow is to make it easier to coordinate the execution of complex [data analysis pipelines](https://www.wikiwand.com/en/Pipeline_(computing)), and to facilitate the execution of such pipelines in [cloud environments](https://www.wikiwand.com/en/Cloud_computing) and [high-performance clusters](https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster).
+[Nextflow](https://www.nextflow.io/index.html) is an open-source workflow manager consisting of a domain-specific language built as a superset of the [Groovy](https://groovy-lang.org/) programming language, which is itself a superset of [Java](https://www.java.com/en/).
+The purpose of Nextflow is to make it easier to coordinate the execution of complex [data analysis pipelines](https://www.wikiwand.com/en/Pipeline_(computing)) and to facilitate the execution of such pipelines in [cloud environments](https://www.wikiwand.com/en/Cloud_computing) and [high-performance clusters](https://www.hpc.iastate.edu/guides/introduction-to-hpc-clusters/what-is-an-hpc-cluster).
 
-In practice, Nextflow allows you to declare how the output of some processes in a pipeline are fed as the input of other processes, leading to the production of a final result.
+In practice, Nextflow allows you to declare how the output of some processes in a pipeline is fed as the input to other processes, leading to the production of a final result.
 In addition, Nextflow allows the specification of software requirements for each process using [conda](https://docs.conda.io/en/latest/) environments, [docker](https://www.docker.com/) containers, and a variety of other solutions.
 
 Once a pipeline has been written in Nextflow, it can be easily scaled from a local laptop to a high-performance cluster or cloud environment without any modification, with Nextflow taking care of environment-specific commands (for example, submitting appropriate jobs to a batch scheduler).
 Moreover, the pipeline execution is parallelised if the dependencies among different processes allow it.
 A motivation for using a workflow manager such as Nextflow is also to increase the reproducibility of your data analysis.
 
-Finally, each processes in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.
+Finally, each process in Nextflow is executed in its own unique directory, with automatic staging of the required inputs, so there is no need to think about filename collisions and file locations when developing your pipeline.
 
-Nextflow is developed and maintained by [Seqera Labs](https://seqera.io/). The project was started in Cedric Notredame's lab at the Centre for Genomic Regulation ([CRG](https://www.crg.eu/)) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use-case, but it is domain-agnostic and can be used for any data-intensive workflow.
+Nextflow is developed and maintained by [Seqera Labs](https://seqera.io/). The project was started in Cedric Notredame's lab at the Centre for Genomic Regulation ([CRG](https://www.crg.eu/)) in Barcelona, Spain. Nextflow was conceived with bioinformatics as its key use case, but it is domain-agnostic and can be used for any data-intensive workflow.
 
 ## Learning objectives
 
-After following this tutorial, the learner will be autonomous in using nextflow for their own data analysis.
-They will understand fundamental Nextflow concepts such as processes, workflows, channels, they will be able to write a configuration file to alter the resources allocated for a processes and the software environment of execution, and they will be able to deploy a community-curated pipeline from [nf-core](https://nf-co.re/).
+After following this tutorial, the learner will be autonomous in using Nextflow for their own data analysis.
+They will understand fundamental Nextflow concepts such as processes, workflows, and channels.
+They will be able to write a configuration file to alter the resources allocated for a process and the software environment of execution.
+They will be able to deploy a community-curated pipeline from [nf-core](https://nf-co.re/).
 
 ## Setup
 
@@ -83,37 +85,37 @@ touch nextflow.config
 A Nextflow workflow is usually represented by a git repository containing all the files describing the workflow logic, configurations, and dependencies.
 
 Text files containing Nextflow code usually have the `.nf` extension (i.e. `my_file.nf`).
-It does not really matter how you name your files, as long as they contain valid Nextflow code, but for consistency the best practice is to call the file describing the workflow as `main.nf` and place it at the root of your repository.
+It does not matter how you name your files, as long as they contain valid Nextflow code, but for consistency, the best practice is to call the file describing the workflow as `main.nf` and place it at the root of your repository.
 
 The `main.nf` file can access code from other Nextflow scripts, called sub-workflows, that can have arbitrary names.
-The best practice is to place such additional Nextflow scripts under the folder `workflows` in the root of the repository.
+The best practice is to place such additional Nextflow scripts under the folder `workflows` at the root of the repository.
 So for example an additional Nextflow script could be named `workflows/preprocessing.nf`.
 We will explore later the usage of sub-workflows, so don't worry if you don't understand their purpose yet.
 
 The configurations for the pipeline need to be placed in a file called `nextflow.config` at the root of the repository.
 Note that differently from what was said before regarding `main.nf`, this name is mandatory for Nextflow to properly recognise the file.
 The `nextflow.config` file can contain for example resource requirements, execution, parameters, and metadata about your workflow.
-We will explore more in depth the usage of configurations files in a later section.
+We will explore in-depth the usage of configuration files in a later section.
 
 Scripts (in any language, for example [R](https://www.r-project.org/about.html) or [Python](https://www.python.org/)) that are used in the execution of specific processes in your pipeline should be placed in the folder `bin`.
-Scripts placed here are automatically recognise by Nextflow during task execution without the need to specify their full path.
+Scripts placed here are automatically recognised by Nextflow during task execution without the need to specify their full path.
 
-Additional files needed for your workflow, for example a table containing some metadata for your samples, are usually placed under the folder `assets`.
-However this is not required and many workflows do not have an `assets` folder.
+Additional files needed for your workflow, such as a table containing some metadata for your samples, are usually placed under the folder `assets`.
+However, this is not required and many workflows do not have an `assets` folder.
 
 Inputs to the workflow are usually defined in a so-called "sample sheet" that should contain the (preferably) absolute file path to the input files end eventual sample-specific parameters for task execution.
-Best practice is to have your sample sheet formatted as a [csv](https://www.wikiwand.com/en/Comma-separated_values) file with an appropriate header.
+The best practice is to have your sample sheet formatted as a [csv](https://www.wikiwand.com/en/Comma-separated_values) file with an appropriate header.
 Note that the sample sheet is not part of the pipeline itself.
 The absolute path to the sample sheet is usually provided to Nextflow either as a command-line parameter or in the `nextflow.config` file.
 
-In order to execute your workflow, you would run (do not do it now, we still need to write the workflow) `nextflow run main.nf` at the root of your repository if your workflow is in a file named `main.nf`.
+To execute your workflow, you would run (do not do it now, we still need to write the workflow) `nextflow run main.nf` at the root of your repository if your workflow is in a file named `main.nf`.
 This would prompt Nextflow to read the `main.nf` file and eventual sub-workflows, extract the workflow logic from it, load the configurations in `nextflow.config`, and coordinate the execution of the different steps in your pipeline to produce the final result.
 
-### Nextflow domain specific language versions
+### Nextflow domain-specific language versions
 
-Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain Specific Language 1 (DSL1).
+Before starting, it is important to know that Nextflow as it was initially developed is referred to as Domain-Specific Language 1 (DSL1).
 A major change in the Nextflow syntax was done by its developers, and the new syntax is referred to as DSL 2.
-In this workshop we will be using exclusively the new DSL2 syntax.
+In this workshop, we will be using exclusively the new DSL2 syntax.
 
 For this reason, you need to add the following line at the top of your `main.nf` file:
 
@@ -125,13 +127,13 @@ So if in the future you will find yourself looking at a Nextflow workflow which 
 
 ### Core concepts
 
-A Nextflow workflow is defined by a set of processes, which execute a single task each, which are coordinate by one or more workflows.
-So for example there may be a processes called `align_fastq` that takes in input a [fastq](https://www.wikiwand.com/en/FASTQ_format) file and a [reference genome](https://www.wikiwand.com/en/Reference_genome) and uses the software [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2) to align it, producing an aligned [cram file](https://www.sanger.ac.uk/tool/cram/) in output.
+A Nextflow workflow is composed of a set of processes, which execute a single task each, which are coordinated by one or more workflows.
+So for example there may be a process called `align_fastq` that takes in input a [fastq](https://www.wikiwand.com/en/FASTQ_format) file and a [reference genome](https://www.wikiwand.com/en/Reference_genome) and uses the software [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2) to align it, producing an aligned [cram file](https://www.sanger.ac.uk/tool/cram/) in output.
 
-A processes defines as a minimum the command to be executed.
+A process defines as a minimum the command to be executed.
 Outputs are typically defined but may be omitted if the process is run for its side effects.
 Inputs are usually also defined but there may be processes that do not need any input and instead perform a static computation.
-Many additional parameters can be specified for a process, for example the software needed, or how much memory or time is required for its execution.
+Many additional parameters can be specified for a process, such as the software needed, or how much memory or time is required for its execution.
 We will explore processes and their definition more in detail in a later section.
 
 If processes determine what is to be executed and how, workflows instead determine the logic of execution and how different processes communicate with each other.
@@ -140,7 +142,7 @@ So for example there may be a workflow called `SNP_CALLING` that takes a [fastq]
 Processes communicate with each other using so-called "channels", which are unidirectional [First-In-First-Out (FIFO)](https://www.wikiwand.com/en/FIFO_(computing_and_electronics)) queues.
 This means that a channel is populated with a set of elements (for example, files) produced by a process in the order in which they are produced.
 Then, these elements are consumed one by one by another process in the same order.
-Several ways to manipulate, merge, and split channel exist, and we will explore them later.
+Several ways to manipulate, merge, and split channels exist, and we will explore them later.
 So for example the workflow that I described above may define an input channel containing the [fastq](https://www.wikiwand.com/en/FASTQ_format) files in input, and a channel connecting the output of `align_fastq` to the input of `gatk_call`.
 Note that channels are unidirectional: communication happens only in one direction, from outputs to inputs.
 
@@ -207,15 +209,16 @@ Now run the workflow executing from the root of your repository the following
 nextflow run main.nf
 ```
 
-You should see a bunch of information about your workflow and finally you will see the name of the file we just created, `hello_world.txt`, appear on your terminal. Note that the full path to the file will be printed in your terminal, which will look something like `/home/myname/nextflow_workdir/00/fjdanurew9gihwepw1455idusodhfweioru/hello_world.txt`.
+You should see a bunch of information about your workflow appear on your terminal followed by the name of the file we just created, `hello_world.txt`.
+Note that the full path to the file will be printed in your terminal, which will look something like `/home/myname/nextflow_workdir/00/fjdanurew9gihwepw1455idusodhfweioru/hello_world.txt`.
 
 Let's now examine the code step by step:
 
-- In `nextflow.config` we declared our working directory to be `../nextflow_workdir` with the keyword `workDir`. The working directory is where Nextflow actually stores your files during intermediate processing.
+- In `nextflow.config` we declared our working directory to be `../nextflow_workdir` with the keyword `workDir`. The working directory is where Nextflow stores your files during intermediate processing.
 - Lines starting with `//` define a comment in groovy, and they are ignored.
 - The keyword `process` defines a process, with the statement that follows defining the process name. So `process say_hello` creates a process named `say_hello`.
 - Curly braces enclose a block of code, so `process say_hello {<some code>}` is understood by Nextflow as defining `<some code>` to belong to the process named `say_hello`.
-- The keyword `output:` when used inside of a process defines the expected outputs that that process should produce. If the declared output is absent at the end of the process' execution the execution fails.
+- The keyword `output:` when used inside of a process defines the expected outputs that that process should produce. If the declared output is absent at the end of the process execution the execution fails.
 - Several types of outputs can be defined, and `path` is one of them. The keyword `path` defines what comes after it to be a file.
 - Output files are named in the output block after the `path` qualifier. They should be placed inside a string. Strings are enclosed in quotes in groovy (`"this is a string"`).
 - The `script:` keyword defines the actual command to be executed in the process. The command should be provided as a string. Since commands can be long, here a multi-line string is used. In groovy, multi-line strings are enclosed in three quotes
@@ -229,8 +232,8 @@ it is very long
     - The command that we wrote, `echo "This is the EBI predoc course" > hello_world.txt`, creates a file called `hello_world.txt` containing the string `"This is the EBI predoc course"`
 - The keyword `workflow` defines a workflow, that we left unnamed in this case. The last workflow to be written in your `main.nf` file is automatically executed by Nextflow.
     - The workflow that we defined executes the process `say_hello`
-    - The output of the process `say_hello` is captured by `say_hello.out`, which is a channel. In this case it will contain just the file `hello_world.txt`
-    - The operator `view()` just echoes to the terminal the content of the channel. In this case it prints `hello_world.txt` to our shell.
+    - The output of the process `say_hello` is captured by `say_hello.out`, which is a channel. In this case, it will contain just the file `hello_world.txt`
+    - The operator `view()` just echoes to the terminal the content of the channel. In this case, it prints `hello_world.txt` to our shell.
 
 So to put everything together, when you ran `nextflow run main.nf` Nextflow read the `main.nf` file, it found the last workflow, which we left unnamed, and executed it.
 Some additional notes:
@@ -245,6 +248,6 @@ say_hello.out
     .view()
 ```
 - Note that spaces and [tab charachters](https://www.wikiwand.com/en/Tab_key) are just for visual clarity and are not required
-- Explore the working directory `../nextflow_workdir`. It contains a directory with a strange alphanumeric name like `00/fjdanurew9gihwepw1455idusodhfweioru` (NOTE: yours will have a different name). One different directory like this is created by Nextflow for the execution of each task (a task is an instance of a process, a process is the definition itself, while a task is created each time that process is executed on different inputs).
+- Explore the working directory `../nextflow_workdir`. It contains a directory with a strange alphanumeric name like `00/fjdanurew9gihwepw1455idusodhfweioru` (NOTE: yours will have a different name). One different directory like this is created by Nextflow for the execution of each task (each time a process is executed on a set of inputs, such execution is defined as a task).
     - Inside the directory with the strange name, you will see the file that we just created, `hello_world.txt`
     - Read the content of the file with `cat hello_world.txt`. You should see `This is the EBI predoc course` in your terminal.
