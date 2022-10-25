@@ -4,14 +4,14 @@ If you are reading the advanced section of this workshop I am assuming that you 
 I am also assuming that you know how a Nextflow workflow is structured and you understand the syntax and logic used in writing and configuring Nextflow pipelines.
 For this reason, you will find the following section to be a bit different from the ones that came before.
 I will not walk you through complete reproducible examples as I did until now, but I will present small snippets of code that show some specific functionality or practice that I deemed to be useful to know.
-You are supposed to try out by yourself these ideas, and see how they can be applied to your own use-case.
+You are supposed to try out by yourself these ideas, and see how they can be applied to your own use case.
 
 ## Process inputs
 
 The input(s) used by a process is defined in its `input:` block, as we saw before.
 The input(s) specified can be of several types.
 We already saw in the basic section of this workshop the `path` and `val` input qualifiers.
-We will see them more in details now, as well as explore some additional input qualifiers.
+We will see them more in detail now, as well as explore some additional input qualifiers.
 
 ### Input of type `val`
 
@@ -64,7 +64,7 @@ workflow {
 
 ### Input of type `tuple`
 
-An input of type `tuple` can be used when the channel given in input to the process emits lists of elements instead than single elements.
+An input of type `tuple` can be used when the channel given in input to the process emits lists of elements instead of single elements.
 The elements contained in the list can be of any type, like for example `val` or `path`.
 
 As an example, the following code appends the value "Good morning"  to the file `/path/to/a/file.txt`.
@@ -125,7 +125,7 @@ workflow {
 }
 ```
 
-In this example we see the same process as before, but this time we declared an output block.
+In this example, we see the same process as before, but this time we declared an output block.
 The output is of type `tuple`, with two elements contained in it (one of type `path` and the other of type `val`).
 After execution of the process `append_value_to_file`, the channel `append_value_to_file.out` will contain a list of two elements.
 The first element will be the filename given in input, and the second element will be the value given in input.
@@ -138,8 +138,8 @@ If you want to test out some Groovy code interactively, head off to [this websit
 
 ### Closures
 
-We already introduced closures in previous section, where we used them in conjunction with the map operator.
-In general, we can consider a closure as a unnamed function, defined as a statement enclosed in curly brackets.
+We already introduced closures in previous sections, where we used them in conjunction with the map operator.
+In general, we can consider a closure as an unnamed function, defined as a statement enclosed in curly brackets.
 The following is a closure
 
 ```groovy
@@ -157,7 +157,7 @@ For example:
 }
 ```
 
-In the above defined example the closure expects two inputs, (`x,y ->`), some operation is performed on them (`z = x + y`), and a value is explicitly returned (`return z`).
+In the above-defined example the closure expects two inputs, (`x,y ->`), some operation is performed on them (`z = x + y`), and a value is explicitly returned (`return z`).
 The definition of inputs is optional, and indeed it is usually skipped.
 If an input is not defined, the implicit variable `it` is used to refer to any input passed to the closure.
 So we could write the following, assuming that a tuple of two elements is passed as an input to the closure
@@ -176,7 +176,7 @@ In this case, the last evaluated expression is returned.
 { it[0] + it[1] }
 ```
 
-As shown in the previous example, closures can be split on multiple lines or they can be written on a single line.
+As shown in the previous example, closures can be split into multiple lines or they can be written on a single line.
 They can contain any valid Groovy code statement.
 For example:
 
@@ -210,12 +210,12 @@ In case when the return value desired for the `TRUE` case is the statement itsel
 y = my_list ?: "list is empty"
 ```
 
-In the latter case the variable `y` will contain the content of `my_list` if this is not empty, otherwise the string `list is empty`.
+In the latter case, the variable `y` will contain the content of the list`my_list` if this is not empty, and it will contain the string `list is empty` otherwise.
 
 ## Channel factories
 
 Besides the `Channel.fromPath` and `Channel.value` channel factories that we saw before, another useful Channel factory (especially for debugging purposes) is `Channel.of`.
-`Channel.of` allows you tu put into a channel any Groovy data structure like lists, hash maps, and so on.
+`Channel.of` allows you to put into a channel any Groovy data structure like lists, hash maps, and so on.
 So takes as an example the following:
 
 ```groovy
@@ -232,7 +232,7 @@ What especially differentiates `Channel.of` from  `Channel.value` is that the la
 ## Operators
 
 In the basic section of this workshop, we introduced a few Nextflow operators: `map`, `splitCsv`, `view`.
-Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with a more complex logic.Note that this is not an exhaustive list.
+Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with more complex logic. Note that this is not an exhaustive list.
 An exhaustive list can be found [here](https://www.nextflow.io/docs/latest/operator.html#).
 
 
@@ -274,22 +274,23 @@ GB
 
 ### The `set` operator
 
-The `set` operator creates assigns a name to the channel, given as a closure argument.
+The `set` operator assigns a name to a channel.
+The name must be given as a closure argument.
 
 ```
 Channel.of(1, 2, 3).set{ my_ch }
 ```
 
-The above snippets creates a channel called `my_ch` with the values specified.
+The above snippet creates a channel called `my_ch` with the values specified.
 
 ### The `splitCsv` operator
 
 The `splitCsv` operator is usually used to process a sample sheet.
-It takes a `path` channel containing a csv file and emits each line of the csv as a list of values (or as a hash map if `header: true` is specified).
+It takes a `path` channel containing a CSV file and emits each line of the CSV as a list of values (or as a hash map if `header: true` is specified).
 
 ### The `flatten` operator
 
-The `flatten` operator will take all the elements in a channel and split them in single elements.
+The `flatten` operator will take all the elements in a channel and split them into single elements.
 If the channel emits lists or nested lists, they are flattened and each element is emitted independently.
 
 ```groovy
@@ -461,7 +462,7 @@ Here just a few implicit variables are presented. For a full description visit [
 All of the process implicit variables are part of the `task` dictionary.
 
 - `task.attempt`: the number of times the task has been retried because of errors (when using `errorStrategy "retry"`)
-- `task.hash`: the hash values of the taks used to define its working directory
+- `task.hash`: the hash values of the task (this is used to define the task's working directory)
 - `task.processes`: the name of the process
 - `task.name`: the name of the task (composed of process name and inputs)
 - `task.exitStatus`: the exit code of the task
@@ -494,7 +495,7 @@ process {
 
 The `container` directive defines the container used to run the script block.
 This can be a Docker container, a Singularity container, or other kinds of containers (see [here](https://www.nextflow.io/docs/latest/container.html) for more).
-The container runtime to be used is usually defined in defined in the `nextflow.config` file.
+The container runtime to be used is usually defined in the `nextflow.config` file.
 The container can be local or hosted in a container registry like DockerHub.
 
 ```
@@ -530,7 +531,7 @@ process {
 ### The `label` directive
 
 The `label` directive is used to apply a common set of configurations to a set of processes.
-This allows all the configurations to be defined centrally in `nextflow.config`, instead than being hard-coded in each process definition.
+This allows all the configurations to be defined centrally in `nextflow.config`, instead of being hard-coded in each process definition.
 
 
 ```groovy
@@ -564,7 +565,7 @@ withLabel:process_long {
 ### The `debug` directive
 
 The `debug` directive can be set to the boolean values `true` or `false`.
-If set to `true`, the standard output of the process is shown on the command line during workflows execution.
+If set to `true`, the standard output of the process is shown on the command line during workflow execution.
 As the name suggests, this is useful for debugging particular processes.
 
 ```groovy
@@ -581,7 +582,7 @@ process do_something {
 ### The `cache` directive
 
 The `cache` directive controls the behaviour of the Nextflow resume system.
-If cache is set to `false`, the process is not cached and it is executed *de novo* each time, even if `resume` is set to `true` globally.
+If `cache` is set to `false`, the process is not cached and it is executed *de novo* each time, even if `resume` is set to `true` globally.
 
 ```groovy
 process do_something {
@@ -609,7 +610,7 @@ process do_something {
 ```
 
 It is also possible to use a closure as an argument for the `errorStrategy` directive.
-This allows to obtain a different behaviour with different exit codes.
+This allows us to obtain a different exit behaviour with different exit codes.
 Combining the "retry" `errorStrategy` with dynamic resource allocation we can obtain a process that when fails with certain exit codes (for example corresponding to insufficient memory) is retried with more resources.
 
 ```groovy
@@ -623,13 +624,13 @@ process do_something {
 }
 ```
 
-Note that the exit codes are platform-dependent so are best defined on a platform dependent basis instead than being hard-coded.
+Note that the exit codes are platform-dependent so are best defined on a platform-dependent basis instead of being hard-coded.
 
 ### The `publishDir` directive
 
 The `publishDir` directive defines where to copy the outputs of a process following successful execution.
 This is typically used with the final outputs of a workflow that are of interest for further analysis.
-Using the `publishDir` directory, we can obtain all our outputs in a organised directory structure.
+Using the `publishDir` directory, we can obtain all our outputs in an organised directory structure.
 
 ```groovy
 process do_something {
@@ -647,7 +648,7 @@ process do_something {
 
 ### The `executor` and `queue` directives
 
-The `executor` directive allows to specify the executor to use for a given process.
+The `executor` directive allows specifying the executor that should be used for the execution of each process.
 This can be "local" (the default) for local execution, "lsf" for using the batch scheduler [IBM Spectrum LSF](https://www.ibm.com/docs/en/spectrum-lsf), or other values for several other batch schedulers.
 It is even possible to use cloud infrastructures such as [AWS](https://aws.amazon.com/?nc2=h_lg), [Microsoft Azure](https://azure.microsoft.com/en-gb/), or [Google Cloud](https://cloud.google.com/).
 
@@ -690,7 +691,7 @@ process do_something {
 ## Advanced workflow configuration
 
 We have already explored one of the main locations where Nextflow configurations can be set: the `nextflow.config` file.
-Nextflow actually provides several systems for configuring a workflow, each suited to a specific use-case.
+Nextflow actually provides several systems for configuring a workflow, each suited to a specific use case.
 We will explore them in this section, together with configuration profiles.
 
 ### Configuration files and command line parameters
@@ -698,7 +699,7 @@ We will explore them in this section, together with configuration profiles.
 Configuration files can be found in canonical locations, that Nextflow checks automatically.
 Alternatively, it is possible to manually load a configuration file in a custom location when running a workflow, or pass configuration parameters on the command line itself.
 
-A rigid hierarchy of configurations applies, so that in case of conflicting configurations it is predictable which one will be actually used.
+A rigid hierarchy of configurations is enforced so that in case of conflicting configurations it is predictable which one will be actually used.
 The following configuration modes go from highest to lowest priority:
 
 - Command line parameters (`--some_param`)
@@ -722,17 +723,17 @@ Nextflow runtime parameters are used to modify the behaviour of Nextflow itself 
 #### The `nextflow.config` file
 
 This file is automatically sourced by Nextflow and should be placed in the same directory as `main.nf` (another `nextflow.config` file can also be present in the launch directory, but this is rarely used in my experience).
-It is typically used to set workflow-specific configurations that do not depend on the compute environment where the workflow is run, nor on the specific inputs used.
+It is typically used to set workflow-specific configurations that do not depend on the computing environment where the workflow is run, nor on the specific inputs used.
 
 For example, the `nextflow.config` file can be used to set process software dependencies with a `withLabel` code block.
-Another typically usage is that of setting default values for parameters that can be overridden on the command line (as part of a `params` block).
+Another typical usage is that of setting default values for parameters that can be overridden on the command line (as part of a `params` block).
 Profiles corresponding to different use-case scenarios are also often included.
 
 #### The `$HOME/.nextflow/config` file
 
-The `$HOME/.nextflow/config` file is typically used for compute environment-specific configurations, since it is available to all the workflows run on a given system.
+The `$HOME/.nextflow/config` file is typically used for computing environment-specific configurations since it is available to all the workflows run on a given system.
 
-So for example we may want our workflows to behave differently on our local laptop versus on a high performance cluster.
+So for example we may want our workflows to behave differently on our local laptop versus on a high-performance cluster.
 On my own `$HOME/.nextflow/config` on the EBI cluster, I define for example when different queues should be used, I set the executor to IBM Spectrum LSF, and I set the path for the input and output directories.
 
 
@@ -749,9 +750,9 @@ Note that parameters set in this way have the lowest priority.
 
 ### Configuration profiles
 
-Configuration profiles are set of configurations that have a collective name and can be optionally activated on the command line.
+Configuration profiles are sets of configurations that have a collective name and can be optionally activated on the command line.
 They can be written in any of the configuration files we explored before.
-The following code defines a configuration profiles named `cluster`.
+The following code defines a configuration profile named `cluster`.
 
 ```groovy
 profiles {
@@ -769,7 +770,7 @@ Once activated, all the configurations contained in it are applied.
 Several profiles can be defined in the `profiles` block.
 If several profiles need to be activated at the same time, this can be done by concatenating them with commas after the `-profile` option (so if the profiles `foo` and `bar` need to be activated at once, I can write `-profile foo,bar`).
 
-Profiles are particularly useful to set compute environments, software environments (i.e. use conda versus Docker versus Singularity), and particular running modes (think of a workflow that can perform several things, and the profile is used to choose what the workflow should do).
+Profiles are particularly useful to set compute environments, software environments (i.e. use Conda versus Docker versus Singularity), and particular running modes (think of a workflow that can perform several things, and the profile is used to choose what the workflow should do).
 
 ## Sub-workflows
 
@@ -806,8 +807,8 @@ workflow {
 }
 ```
 
-Sub-workflows can have an `input`, a `main`,and a `output` block.
-The `input` block defines the name of one or more channels that are passed as an input to the sub-workflows.
+Sub-workflows can have an `input`, a `main`, and an `output` block.
+The `input` block defines the name of one or more channels that are passed as inputs to the sub-workflows.
 The `output` block can define a channel accessible from `<WORKFLOW_NAME>.out` after execution.
 The `main` block defines the actual workflow logic in terms of processes to be run and channel manipulations.
 
@@ -827,7 +828,7 @@ workflow {
 
 ## Nextflow Tower
 
-[Nextflow Tower](https://cloud.tower.nf/) is a centralised web interface that allows to monitor and launch your Nextflow workflows.
+[Nextflow Tower](https://cloud.tower.nf/) is a centralised web interface that allows the monitoring and submission of Nextflow workflows.
 It is possible to use the Nextflow Tower website (for free) or also on-premises solution are available for institutions (at a price).
 
 Nextflow Tower communicates with the execution environment via [SSH](https://www.wikiwand.com/en/Secure_Shell) access (if the host is reachable via SSH), or via a ["Tower agent"](https://help.tower.nf/22.3/agent/) that is run on the execution environment itself.
@@ -840,18 +841,18 @@ You can have a look at an example of the Nextflow Tower interface here below.
 
 # Advanced challenge
 
-You are given a set of [tsv files](https://www.wikiwand.com/en/Tab-separated_values).
+You are given a set of [TSV files](https://www.wikiwand.com/en/Tab-separated_values).
 Each file contains a single column with the header "Entry" containing a set of [UniProt](https://www.uniprot.org/) protein IDs belonging to a single species (different for each file).
-You are given a sample sheet containing a list of animal species and the path to the tsv file containing UniProt IDs for that species.
-Finally, you are given a csv file containing all the natural amino acids found in proteins with their one-letter codes, three-letter codes, common names, and whether they have a polar or apolar side chain.
+You are given a sample sheet containing a list of animal species and the path to the TSV file containing UniProt IDs for that species.
+Finally, you are given a CSV file containing all the natural amino acids found in proteins with their one-letter codes, three-letter codes, common names, and whether they have a polar or apolar side chain.
 Your goal is to produce a box plot showing, for each species, the distribution of the fraction of polar versus apolar amino acids (across the proteins provided).
-You should produce a plot like the one following and place it in the folder `../nextflow_output/challange` (relative to your project directory).
+You should produce a plot like the one following and place it in the folder `../nextflow_output/challenge` (relative to your project directory).
 
 ![](images/final_plot.png)
 
 Your input files will be created in the folder `../nextflow_inputs` (after running the commands in the [Setup] section), and you can explore them manually to see their structure.
 You may use any programming language for the task, but you should embed any computational step in a Nextflow process.
-It is preferable if you split the work in as many independent processes as possible, instead than doing everything in a monolithic process.
+It is preferable if you split the work into as many independent processes as possible, instead of doing everything in a monolithic process.
 
 **Hint:** you can retrieve protein sequences from UniProt programmatically by running the following (replacing `<uniprot-id>` with the actual UniProt ID of the protein you want to download)
 
