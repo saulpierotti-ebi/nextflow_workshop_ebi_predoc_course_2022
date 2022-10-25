@@ -246,13 +246,13 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
 I am also assuming that you know how a Nextflow workflow is structured and you understand the syntax and logic used in writing and configuring Nextflow pipelines.
 For this reason, you will find the following section to be a bit different from the ones that came before.
 I will not walk you through complete reproducible examples as I did until now, but I will present small snippets of code that show some specific functionality or practice that I deemed to be useful to know.
-You are supposed to try out by yourself these ideas, and see how they can be applied to your own use-case.</p>
+You are supposed to try out by yourself these ideas, and see how they can be applied to your own use case.</p>
 <div id="process-inputs" class="section level2 hasAnchor" number="4.1">
 <h2><span class="header-section-number">4.1</span> Process inputs<a href="advanced-features.html#process-inputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The input(s) used by a process is defined in its <code>input:</code> block, as we saw before.
 The input(s) specified can be of several types.
 We already saw in the basic section of this workshop the <code>path</code> and <code>val</code> input qualifiers.
-We will see them more in details now, as well as explore some additional input qualifiers.</p>
+We will see them more in detail now, as well as explore some additional input qualifiers.</p>
 <div id="input-of-type-val" class="section level3 hasAnchor" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Input of type <code>val</code><a href="advanced-features.html#input-of-type-val" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>An input of type <code>val</code> just defines a value, that is made available to the process as a variable.</p>
@@ -296,7 +296,7 @@ We will see them more in details now, as well as explore some additional input q
 </div>
 <div id="input-of-type-tuple" class="section level3 hasAnchor" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Input of type <code>tuple</code><a href="advanced-features.html#input-of-type-tuple" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>An input of type <code>tuple</code> can be used when the channel given in input to the process emits lists of elements instead than single elements.
+<p>An input of type <code>tuple</code> can be used when the channel given in input to the process emits lists of elements instead of single elements.
 The elements contained in the list can be of any type, like for example <code>val</code> or <code>path</code>.</p>
 <p>As an example, the following code appends the value “Good morning” to the file <code>/path/to/a/file.txt</code>.</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb69-1"><a href="advanced-features.html#cb69-1" aria-hidden="true" tabindex="-1"></a>process append_value_to_file <span class="op">{</span></span>
@@ -348,7 +348,7 @@ Other output types exist in Nextflow, but we will not treat them here.</p>
 <span id="cb70-21"><a href="advanced-features.html#cb70-21" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Channel</span><span class="op">.</span><span class="fu">of</span><span class="op">(</span> <span class="op">[</span> <span class="st">&quot;Good morning&quot;</span><span class="op">,</span> <span class="st">&quot;/path/to/a/file.txt&quot;</span> <span class="op">]</span> <span class="op">).</span><span class="fu">set</span><span class="op">{</span> my_ch <span class="op">}</span></span>
 <span id="cb70-22"><a href="advanced-features.html#cb70-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">append_value_to_file</span><span class="op">(</span> my_ch <span class="op">)</span></span>
 <span id="cb70-23"><a href="advanced-features.html#cb70-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>In this example we see the same process as before, but this time we declared an output block.
+<p>In this example, we see the same process as before, but this time we declared an output block.
 The output is of type <code>tuple</code>, with two elements contained in it (one of type <code>path</code> and the other of type <code>val</code>).
 After execution of the process <code>append_value_to_file</code>, the channel <code>append_value_to_file.out</code> will contain a list of two elements.
 The first element will be the filename given in input, and the second element will be the value given in input.
@@ -360,8 +360,8 @@ Note that the file produced in output by the process will not be the same file g
 If you want to test out some Groovy code interactively, head off to <a href="https://groovyconsole.appspot.com/">this website</a> and paste the code snippets that we will introduce.</p>
 <div id="closures" class="section level3 hasAnchor" number="4.3.1">
 <h3><span class="header-section-number">4.3.1</span> Closures<a href="advanced-features.html#closures" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We already introduced closures in previous section, where we used them in conjunction with the map operator.
-In general, we can consider a closure as a unnamed function, defined as a statement enclosed in curly brackets.
+<p>We already introduced closures in previous sections, where we used them in conjunction with the map operator.
+In general, we can consider a closure as an unnamed function, defined as a statement enclosed in curly brackets.
 The following is a closure</p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb71-1"><a href="advanced-features.html#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span> it<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">}</span></span></code></pre></div>
 <p>We can manually define the inputs and outputs of a closure.
@@ -371,7 +371,7 @@ For example:</p>
 <span id="cb72-3"><a href="advanced-features.html#cb72-3" aria-hidden="true" tabindex="-1"></a>  z <span class="op">=</span> x <span class="op">+</span> y</span>
 <span id="cb72-4"><a href="advanced-features.html#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> z</span>
 <span id="cb72-5"><a href="advanced-features.html#cb72-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>In the above defined example the closure expects two inputs, (<code>x,y -&gt;</code>), some operation is performed on them (<code>z = x + y</code>), and a value is explicitly returned (<code>return z</code>).
+<p>In the above-defined example the closure expects two inputs, (<code>x,y -&gt;</code>), some operation is performed on them (<code>z = x + y</code>), and a value is explicitly returned (<code>return z</code>).
 The definition of inputs is optional, and indeed it is usually skipped.
 If an input is not defined, the implicit variable <code>it</code> is used to refer to any input passed to the closure.
 So we could write the following, assuming that a tuple of two elements is passed as an input to the closure</p>
@@ -382,7 +382,7 @@ So we could write the following, assuming that a tuple of two elements is passed
 <p>What’s more, it is possible to also omit the <code>return</code> statement from a closure.
 In this case, the last evaluated expression is returned.</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb74-1"><a href="advanced-features.html#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span> it<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">+</span> it<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">}</span></span></code></pre></div>
-<p>As shown in the previous example, closures can be split on multiple lines or they can be written on a single line.
+<p>As shown in the previous example, closures can be split into multiple lines or they can be written on a single line.
 They can contain any valid Groovy code statement.
 For example:</p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb75-1"><a href="advanced-features.html#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span> <span class="cf">if</span> <span class="op">(</span> it <span class="op">&lt;</span> <span class="dv">1</span> <span class="op">)</span> <span class="op">{</span><span class="st">&quot;small&quot;</span><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span> <span class="st">&quot;big&quot;</span> <span class="op">}</span> <span class="op">}</span></span></code></pre></div>
@@ -401,13 +401,13 @@ This can be written, for example, as follows.</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb77-1"><a href="advanced-features.html#cb77-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="op">(</span> x <span class="op">&lt;</span> <span class="dv">1</span> <span class="op">)</span> <span class="op">?</span> <span class="st">&quot;small&quot;</span> <span class="op">:</span> <span class="st">&quot;big&quot;</span></span></code></pre></div>
 <p>In case when the return value desired for the <code>TRUE</code> case is the statement itself, the Elvis operator can be used</p>
 <div class="sourceCode" id="cb78"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb78-1"><a href="advanced-features.html#cb78-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> my_list <span class="op">?:</span> <span class="st">&quot;list is empty&quot;</span></span></code></pre></div>
-<p>In the latter case the variable <code>y</code> will contain the content of <code>my_list</code> if this is not empty, otherwise the string <code>list is empty</code>.</p>
+<p>In the latter case, the variable <code>y</code> will contain the content of the list<code>my_list</code> if this is not empty, and it will contain the string <code>list is empty</code> otherwise.</p>
 </div>
 </div>
 <div id="channel-factories" class="section level2 hasAnchor" number="4.4">
 <h2><span class="header-section-number">4.4</span> Channel factories<a href="advanced-features.html#channel-factories" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Besides the <code>Channel.fromPath</code> and <code>Channel.value</code> channel factories that we saw before, another useful Channel factory (especially for debugging purposes) is <code>Channel.of</code>.
-<code>Channel.of</code> allows you tu put into a channel any Groovy data structure like lists, hash maps, and so on.
+<code>Channel.of</code> allows you to put into a channel any Groovy data structure like lists, hash maps, and so on.
 So takes as an example the following:</p>
 <div class="sourceCode" id="cb79"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb79-1"><a href="advanced-features.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Channel</span><span class="op">.</span><span class="fu">of</span><span class="op">(</span></span>
 <span id="cb79-2"><a href="advanced-features.html#cb79-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span><span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;EBI&quot;</span><span class="op">,</span> <span class="st">&quot;type&quot;</span><span class="op">:</span> <span class="st">&quot;institute&quot;</span><span class="op">,</span> <span class="st">&quot;location&quot;</span><span class="op">:</span> <span class="st">&quot;UK&quot;</span><span class="op">],</span></span>
@@ -419,7 +419,7 @@ What especially differentiates <code>Channel.of</code> from <code>Channel.value<
 <div id="operators" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> Operators<a href="advanced-features.html#operators" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In the basic section of this workshop, we introduced a few Nextflow operators: <code>map</code>, <code>splitCsv</code>, <code>view</code>.
-Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with a more complex logic.Note that this is not an exhaustive list.
+Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with more complex logic. Note that this is not an exhaustive list.
 An exhaustive list can be found <a href="https://www.nextflow.io/docs/latest/operator.html#">here</a>.</p>
 <div id="the-view-operator" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> The <code>view</code> operator<a href="advanced-features.html#the-view-operator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -445,18 +445,19 @@ GB</code></pre>
 </div>
 <div id="the-set-operator" class="section level3 hasAnchor" number="4.5.3">
 <h3><span class="header-section-number">4.5.3</span> The <code>set</code> operator<a href="advanced-features.html#the-set-operator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The <code>set</code> operator creates assigns a name to the channel, given as a closure argument.</p>
+<p>The <code>set</code> operator assigns a name to a channel.
+The name must be given as a closure argument.</p>
 <pre><code>Channel.of(1, 2, 3).set{ my_ch }</code></pre>
-<p>The above snippets creates a channel called <code>my_ch</code> with the values specified.</p>
+<p>The above snippet creates a channel called <code>my_ch</code> with the values specified.</p>
 </div>
 <div id="the-splitcsv-operator" class="section level3 hasAnchor" number="4.5.4">
 <h3><span class="header-section-number">4.5.4</span> The <code>splitCsv</code> operator<a href="advanced-features.html#the-splitcsv-operator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <code>splitCsv</code> operator is usually used to process a sample sheet.
-It takes a <code>path</code> channel containing a csv file and emits each line of the csv as a list of values (or as a hash map if <code>header: true</code> is specified).</p>
+It takes a <code>path</code> channel containing a CSV file and emits each line of the CSV as a list of values (or as a hash map if <code>header: true</code> is specified).</p>
 </div>
 <div id="the-flatten-operator" class="section level3 hasAnchor" number="4.5.5">
 <h3><span class="header-section-number">4.5.5</span> The <code>flatten</code> operator<a href="advanced-features.html#the-flatten-operator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The <code>flatten</code> operator will take all the elements in a channel and split them in single elements.
+<p>The <code>flatten</code> operator will take all the elements in a channel and split them into single elements.
 If the channel emits lists or nested lists, they are flattened and each element is emitted independently.</p>
 <div class="sourceCode" id="cb85"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb85-1"><a href="advanced-features.html#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Channel</span><span class="op">.</span><span class="fu">of</span><span class="op">(</span></span>
 <span id="cb85-2"><a href="advanced-features.html#cb85-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">],</span></span>
@@ -581,7 +582,7 @@ They can be accessed to modify the execution of processes and workflows accordin
 <p>All of the process implicit variables are part of the <code>task</code> dictionary.</p>
 <ul>
 <li><code>task.attempt</code>: the number of times the task has been retried because of errors (when using <code>errorStrategy "retry"</code>)</li>
-<li><code>task.hash</code>: the hash values of the taks used to define its working directory</li>
+<li><code>task.hash</code>: the hash values of the task (this is used to define the task’s working directory)</li>
 <li><code>task.processes</code>: the name of the process</li>
 <li><code>task.name</code>: the name of the task (composed of process name and inputs)</li>
 <li><code>task.exitStatus</code>: the exit code of the task</li>
@@ -610,7 +611,7 @@ Even when using the faster <code>mamba</code> solver instead than <code>conda</c
 <h3><span class="header-section-number">4.7.2</span> The <code>container</code> directive<a href="advanced-features.html#the-container-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <code>container</code> directive defines the container used to run the script block.
 This can be a Docker container, a Singularity container, or other kinds of containers (see <a href="https://www.nextflow.io/docs/latest/container.html">here</a> for more).
-The container runtime to be used is usually defined in defined in the <code>nextflow.config</code> file.
+The container runtime to be used is usually defined in the <code>nextflow.config</code> file.
 The container can be local or hosted in a container registry like DockerHub.</p>
 <pre><code>process {
   container &quot;docker://saulpierottiebi/nvtop&quot;
@@ -639,7 +640,7 @@ The latter expression can also be used in closures to dynamically compute resour
 <div id="the-label-directive" class="section level3 hasAnchor" number="4.7.4">
 <h3><span class="header-section-number">4.7.4</span> The <code>label</code> directive<a href="advanced-features.html#the-label-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <code>label</code> directive is used to apply a common set of configurations to a set of processes.
-This allows all the configurations to be defined centrally in <code>nextflow.config</code>, instead than being hard-coded in each process definition.</p>
+This allows all the configurations to be defined centrally in <code>nextflow.config</code>, instead of being hard-coded in each process definition.</p>
 <div class="sourceCode" id="cb102"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb102-1"><a href="advanced-features.html#cb102-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
 <span id="cb102-2"><a href="advanced-features.html#cb102-2" aria-hidden="true" tabindex="-1"></a>  label <span class="st">&quot;process_long&quot;</span></span>
 <span id="cb102-3"><a href="advanced-features.html#cb102-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -664,7 +665,7 @@ This allows all the configurations to be defined centrally in <code>nextflow.con
 <div id="the-debug-directive" class="section level3 hasAnchor" number="4.7.5">
 <h3><span class="header-section-number">4.7.5</span> The <code>debug</code> directive<a href="advanced-features.html#the-debug-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <code>debug</code> directive can be set to the boolean values <code>true</code> or <code>false</code>.
-If set to <code>true</code>, the standard output of the process is shown on the command line during workflows execution.
+If set to <code>true</code>, the standard output of the process is shown on the command line during workflow execution.
 As the name suggests, this is useful for debugging particular processes.</p>
 <div class="sourceCode" id="cb104"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb104-1"><a href="advanced-features.html#cb104-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
 <span id="cb104-2"><a href="advanced-features.html#cb104-2" aria-hidden="true" tabindex="-1"></a>  debug <span class="kw">true</span></span>
@@ -678,7 +679,7 @@ As the name suggests, this is useful for debugging particular processes.</p>
 <div id="the-cache-directive" class="section level3 hasAnchor" number="4.7.6">
 <h3><span class="header-section-number">4.7.6</span> The <code>cache</code> directive<a href="advanced-features.html#the-cache-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <code>cache</code> directive controls the behaviour of the Nextflow resume system.
-If cache is set to <code>false</code>, the process is not cached and it is executed <em>de novo</em> each time, even if <code>resume</code> is set to <code>true</code> globally.</p>
+If <code>cache</code> is set to <code>false</code>, the process is not cached and it is executed <em>de novo</em> each time, even if <code>resume</code> is set to <code>true</code> globally.</p>
 <div class="sourceCode" id="cb105"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb105-1"><a href="advanced-features.html#cb105-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
 <span id="cb105-2"><a href="advanced-features.html#cb105-2" aria-hidden="true" tabindex="-1"></a>  cache <span class="kw">false</span></span>
 <span id="cb105-3"><a href="advanced-features.html#cb105-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -699,7 +700,7 @@ Possible values are “terminate”, “retry”, “finish”, and “ignore”
 <span id="cb106-6"><a href="advanced-features.html#cb106-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
 <span id="cb106-7"><a href="advanced-features.html#cb106-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>It is also possible to use a closure as an argument for the <code>errorStrategy</code> directive.
-This allows to obtain a different behaviour with different exit codes.
+This allows us to obtain a different exit behaviour with different exit codes.
 Combining the “retry” <code>errorStrategy</code> with dynamic resource allocation we can obtain a process that when fails with certain exit codes (for example corresponding to insufficient memory) is retried with more resources.</p>
 <div class="sourceCode" id="cb107"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb107-1"><a href="advanced-features.html#cb107-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
 <span id="cb107-2"><a href="advanced-features.html#cb107-2" aria-hidden="true" tabindex="-1"></a>  errorStrategy <span class="op">{</span> task<span class="op">.</span>exitStatus <span class="op">==</span> <span class="dv">130</span> <span class="op">?</span> <span class="st">&quot;retry&quot;</span> <span class="op">:</span> <span class="st">&quot;terminate&quot;</span> <span class="op">}</span></span>
@@ -709,13 +710,13 @@ Combining the “retry” <code>errorStrategy</code> with dynamic resource alloc
 <span id="cb107-6"><a href="advanced-features.html#cb107-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
 <span id="cb107-7"><a href="advanced-features.html#cb107-7" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
 <span id="cb107-8"><a href="advanced-features.html#cb107-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Note that the exit codes are platform-dependent so are best defined on a platform dependent basis instead than being hard-coded.</p>
+<p>Note that the exit codes are platform-dependent so are best defined on a platform-dependent basis instead of being hard-coded.</p>
 </div>
 <div id="the-publishdir-directive" class="section level3 hasAnchor" number="4.7.8">
 <h3><span class="header-section-number">4.7.8</span> The <code>publishDir</code> directive<a href="advanced-features.html#the-publishdir-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <code>publishDir</code> directive defines where to copy the outputs of a process following successful execution.
 This is typically used with the final outputs of a workflow that are of interest for further analysis.
-Using the <code>publishDir</code> directory, we can obtain all our outputs in a organised directory structure.</p>
+Using the <code>publishDir</code> directory, we can obtain all our outputs in an organised directory structure.</p>
 <div class="sourceCode" id="cb108"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb108-1"><a href="advanced-features.html#cb108-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
 <span id="cb108-2"><a href="advanced-features.html#cb108-2" aria-hidden="true" tabindex="-1"></a>  publishDir <span class="st">&quot;/my/output/dir&quot;</span></span>
 <span id="cb108-3"><a href="advanced-features.html#cb108-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -730,7 +731,7 @@ Using the <code>publishDir</code> directory, we can obtain all our outputs in a 
 </div>
 <div id="the-executor-and-queue-directives" class="section level3 hasAnchor" number="4.7.9">
 <h3><span class="header-section-number">4.7.9</span> The <code>executor</code> and <code>queue</code> directives<a href="advanced-features.html#the-executor-and-queue-directives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The <code>executor</code> directive allows to specify the executor to use for a given process.
+<p>The <code>executor</code> directive allows specifying the executor that should be used for the execution of each process.
 This can be “local” (the default) for local execution, “lsf” for using the batch scheduler <a href="https://www.ibm.com/docs/en/spectrum-lsf">IBM Spectrum LSF</a>, or other values for several other batch schedulers.
 It is even possible to use cloud infrastructures such as <a href="https://aws.amazon.com/?nc2=h_lg">AWS</a>, <a href="https://azure.microsoft.com/en-gb/">Microsoft Azure</a>, or <a href="https://cloud.google.com/">Google Cloud</a>.</p>
 <p>Using executors other than the “local” executor is essential for real-world workflows, where the computational resources required often vastly exceed those of a single laptop or even server.</p>
@@ -765,13 +766,13 @@ The custom variables are made available like any other <code>task</code> implici
 <div id="advanced-workflow-configuration" class="section level2 hasAnchor" number="4.8">
 <h2><span class="header-section-number">4.8</span> Advanced workflow configuration<a href="advanced-features.html#advanced-workflow-configuration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We have already explored one of the main locations where Nextflow configurations can be set: the <code>nextflow.config</code> file.
-Nextflow actually provides several systems for configuring a workflow, each suited to a specific use-case.
+Nextflow actually provides several systems for configuring a workflow, each suited to a specific use case.
 We will explore them in this section, together with configuration profiles.</p>
 <div id="configuration-files-and-command-line-parameters" class="section level3 hasAnchor" number="4.8.1">
 <h3><span class="header-section-number">4.8.1</span> Configuration files and command line parameters<a href="advanced-features.html#configuration-files-and-command-line-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Configuration files can be found in canonical locations, that Nextflow checks automatically.
 Alternatively, it is possible to manually load a configuration file in a custom location when running a workflow, or pass configuration parameters on the command line itself.</p>
-<p>A rigid hierarchy of configurations applies, so that in case of conflicting configurations it is predictable which one will be actually used.
+<p>A rigid hierarchy of configurations is enforced so that in case of conflicting configurations it is predictable which one will be actually used.
 The following configuration modes go from highest to lowest priority:</p>
 <ul>
 <li>Command line parameters (<code>--some_param</code>)</li>
@@ -794,15 +795,15 @@ Nextflow runtime parameters are used to modify the behaviour of Nextflow itself 
 <div id="the-nextflow.config-file" class="section level4 hasAnchor" number="4.8.1.2">
 <h4><span class="header-section-number">4.8.1.2</span> The <code>nextflow.config</code> file<a href="advanced-features.html#the-nextflow.config-file" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>This file is automatically sourced by Nextflow and should be placed in the same directory as <code>main.nf</code> (another <code>nextflow.config</code> file can also be present in the launch directory, but this is rarely used in my experience).
-It is typically used to set workflow-specific configurations that do not depend on the compute environment where the workflow is run, nor on the specific inputs used.</p>
+It is typically used to set workflow-specific configurations that do not depend on the computing environment where the workflow is run, nor on the specific inputs used.</p>
 <p>For example, the <code>nextflow.config</code> file can be used to set process software dependencies with a <code>withLabel</code> code block.
-Another typically usage is that of setting default values for parameters that can be overridden on the command line (as part of a <code>params</code> block).
+Another typical usage is that of setting default values for parameters that can be overridden on the command line (as part of a <code>params</code> block).
 Profiles corresponding to different use-case scenarios are also often included.</p>
 </div>
 <div id="the-home.nextflowconfig-file" class="section level4 hasAnchor" number="4.8.1.3">
 <h4><span class="header-section-number">4.8.1.3</span> The <code>$HOME/.nextflow/config</code> file<a href="advanced-features.html#the-home.nextflowconfig-file" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The <code>$HOME/.nextflow/config</code> file is typically used for compute environment-specific configurations, since it is available to all the workflows run on a given system.</p>
-<p>So for example we may want our workflows to behave differently on our local laptop versus on a high performance cluster.
+<p>The <code>$HOME/.nextflow/config</code> file is typically used for computing environment-specific configurations since it is available to all the workflows run on a given system.</p>
+<p>So for example we may want our workflows to behave differently on our local laptop versus on a high-performance cluster.
 On my own <code>$HOME/.nextflow/config</code> on the EBI cluster, I define for example when different queues should be used, I set the executor to IBM Spectrum LSF, and I set the path for the input and output directories.</p>
 </div>
 <div id="custom-configuration-files" class="section level4 hasAnchor" number="4.8.1.4">
@@ -819,9 +820,9 @@ Note that parameters set in this way have the lowest priority.</p>
 </div>
 <div id="configuration-profiles" class="section level3 hasAnchor" number="4.8.2">
 <h3><span class="header-section-number">4.8.2</span> Configuration profiles<a href="advanced-features.html#configuration-profiles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Configuration profiles are set of configurations that have a collective name and can be optionally activated on the command line.
+<p>Configuration profiles are sets of configurations that have a collective name and can be optionally activated on the command line.
 They can be written in any of the configuration files we explored before.
-The following code defines a configuration profiles named <code>cluster</code>.</p>
+The following code defines a configuration profile named <code>cluster</code>.</p>
 <div class="sourceCode" id="cb111"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb111-1"><a href="advanced-features.html#cb111-1" aria-hidden="true" tabindex="-1"></a>profiles <span class="op">{</span></span>
 <span id="cb111-2"><a href="advanced-features.html#cb111-2" aria-hidden="true" tabindex="-1"></a>  cluster <span class="op">{</span></span>
 <span id="cb111-3"><a href="advanced-features.html#cb111-3" aria-hidden="true" tabindex="-1"></a>    executor<span class="op">.</span>name <span class="op">=</span> <span class="st">&quot;lsf&quot;</span></span>
@@ -834,7 +835,7 @@ The following code defines a configuration profiles named <code>cluster</code>.<
 Once activated, all the configurations contained in it are applied.
 Several profiles can be defined in the <code>profiles</code> block.
 If several profiles need to be activated at the same time, this can be done by concatenating them with commas after the <code>-profile</code> option (so if the profiles <code>foo</code> and <code>bar</code> need to be activated at once, I can write <code>-profile foo,bar</code>).</p>
-<p>Profiles are particularly useful to set compute environments, software environments (i.e. use conda versus Docker versus Singularity), and particular running modes (think of a workflow that can perform several things, and the profile is used to choose what the workflow should do).</p>
+<p>Profiles are particularly useful to set compute environments, software environments (i.e. use Conda versus Docker versus Singularity), and particular running modes (think of a workflow that can perform several things, and the profile is used to choose what the workflow should do).</p>
 </div>
 </div>
 <div id="sub-workflows" class="section level2 hasAnchor" number="4.9">
@@ -868,8 +869,8 @@ So for example a workflow that does germline variant calling on a set of sequenc
 <span id="cb112-25"><a href="advanced-features.html#cb112-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAP_TO_REF</span><span class="op">(</span> params<span class="op">.</span>input <span class="op">)</span></span>
 <span id="cb112-26"><a href="advanced-features.html#cb112-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">CALL_VARIANTS</span><span class="op">(</span> MAP_TO_REF<span class="op">.</span>out <span class="op">)</span></span>
 <span id="cb112-27"><a href="advanced-features.html#cb112-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Sub-workflows can have an <code>input</code>, a <code>main</code>,and a <code>output</code> block.
-The <code>input</code> block defines the name of one or more channels that are passed as an input to the sub-workflows.
+<p>Sub-workflows can have an <code>input</code>, a <code>main</code>, and an <code>output</code> block.
+The <code>input</code> block defines the name of one or more channels that are passed as inputs to the sub-workflows.
 The <code>output</code> block can define a channel accessible from <code>&lt;WORKFLOW_NAME&gt;.out</code> after execution.
 The <code>main</code> block defines the actual workflow logic in terms of processes to be run and channel manipulations.</p>
 <p>It is also possible to write separate logical steps of the workflow in separate <code>.nf</code> files.
@@ -885,7 +886,7 @@ Workflows defined in such files can be accessed from <code>main.nf</code> using 
 </div>
 <div id="nextflow-tower" class="section level2 hasAnchor" number="4.10">
 <h2><span class="header-section-number">4.10</span> Nextflow Tower<a href="advanced-features.html#nextflow-tower" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://cloud.tower.nf/">Nextflow Tower</a> is a centralised web interface that allows to monitor and launch your Nextflow workflows.
+<p><a href="https://cloud.tower.nf/">Nextflow Tower</a> is a centralised web interface that allows the monitoring and submission of Nextflow workflows.
 It is possible to use the Nextflow Tower website (for free) or also on-premises solution are available for institutions (at a price).</p>
 <p>Nextflow Tower communicates with the execution environment via <a href="https://www.wikiwand.com/en/Secure_Shell">SSH</a> access (if the host is reachable via SSH), or via a <a href="https://help.tower.nf/22.3/agent/">“Tower agent”</a> that is run on the execution environment itself.
 Nextflow Tower is particularly useful when you are running several pipelines at the same time in different environments to monitor failures and resource usage.</p>

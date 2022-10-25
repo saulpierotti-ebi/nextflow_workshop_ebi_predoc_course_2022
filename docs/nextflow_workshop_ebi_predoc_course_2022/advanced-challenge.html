@@ -242,16 +242,16 @@ code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
             <section class="normal" id="section-">
 <div id="advanced-challenge" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">5</span> Advanced challenge<a href="advanced-challenge.html#advanced-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>You are given a set of <a href="https://www.wikiwand.com/en/Tab-separated_values">tsv files</a>.
+<p>You are given a set of <a href="https://www.wikiwand.com/en/Tab-separated_values">TSV files</a>.
 Each file contains a single column with the header “Entry” containing a set of <a href="https://www.uniprot.org/">UniProt</a> protein IDs belonging to a single species (different for each file).
-You are given a sample sheet containing a list of animal species and the path to the tsv file containing UniProt IDs for that species.
-Finally, you are given a csv file containing all the natural amino acids found in proteins with their one-letter codes, three-letter codes, common names, and whether they have a polar or apolar side chain.
+You are given a sample sheet containing a list of animal species and the path to the TSV file containing UniProt IDs for that species.
+Finally, you are given a CSV file containing all the natural amino acids found in proteins with their one-letter codes, three-letter codes, common names, and whether they have a polar or apolar side chain.
 Your goal is to produce a box plot showing, for each species, the distribution of the fraction of polar versus apolar amino acids (across the proteins provided).
-You should produce a plot like the one following and place it in the folder <code>../nextflow_output/challange</code> (relative to your project directory).</p>
+You should produce a plot like the one following and place it in the folder <code>../nextflow_output/challenge</code> (relative to your project directory).</p>
 <p><img src="images/final_plot.png" /></p>
 <p>Your input files will be created in the folder <code>../nextflow_inputs</code> (after running the commands in the <a href="advanced-challenge.html#setup-1">Setup</a> section), and you can explore them manually to see their structure.
 You may use any programming language for the task, but you should embed any computational step in a Nextflow process.
-It is preferable if you split the work in as many independent processes as possible, instead than doing everything in a monolithic process.</p>
+It is preferable if you split the work into as many independent processes as possible, instead of doing everything in a monolithic process.</p>
 <p><strong>Hint:</strong> you can retrieve protein sequences from UniProt programmatically by running the following (replacing <code>&lt;uniprot-id&gt;</code> with the actual UniProt ID of the protein you want to download)</p>
 <div class="sourceCode" id="cb114"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb114-1"><a href="advanced-challenge.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://rest.uniprot.org/uniprotkb/<span class="op">&lt;</span>uniprot-id<span class="op">&gt;</span>.fasta</span></code></pre></div>
 <div id="setup-1" class="section level2 hasAnchor" number="5.1">
