@@ -323,7 +323,7 @@ This is the EBI predoc course</code></pre>
 <div id="creating-channels-and-specifying-pipeline-parameters" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Creating channels and specifying pipeline parameters<a href="basic-features.html#creating-channels-and-specifying-pipeline-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The workflow that we wrote works as expected but it is not very useful since we cannot specify dynamically its input files. We will now learn how to use pipeline parameters to specify an external input file for the whole workflow and how to use channel factories to feed it to our processes.</p>
-<p>First create a text file called <code>../nextflow_inputs/a_file.txt</code> containing the string <code>"This is the file content"</code></p>
+<p>First, create a text file called <code>../nextflow_inputs/a_file.txt</code> containing the string <code>"This is the file content"</code></p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="basic-features.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ../nextflow_inputs</span>
 <span id="cb19-2"><a href="basic-features.html#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is the file content&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/a_file.txt</span></code></pre></div>
 <p>Modify the workflow as follows</p>
@@ -384,7 +384,7 @@ Code
 <span id="cb23-6"><a href="basic-features.html#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </details>
 <p>Now run again the workflow with <code>nextflow run main.nf</code>.
-This time if you examine the folder <code>../nextflow_output/duplicate_lines</code> you will find a file called <code>a_file.duplicated.txt</code>. Let’s see it’s content.</p>
+This time if you examine the folder <code>../nextflow_output/duplicate_lines</code> you will find a file called <code>a_file.duplicated.txt</code>. Let’s see its content.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="basic-features.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ../nextflow_output/duplicate_lines/a_file.duplicated.txt</span></code></pre></div>
 <p>This should print</p>
 <pre><code>This is the file content
@@ -398,7 +398,7 @@ Let’s examine what happened:</p>
 <li>We then used the channel <code>input_ch</code> as an input for the process <code>duplicate_lines</code> in the statement <code>duplicate_lines( input_ch )</code>. Since the channel <code>input_ch</code> contains the variable <code>params.input_file</code>, which we declared to contain the value <code>../nextflow_inputs/a_file.txt</code>, this file is given in input to <code>duplicate_lines</code></li>
 <li><code>duplicate_lines</code> performed its function as before, putting its output in <code>../nextflow_output/duplicate_lines</code></li>
 </ul>
-<p>Instead than hard-coding parameters in <code>nextflow.config</code>, it is also possible to pass them on the command line. So for example we could have omitted the <code>params</code> block in <code>nextflow.config</code> and run</p>
+<p>Instead of hard-coding parameters in <code>nextflow.config</code>, it is also possible to pass them on the command line. So for example we could have omitted the <code>params</code> block in <code>nextflow.config</code> and run</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="basic-features.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">--input_file</span> ../nextflow_inputs/a_file.txt</span></code></pre></div>
 <p>This produces the same result. Note that pipeline parameters need to be specified with two prepending dashes (<code>--my_parameter</code>).
 This differentiates them from command line options for Nextflow itself, such as <code>-dry-run</code>, which use a single dash.</p>
@@ -455,7 +455,7 @@ set_of_files_8.duplicated.txt</code></pre>
 <h2><span class="header-section-number">2.4</span> Using a sample sheet and value channels<a href="basic-features.html#using-a-sample-sheet-and-value-channels" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Using glob patterns for specifying samples is useful and quick, but what if we want to specify input files that live in many different directories with very different names?
 And if we want some files to be processed in pairs with other specific files, or with specific parameters?
-For such use cases a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.</p>
+For such use cases, a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.</p>
 <p>A sample sheet is just a <a href="https://www.wikiwand.com/en/Comma-separated_values">csv</a> file with one row per file to be processed, and with each column specifying either a file or a parameter.
 Create a sample sheet called <code>../nextflow_inputs/samplesheet.csv</code> by running the following command.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="basic-features.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;sample,content&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
@@ -587,26 +587,27 @@ csv_content_1</code></pre>
 This is content of file 1
 csv_content_3</code></pre>
 <p>So the first two lines have the correct number but the last line shows the wrong element! What’s more, the element shown on the last line can be different on each run (try!). We said before that channels are guaranteed to emit elements in the same order that they are received, so we should have the correct matches between files and values. What happened?</p>
-<p>What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process <code>duplicate_lines</code> receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the file are processed in parallel, and for example <code>set_of_files_5.append_to_file.txt</code> could be processed and emitted some milliseconds earlier that <code>set_of_files_1.append_to_file.txt</code>, and so the order would be altered.</p>
+<p>What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process <code>duplicate_lines</code> receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the files are processed in parallel.
+So for example, <code>set_of_files_5.append_to_file.txt</code> could be processed and emitted some milliseconds earlier than <code>set_of_files_1.append_to_file.txt</code>, altering the order.</p>
 <p>A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in a later section.
 For now, let’s examine what happened in this version of our workflow:</p>
 <ul>
 <li>We created the process <code>append_to_file</code>, which takes in input a file (<code>path my_file</code>) and a value (<code>val my_val</code>). This process copies the content of <code>my_file</code> to <code>${my_file.simpleName}.append_to_file.txt</code> and then appends to the newly created file the content of <code>my_val</code></li>
 <li>We defined the parameter <code>samplesheet</code> in <code>nextflow.config</code></li>
 <li>We modified the workflow so that we use <code>params.samplesheet</code> to create a channel with <code>Channel.fromPath</code></li>
-<li>We applied the operator <code>splitCsv</code> to this channel containing the samplesheet, using the option <code>header: true</code>. This operator reads the file contained in the channel assuming it to be a csv file with an header line. Then it produces in output another channel containing, for each row in the samplesheet, a groovy map (what in Python would be called a <a href="https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_data_structures/Dictionaries">dictionary</a>). This map contains a key for each element in the csv header, and a value corresponding to the value of that column in the current line of the csv file.</li>
+<li>We applied the operator <code>splitCsv</code> to this channel containing the sample sheet, using the option <code>header: true</code>. This operator reads the file contained in the channel assuming it to be a CSV file with a header line. Then it produces in output another channel containing, for each row in the sample sheet, a groovy map (what in Python would be called a <a href="https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_data_structures/Dictionaries">dictionary</a>). This map contains a key for each element in the CSV header, and a value corresponding to the value of that column in the current line of the CSV file.</li>
 <li>We apply the <code>map</code> operator (<code>.map{ it["sample"] }</code>) to the resulting channel
 <ul>
 <li>The map operator is follwed by a <a href="https://www.wikiwand.com/en/Closure_(computer_programming)">closure</a> (<code>{ it["sample"] }</code>)</li>
 <li>You can think of a closure as an unnamed function (like a lambda function in Python)</li>
-<li>The <code>map</code> operator calls this unnamed function for each element in the channel, and creates another channel containing the respective function outputs</li>
-<li>Closure understand the implicit variable <code>it</code>, which represents whatever imput is given to the function</li>
+<li>The <code>map</code> operator calls this unnamed function for each element in the channel and creates another channel containing the respective function outputs</li>
+<li>Closures understand the implicit variable <code>it</code>, which represents whatever input is given to the function</li>
 <li>If an explicit return statement is not present in the closure, the last evaluated expression is returned by the closure ( <code>it["sample"]</code> in this case)</li>
 </ul></li>
-<li>Since <code>splitCsv</code> created a dictionary for each item in the samplesheet, <code>map{ it["sample"] }</code> replaces that dictionary (<code>it</code> in the closure) with the content of the value contained in it under the key <code>"sample"</code></li>
+<li>Since <code>splitCsv</code> created a dictionary for each item in the sample sheet, <code>map{ it["sample"] }</code> replaces that dictionary (<code>it</code> in the closure) with the content of the value contained in it under the key <code>"sample"</code></li>
 <li><code>input_ch</code> is used again in <code>input_ch.map{ it["content"] }.set{ content_ch }</code> to extract the value of <code>content</code> for each sample from the samplesheet
 <ul>
-<li>Channels can be used many times, and each time all the files contained in it are processed. So both <code>input_ch.map{ it["content"] }.set{ content_ch }</code> and <code>input_ch.map{ it["sample"] }.set{ sample_ch }</code> process every element in <code>input_ch</code></li>
+<li>Channels can be used many times, and each time all the files contained in them are processed. So both <code>input_ch.map{ it["content"] }.set{ content_ch }</code> and <code>input_ch.map{ it["sample"] }.set{ sample_ch }</code> process every element in <code>input_ch</code></li>
 </ul></li>
 <li>We created the channels <code>sample_ch</code> and <code>content_ch</code> using the <code>set</code> operator. They contain respectively the sample files and the <code>content</code> values related to them.
 <ul>
@@ -626,20 +627,20 @@ Take as an example the following</p>
 </div>
 <div id="software-dependencies" class="section level2 hasAnchor" number="2.5">
 <h2><span class="header-section-number">2.5</span> Software dependencies<a href="basic-features.html#software-dependencies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We can do many things with just shell scripts, but for real-word scenarios we would probably need to use some additional library or tool.
+<p>We can do many things with just shell scripts, but for real-world scenarios, we would probably need to use some additional library or tool.
 Software dependencies for a process can be specified in Nextflow in two main ways: using <a href="https://www.docker.com/resources/what-container/">software containers</a> or <a href="https://realpython.com/python-virtual-environments-a-primer/">virtual environments</a>.</p>
-<p>A software container is like a shipping container: it is a monolithic block of code and data that contains everything needed to run a specific application, including the operating system (but not the kernel, the host kernel is used). The most popular container engine (the software that is used to actually run a container) is <a href="https://www.docker.com/">Docker</a>. In high-performance clusters, for security reasons Docker is often discouraged or forbidden. A popular alternative container engine used in bioinformatics is <a href="https://sylabs.io/singularity/">Singularity</a>. The good news is that Singularity is also able to run containers created with Docker, so we can consider them equivalent for our purpose.</p>
-<p>For popular tools, a container has most probably already been created by someone and put in a public container registry like <a href="https://hub.docker.com/">DockerHub</a>. In this case, we can provide to Nextflow just a link to the container and it will do the rest.
-If instead we need to use a custom container, we would need to write an appropriate description file for it (called a “Dockerfile”), use it to actually build the container, and then upload the container to DockerHub.
-This last use-case will not be treated in this workshop, and we will limit ourselves to the use of pre-built containers.</p>
+<p>A software container is like a shipping container: it is a monolithic block of code and data that contains everything needed to run a specific application, including the operating system (but not the kernel, the host kernel is used). The most popular container engine (the software that is used to actually run a container) is <a href="https://www.docker.com/">Docker</a>. In high-performance clusters, for security reasons, Docker is often discouraged or forbidden. A popular alternative container engine used in bioinformatics is <a href="https://sylabs.io/singularity/">Singularity</a>. The good news is that Singularity is also able to run containers created with Docker, so we can consider them equivalent for our purposes.</p>
+<p>For popular tools, a container has most probably already been created by someone and put in a public container registry like <a href="https://hub.docker.com/">DockerHub</a>. In this case, we can provide Nextflow with just a link to the container and it will do the rest.
+In case we wanted to use a custom container instead, we would have needed to write an appropriate description file for it (called a “Dockerfile”), use it to actually build the container, and then upload the container to DockerHub.
+This last use case will not be treated in this workshop, and we will limit ourselves to the use of pre-built containers.</p>
 <p>On the other hand, virtual environments are a more lightweight and modifiable alternative to containers.
-They rely on the host operating system but they allow to define additional software.
+They rely on the host operating system but they allow the definition of additional software.
 Nextflow is compatible with <a href="https://docs.conda.io/en/latest/">Conda</a> environments, and can also use the faster <a href="https://mamba.readthedocs.io/en/latest/index.html">Mamba</a> implementation of Conda.
-It is worth noting that while Conda/Mamba are typically thought of as package managers for Python, they are actually able to install also R packages, the R interpreter itself, stand-alone tools, and even GPU drivers.</p>
+It is worth noting that while Conda and Mamba are typically thought of as package managers for Python, they are actually able to install also R packages, the R interpreter itself, stand-alone tools, and even GPU drivers.</p>
 <p>Differently from containers, environments do not need to be pre-built to be used by Nextflow.
 It is possible to just define the software that we need and Nextflow will take care to build an appropriate environment with it.</p>
 <p>Let’s now write a workflow that makes use of virtual environments.</p>
-<p>First download a csv file containing a set of countries, their population, and their area by running the following</p>
+<p>First download a CSV file containing a set of countries, their population, and their area by running the following</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb41-1"><a href="basic-features.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/population_area_by_country.csv</span></code></pre></div>
 <p>Now modify your <code>main.nf</code> file and make it look like this</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb42-1"><a href="basic-features.html#cb42-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
@@ -722,15 +723,15 @@ Now open the file <code>../nextflow_output/plots/population_area_by_country.pdf<
 It will contain a plot of the population of different countries versus their area, with the size proportional to their population density.</p>
 <p>Let’s explore what happened:</p>
 <ul>
-<li>We specified to Nextflow to use mamba instead than conda when using the conda directive (with <code>conda{use.mamba = true}</code> in <code>nextflow.config</code>)</li>
+<li>We specified to Nextflow to use Mamba instead than Conda when using the <code>conda</code> directive (with <code>conda{use.mamba = true}</code> in <code>nextflow.config</code>)</li>
 <li>As before, we used a command-line flag to pass an input file to the workflow (<code>--input population_area_by_country.csv</code>)</li>
 <li>We used <code>population_area_by_country.csv</code> as an input for the process <code>calculate_population_density</code>, which uses Python code to calculate the population density of a country from its area and total population</li>
 <li>The output of <code>calculate_population_density</code> is fed to the process <code>plot_population_by_area</code>, which uses R code to produce the plot</li>
 </ul>
-<p>The <code>conda</code> directive used in these processes defines the software dependencies needed, in this case Python and <a href="https://pandas.pydata.org/">pandas</a> for the first process and R and <a href="https://www.tidyverse.org/">tidyverse</a> for the second process.
+<p>The <code>conda</code> directive used in these processes defines the software dependencies needed (in this case Python and <a href="https://pandas.pydata.org/">pandas</a> for the first process and R and <a href="https://www.tidyverse.org/">tidyverse</a> for the second process).
 Software versions can be specified with an equal sign after the software name.
 Packages are sourced from the repository <a href="https://anaconda.org/">Anaconda</a>.</p>
-<p>Another thing to note here: the <code>script</code> directive normally interprets the code written in it as bash code, but if an sh-bang (<code>!#</code>) is included in the first line of the script, then the software specified in the sh-bang is used to run the script section (so <code>!#/usr/bin/env Python</code> tells to Nextflow to interpret the script section as Python code).</p>
+<p>Another thing to note here: the <code>script</code> directive normally interprets the code written in it as bash code, but if a <a href="https://www.wikiwand.com/en/Shebang_(Unix)">sh-bang</a> (<code>!#</code>) is included in the first line of the script, then the software specified in the sh-bang is used to run the script section (so <code>!#/usr/bin/env Python</code> tells to Nextflow to interpret the script section as Python code).</p>
 <p>A different approach to reach the same goal is to write a separate Python or R script, place it in the <code>bin</code> folder, and then execute it with a bash command in the script directive.</p>
 <p>So for example you can create a file called <code>bin/calculate_population_density.py</code> with the following content</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="basic-features.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas</span>
@@ -767,9 +768,9 @@ They can be used either with Docker or Singularity.</p>
 </div>
 <div id="resource-allocation" class="section level2 hasAnchor" number="2.6">
 <h2><span class="header-section-number">2.6</span> Resource allocation<a href="basic-features.html#resource-allocation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Resource allocation is very useful when our workflow is run on a high performance cluster or in the cloud.
+<p>Resource allocation is very useful when our workflow is run on a high-performance cluster or in the cloud.
 It is possible to specify the amount of <a href="https://www.wikiwand.com/en/Random-access_memory">RAM</a>, the number of <a href="https://www.wikiwand.com/en/Central_processing_unit">CPU cores</a>, and the running time required by a process.
-These values are then used by Nextflow to reserve appropriate resources, for example to submit a job to the cluster with the desired requirements.</p>
+These values are then used by Nextflow to reserve appropriate resources, such as for submitting a job to the cluster with the desired requirements.</p>
 <p>Since we do not have a cluster environment available for this workshop, we will not try to implement an actual workflow using resource requirements (we could specify them also for a local workflow, but we would not see any effect).</p>
 <p>An example process specifying resource requirements looks like this</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb52-1"><a href="basic-features.html#cb52-1" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
@@ -809,10 +810,10 @@ This number is calculated from the following values:</p>
 <li>Any executed scripts in the bin directory</li>
 </ul>
 <p>So, any time one of the following features of a process changes, the hash value and hence the working directory changes.</p>
-<p>If a working directory with the same hash value as the one of the task to be executed is found by Nextflow, and this folder contains all the required outputs declared in the <code>output</code> block of the process, and it contains a file called <code>.exitcode</code> containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.</p>
-<p>This feature allows to resume the execution of a previous failed run of a workflow from the last successful task, potentially saving a lot of computing time.
+<p>If a working directory with the same hash value as that of one of the tasks to be executed is found by Nextflow, and this folder contains all the required outputs declared in the <code>output</code> block of the process, and it contains a file called <code>.exitcode</code> containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.</p>
+<p>This feature allows resuming the execution of a previous failed run of a workflow from the last successful task, potentially saving a lot of computing time.
 A more in-depth explanation of the resume feature is available <a href="https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html">here</a>.</p>
-<p>To test the resume feature by ourselves, lets modify our <code>main.nf</code> file as follows</p>
+<p>To test the resume feature by ourselves, let’s modify our <code>main.nf</code> file as follows</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb54-1"><a href="basic-features.html#cb54-1" aria-hidden="true" tabindex="-1"></a>nextflow<span class="op">.</span>enable<span class="op">.</span>dsl <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb54-2"><a href="basic-features.html#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-3"><a href="basic-features.html#cb54-3" aria-hidden="true" tabindex="-1"></a>process dumb_process <span class="op">{</span></span>
@@ -837,12 +838,14 @@ After the execution is complete, we can see that the line “Success!” is pres
 <div class="sourceCode" id="cb55"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb55-1"><a href="basic-features.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ../nextflow_output/out.txt</span></code></pre></div>
 <p>Now, to test the resume feature run again the workflow</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="basic-features.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run main.nf <span class="at">-resume</span></span></code></pre></div>
-<p>In this case, the execution will be much quicker since <code>process_dumb</code> is not actually executed, but the cached results obtained before are returned.</p>
+<p>In this case, the execution will be much quicker since <code>process_dumb</code> is not actually executed.
+Instead, the cached results obtained before are returned.</p>
 </div>
 <div id="nf-core-pipelines" class="section level2 hasAnchor" number="2.8">
 <h2><span class="header-section-number">2.8</span> nf-core pipelines<a href="basic-features.html#nf-core-pipelines" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Many of the workflow that we need in our work as bioinformatics are always the same, mapping sequencing reads to a reference and then performing variant calling for example.</p>
-<p>For such common use-cases, very efficient Nextflow pipelines are already available, so there is no need to re-invent the wheel.
+<p>Many of the workflows that we need in our work as bioinformaticians are always the same.
+Mapping sequencing reads to a reference genome and then performing variant calling is an example of this.</p>
+<p>For such common use cases, very efficient Nextflow pipelines are already available, so there is no need to reinvent the wheel.
 Community-curated pipelines can be found on the <a href="https://nf-co.re">nf-core</a> repository.
 So for example for mapping reads to a reference and then performing variant calling we would use the <a href="https://nf-co.re/sarek"><code>nf-core/sarek</code></a> pipeline.
 These pipelines follow a standardised format where inputs are declared by the user in a sample sheet.
@@ -872,7 +875,7 @@ So for example going back to the process <code>calculate_population_density</cod
 <span id="cb59-10"><a href="basic-features.html#cb59-10" aria-hidden="true" tabindex="-1"></a><span class="st">        ./calculate_population_density.py </span><span class="ss">$csv_file</span><span class="st"> </span><span class="ss">${</span>csv_file<span class="op">.</span>simpleName<span class="ss">}</span><span class="st">.with_density.csv</span></span>
 <span id="cb59-11"><a href="basic-features.html#cb59-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &quot;&quot;&quot;</span></span>
 <span id="cb59-12"><a href="basic-features.html#cb59-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Instead than hard-coding the <code>conda</code> directive into the process definition, we could have done as follows</p>
+<p>Instead of hard-coding the <code>conda</code> directive into the process definition, we could have done as follows</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb60-1"><a href="basic-features.html#cb60-1" aria-hidden="true" tabindex="-1"></a>process calculate_population_density <span class="op">{</span></span>
 <span id="cb60-2"><a href="basic-features.html#cb60-2" aria-hidden="true" tabindex="-1"></a>    label <span class="st">&quot;pandas&quot;</span></span>
 <span id="cb60-3"><a href="basic-features.html#cb60-3" aria-hidden="true" tabindex="-1"></a></span>

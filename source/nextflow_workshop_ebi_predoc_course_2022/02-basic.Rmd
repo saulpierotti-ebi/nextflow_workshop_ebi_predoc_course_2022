@@ -99,7 +99,7 @@ Let's analyse what happened this time:
 
 The workflow that we wrote works as expected but it is not very useful since we cannot specify dynamically its input files. We will now learn how to use pipeline parameters to specify an external input file for the whole workflow and how to use channel factories to feed it to our processes.
 
-First create a text file called `../nextflow_inputs/a_file.txt` containing the string `"This is the file content"`
+First, create a text file called `../nextflow_inputs/a_file.txt` containing the string `"This is the file content"`
 
 ```bash
 mkdir ../nextflow_inputs
@@ -176,7 +176,7 @@ params {
 </details>
 
 Now run again the workflow with `nextflow run main.nf`.
-This time if you examine the folder `../nextflow_output/duplicate_lines` you will find a file called `a_file.duplicated.txt`. Let's see it's content.
+This time if you examine the folder `../nextflow_output/duplicate_lines` you will find a file called `a_file.duplicated.txt`. Let's see its content.
 
 ```bash
 cat ../nextflow_output/duplicate_lines/a_file.duplicated.txt
@@ -198,7 +198,7 @@ Let's examine what happened:
 - We then used the channel `input_ch` as an input for the process `duplicate_lines` in the statement `duplicate_lines( input_ch )`. Since the channel `input_ch` contains the variable `params.input_file`, which we declared to contain the value `../nextflow_inputs/a_file.txt`, this file is given in input to `duplicate_lines`
 - `duplicate_lines` performed its function as before, putting its output in `../nextflow_output/duplicate_lines`
 
-Instead than hard-coding parameters in `nextflow.config`, it is also possible to pass them on the command line. So for example we could have omitted the `params` block in `nextflow.config` and run
+Instead of hard-coding parameters in `nextflow.config`, it is also possible to pass them on the command line. So for example we could have omitted the `params` block in `nextflow.config` and run
 
 ```bash
 nextflow run main.nf --input_file ../nextflow_inputs/a_file.txt
@@ -274,7 +274,7 @@ Let's examine what happened:
 
 Using glob patterns for specifying samples is useful and quick, but what if we want to specify input files that live in many different directories with very different names?
 And if we want some files to be processed in pairs with other specific files, or with specific parameters?
-For such use cases a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.
+For such use cases, a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.
 
 A sample sheet is just a [csv](https://www.wikiwand.com/en/Comma-separated_values) file with one row per file to be processed, and with each column specifying either a file or a parameter.
 Create a sample sheet called `../nextflow_inputs/samplesheet.csv` by running the following command.
@@ -441,7 +441,8 @@ csv_content_3
 
 So the first two lines have the correct number but the last line shows the wrong element! What's more, the element shown on the last line can be different on each run (try!). We said before that channels are guaranteed to emit elements in the same order that they are received, so we should have the correct matches between files and values. What happened?
 
-What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process `duplicate_lines` receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the file are processed in parallel, and for example `set_of_files_5.append_to_file.txt` could be processed and emitted some milliseconds earlier that `set_of_files_1.append_to_file.txt`, and so the order would be altered.
+What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process `duplicate_lines` receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the files are processed in parallel.
+So for example, `set_of_files_5.append_to_file.txt` could be processed and emitted some milliseconds earlier than `set_of_files_1.append_to_file.txt`, altering the order.
 
 A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in a later section.
 For now, let's examine what happened in this version of our workflow:
@@ -449,16 +450,16 @@ For now, let's examine what happened in this version of our workflow:
 - We created the process `append_to_file`, which takes in input a file (`path my_file`) and a value (`val my_val`). This process copies the content of `my_file` to `${my_file.simpleName}.append_to_file.txt` and then appends to the newly created file the content of `my_val`
 - We defined the parameter `samplesheet` in `nextflow.config`
 - We modified the workflow so that we use `params.samplesheet` to create a channel with `Channel.fromPath`
-- We applied the operator `splitCsv` to this channel containing the samplesheet, using the option `header: true`. This operator reads the file contained in the channel assuming it to be a csv file with an header line. Then it produces in output another channel containing, for each row in the samplesheet, a groovy map (what in Python would be called a [dictionary](https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_data_structures/Dictionaries)). This map contains a key for each element in the csv header, and a value corresponding to the value of that column in the current line of the csv file.
+- We applied the operator `splitCsv` to this channel containing the sample sheet, using the option `header: true`. This operator reads the file contained in the channel assuming it to be a CSV file with a header line. Then it produces in output another channel containing, for each row in the sample sheet, a groovy map (what in Python would be called a [dictionary](https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_data_structures/Dictionaries)). This map contains a key for each element in the CSV header, and a value corresponding to the value of that column in the current line of the CSV file.
 - We apply the `map` operator (`.map{ it["sample"] }`) to the resulting channel
   - The map operator is follwed by a [closure](https://www.wikiwand.com/en/Closure_(computer_programming)) (`{ it["sample"] }`)
   - You can think of a closure as an unnamed function (like a lambda function in Python)
-  - The `map` operator calls this unnamed function for each element in the channel, and creates another channel containing the respective function outputs
-  - Closure understand the implicit variable `it`, which represents whatever imput is given to the function
+  - The `map` operator calls this unnamed function for each element in the channel and creates another channel containing the respective function outputs
+  - Closures understand the implicit variable `it`, which represents whatever input is given to the function
   - If an explicit return statement is not present in the closure, the last evaluated expression is returned by the closure ( `it["sample"]` in this case)
-- Since `splitCsv` created a dictionary for each item in the samplesheet, `map{ it["sample"] }` replaces that dictionary (`it` in the closure) with the content of the value contained in it under the key `"sample"`
+- Since `splitCsv` created a dictionary for each item in the sample sheet, `map{ it["sample"] }` replaces that dictionary (`it` in the closure) with the content of the value contained in it under the key `"sample"`
 - `input_ch` is used again in `input_ch.map{ it["content"] }.set{ content_ch }` to extract the value of `content` for each sample from the samplesheet
-  - Channels can be used many times, and each time all the files contained in it are processed. So both `input_ch.map{ it["content"] }.set{ content_ch }` and `input_ch.map{ it["sample"] }.set{ sample_ch }` process every element in `input_ch`
+  - Channels can be used many times, and each time all the files contained in them are processed. So both `input_ch.map{ it["content"] }.set{ content_ch }` and `input_ch.map{ it["sample"] }.set{ sample_ch }` process every element in `input_ch`
 - We created the channels `sample_ch` and `content_ch` using the `set` operator. They contain respectively the sample files and the `content` values related to them.
   - The order of processing in a channel is guaranteed, so we can be sure that each sample will be paired with the correct `content` value
 - We fed `sample_ch` to `duplicate_lines`
@@ -479,26 +480,26 @@ This would produce a channel containing in order the values 1, 2, and 3. These w
 
 ## Software dependencies
 
-We can do many things with just shell scripts, but for real-word scenarios we would probably need to use some additional library or tool.
+We can do many things with just shell scripts, but for real-world scenarios, we would probably need to use some additional library or tool.
 Software dependencies for a process can be specified in Nextflow in two main ways: using [software containers](https://www.docker.com/resources/what-container/) or [virtual environments](https://realpython.com/python-virtual-environments-a-primer/).
 
-A software container is like a shipping container: it is a monolithic block of code and data that contains everything needed to run a specific application, including the operating system (but not the kernel, the host kernel is used). The most popular container engine (the software that is used to actually run a container) is [Docker](https://www.docker.com/). In high-performance clusters, for security reasons Docker is often discouraged or forbidden. A popular alternative container engine used in bioinformatics is [Singularity](https://sylabs.io/singularity/). The good news is that Singularity is also able to run containers created with Docker, so we can consider them equivalent for our purpose.
+A software container is like a shipping container: it is a monolithic block of code and data that contains everything needed to run a specific application, including the operating system (but not the kernel, the host kernel is used). The most popular container engine (the software that is used to actually run a container) is [Docker](https://www.docker.com/). In high-performance clusters, for security reasons, Docker is often discouraged or forbidden. A popular alternative container engine used in bioinformatics is [Singularity](https://sylabs.io/singularity/). The good news is that Singularity is also able to run containers created with Docker, so we can consider them equivalent for our purposes.
 
-For popular tools, a container has most probably already been created by someone and put in a public container registry like [DockerHub](https://hub.docker.com/). In this case, we can provide to Nextflow just a link to the container and it will do the rest.
-If instead we need to use a custom container, we would need to write an appropriate description file for it (called a "Dockerfile"), use it to actually build the container, and then upload the container to DockerHub.
-This last use-case will not be treated in this workshop, and we will limit ourselves to the use of pre-built containers.
+For popular tools, a container has most probably already been created by someone and put in a public container registry like [DockerHub](https://hub.docker.com/). In this case, we can provide Nextflow with just a link to the container and it will do the rest.
+In case we wanted to use a custom container instead, we would have needed to write an appropriate description file for it (called a "Dockerfile"), use it to actually build the container, and then upload the container to DockerHub.
+This last use case will not be treated in this workshop, and we will limit ourselves to the use of pre-built containers.
 
 On the other hand, virtual environments are a more lightweight and modifiable alternative to containers.
-They rely on the host operating system but they allow to define additional software.
+They rely on the host operating system but they allow the definition of additional software.
 Nextflow is compatible with [Conda](https://docs.conda.io/en/latest/) environments, and can also use the faster [Mamba](https://mamba.readthedocs.io/en/latest/index.html) implementation of Conda.
-It is worth noting that while Conda/Mamba are typically thought of as package managers for Python, they are actually able to install also R packages, the R interpreter itself, stand-alone tools, and even GPU drivers.
+It is worth noting that while Conda and Mamba are typically thought of as package managers for Python, they are actually able to install also R packages, the R interpreter itself, stand-alone tools, and even GPU drivers.
 
 Differently from containers, environments do not need to be pre-built to be used by Nextflow.
 It is possible to just define the software that we need and Nextflow will take care to build an appropriate environment with it.
 
 Let's now write a workflow that makes use of virtual environments.
 
-First download a csv file containing a set of countries, their population, and their area by running the following
+First download a CSV file containing a set of countries, their population, and their area by running the following
 
 ```bash
 wget https://raw.githubusercontent.com/saulpierotti-ebi/saulpierotti-ebi.github.io/main/assets/population_area_by_country.csv
@@ -599,16 +600,16 @@ It will contain a plot of the population of different countries versus their are
 
 Let's explore what happened:
 
-  - We specified to Nextflow to use mamba instead than conda when using the conda directive (with `conda{use.mamba = true}` in `nextflow.config`)
+  - We specified to Nextflow to use Mamba instead than Conda when using the `conda` directive (with `conda{use.mamba = true}` in `nextflow.config`)
   - As before, we used a command-line flag to pass an input file to the workflow (`--input population_area_by_country.csv`)
   - We used `population_area_by_country.csv` as an input for the process `calculate_population_density`, which uses Python code to calculate the population density of a country from its area and total population
   - The output of `calculate_population_density` is fed to the process `plot_population_by_area`, which uses R code to produce the plot
 
-The `conda` directive used in these processes defines the software dependencies needed, in this case Python and [pandas](https://pandas.pydata.org/) for the first process and R and [tidyverse](https://www.tidyverse.org/) for the second process.
+The `conda` directive used in these processes defines the software dependencies needed (in this case Python and [pandas](https://pandas.pydata.org/) for the first process and R and [tidyverse](https://www.tidyverse.org/) for the second process).
 Software versions can be specified with an equal sign after the software name.
 Packages are sourced from the repository [Anaconda](https://anaconda.org/).
 
-Another thing to note here: the `script` directive normally interprets the code written in it as bash code, but if an sh-bang (`!#`) is included in the first line of the script, then the software specified in the sh-bang is used to run the script section (so `!#/usr/bin/env Python` tells to Nextflow to interpret the script section as Python code).
+Another thing to note here: the `script` directive normally interprets the code written in it as bash code, but if a [sh-bang](https://www.wikiwand.com/en/Shebang_(Unix)) (`!#`) is included in the first line of the script, then the software specified in the sh-bang is used to run the script section (so `!#/usr/bin/env Python` tells to Nextflow to interpret the script section as Python code).
 
 A different approach to reach the same goal is to write a separate Python or R script, place it in the `bin` folder, and then execute it with a bash command in the script directive.
 
@@ -673,9 +674,9 @@ They can be used either with Docker or Singularity.
 
 ## Resource allocation
 
-Resource allocation is very useful when our workflow is run on a high performance cluster or in the cloud.
+Resource allocation is very useful when our workflow is run on a high-performance cluster or in the cloud.
 It is possible to specify the amount of [RAM](https://www.wikiwand.com/en/Random-access_memory), the number of [CPU cores](https://www.wikiwand.com/en/Central_processing_unit), and the running time required by a process.
-These values are then used by Nextflow to reserve appropriate resources, for example to submit a job to the cluster with the desired requirements.
+These values are then used by Nextflow to reserve appropriate resources, such as for submitting a job to the cluster with the desired requirements.
 
 Since we do not have a cluster environment available for this workshop, we will not try to implement an actual workflow using resource requirements (we could specify them also for a local workflow, but we would not see any effect).
 
@@ -726,12 +727,12 @@ This number is calculated from the following values:
 
 So, any time one of the following features of a process changes, the hash value and hence the working directory changes.
 
-If a working directory with the same hash value as the one of the task to be executed is found by Nextflow, and this folder contains all the required outputs declared in the `output` block of the process, and it contains a file called `.exitcode` containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.
+If a working directory with the same hash value as that of one of the tasks to be executed is found by Nextflow, and this folder contains all the required outputs declared in the `output` block of the process, and it contains a file called `.exitcode` containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.
 
-This feature allows to resume the execution of a previous failed run of a workflow from the last successful task, potentially saving a lot of computing time.
+This feature allows resuming the execution of a previous failed run of a workflow from the last successful task, potentially saving a lot of computing time.
 A more in-depth explanation of the resume feature is available [here](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html).
 
-To test the resume feature by ourselves, lets modify our `main.nf` file as follows
+To test the resume feature by ourselves, let's modify our `main.nf` file as follows
 
 ```groovy
 nextflow.enable.dsl = 2
@@ -768,13 +769,15 @@ Now, to test the resume feature run again the workflow
 nextflow run main.nf -resume
 ```
 
-In this case, the execution will be much quicker since `process_dumb` is not actually executed, but the cached results obtained before are returned.
+In this case, the execution will be much quicker since `process_dumb` is not actually executed.
+Instead, the cached results obtained before are returned.
 
 ## nf-core pipelines
 
-Many of the workflow that we need in our work as bioinformatics are always the same, mapping sequencing reads to a reference and then performing variant calling for example.
+Many of the workflows that we need in our work as bioinformaticians are always the same.
+Mapping sequencing reads to a reference genome and then performing variant calling is an example of this.
 
-For such common use-cases, very efficient Nextflow pipelines are already available, so there is no need to re-invent the wheel.
+For such common use cases, very efficient Nextflow pipelines are already available, so there is no need to reinvent the wheel.
 Community-curated pipelines can be found on the [nf-core](https://nf-co.re) repository.
 So for example for mapping reads to a reference and then performing variant calling we would use the [`nf-core/sarek`](https://nf-co.re/sarek) pipeline.
 These pipelines follow a standardised format where inputs are declared by the user in a sample sheet.
@@ -818,7 +821,7 @@ process calculate_population_density {
 }
 ```
 
-Instead than hard-coding the `conda` directive into the process definition, we could have done as follows
+Instead of hard-coding the `conda` directive into the process definition, we could have done as follows
 
 ```groovy
 process calculate_population_density {
@@ -871,11 +874,11 @@ file11.txt,jh,6,1
 file12.txt,96,1,5
 ```
 
-For each file in the sample sheet (under the `filename` column), the workflow should create in output a file with such name and place it in the folder `../nextflow_output/challenge`.
+For each file in the sample sheet (under the `filename` column), the workflow should create in output a file with that name and place it in the folder `../nextflow_output/challenge`.
 Each file should contain the content of the column `value` for that file.
 This content should be repeated `number_of_columns` times in the same line, each instance separated by a comma.
-The file should contain `number_of_rows` times the above mentioned row.
-So at the end, each file should be essentially a csv file with `number_of_rows` rows and `number_of_columns` columns, without header, and with each cell containing `value`.
+The file should contain the above-mentioned row repeated  `number_of_rows` times.
+So in the end, each file should be essentially a CSV file with a number of rows equal to the value contained in the column `number_of_rows`, and a number of columns equal to the value contained in the column `number_of_columns`. Those files should be without a header, and each cell should contain the value stored in the column `value`.
 
 For example, `../nextflow_output/challenge/file1.txt` should contain
 
@@ -890,6 +893,11 @@ For example, `../nextflow_output/challenge/file1.txt` should contain
 3,3,3,3,3,3,3,3,3,3
 3,3,3,3,3,3,3,3,3,3
 3,3,3,3,3,3,3,3,3,3
+```
+and `../nextflow_output/challenge/file6.txt` should contain
+
+```bash
+aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa
 ```
 
 You can use as many or as few processes as you want to achieve this result. The challenge is possible using only the Nextflow features that we discussed, and a bit of bash or Python/R scripting.
