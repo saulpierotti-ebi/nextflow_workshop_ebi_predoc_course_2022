@@ -624,6 +624,53 @@ workflow {
 ```
 </details>
 
+Now run again the workflow with `nextflow run main.nf`.
+As before, if you examine the output folder with `ls ../nextflow_output/append_to_file` you will find a set of files
+
+```
+set_of_files_1.append_to_file.txt
+set_of_files_2.append_to_file.txt
+set_of_files_3.append_to_file.txt
+set_of_files_4.append_to_file.txt
+set_of_files_5.append_to_file.txt
+set_of_files_6.append_to_file.txt
+set_of_files_7.append_to_file.txt
+set_of_files_8.append_to_file.txt
+```
+
+This time, if you check their content you will see that the last line is correctly paired with the first two.
+Here, as an example, the content of the file `set_of_files_1.append_to_file.txt` is shown.
+
+```
+This is content of file 1
+This is content of file 1
+csv_content_1
+```
+
+Let's examine how did we achieve this result:
+
+- We modified the sample sheet so to include a unique ID for each line
+- We modified all the processes to expect in input not a single element but tuples of two or three elements in a single channel
+  - A [tuple](https://www.wikiwand.com/en/Tuple) is the non-modifiable equivalent of a list
+  - When a channel emits lists of elements, the input specifier `tuple` should be used
+  - The input qualifiers in the process definition for the tuple elements must match the order and cardinality of the lists emitted by the channel used as input for the process
+- The input channel for the process `duplicate_lines` was modified so as to emit lists of two elements: the content of the `id` column and the content of the `sample` column (`input_ch.map{ [ it["id"], it["sample"] ] }`)
+- For the process `duplicate_lines`, the input block has been modified to expect tuples of two elements
+  - The first element is expected to be of type `val` and it is not used in the process (but it is passed in the output unchanged)
+  - The second element is expected to be of type `path` and will contain the file to be duplicated
+- The output of the process `duplicate_lines` has also been modified to be of type `tuple`
+  - This tuple produced in output will contain a first element of type `val`, consisting of the same `id` variable received as input
+  - The second element of the tuple is the output file produced by the process, with a qualifier of type `path`
+- The input channel is used again to extract the content of the columns `id` and `content`, as lists of two elements (`input_ch.map{ [ it["id"], it["content"] ] }`)
+- The channel operator `join` is used to join together the output of the process `duplicate_lines` with the channel resulting from the previous operation (`join(duplicate_lines.out, by: 0)`)
+  - The `join` operator joins two or more channels together using a matching key, whose position is specified with the `by` keyword
+  - In our case, we used `by: 0` as an argument to the `join` operator, meaning that we want to match the keys in the first position in the respective channels
+  - The items of the two channels are matched in such a way that items with the same value in the first element of the lists (corresponding to the content of the column `id` of the sample sheet in both cases) are joined together
+  - The resulting channel after the joining operation contains lists of three elements: the matching keys itself, the rest of the list for the first channel (one element), and finally the rest of the list for the second channel (one element)
+  - The channel is named `append_to_file_in_ch` (`set{ append_to_file_in_ch }`)
+- The channel `append_to_file_in_ch` is used as an input to the process `append_to_file`
+  - The process `append_to_file` declares in input a tuple of three items, matching the cardinality of the items produced by the channel `append_to_file_in_ch`
+  - The output of the process `duplicate_lines` and the content of the column `content` in the sample sheet will now be matched correctly since they were joined using the matching key `id`
 
 ## Software dependencies
 
