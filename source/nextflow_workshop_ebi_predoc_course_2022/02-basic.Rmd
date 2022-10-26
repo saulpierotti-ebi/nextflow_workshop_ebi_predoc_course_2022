@@ -351,7 +351,7 @@ process duplicate_lines {
     input:
         path my_file
     output:
-        path "${my_file.simpleName}.appended.txt"
+        path "${my_file.simpleName}.duplicated.txt"
     script:
         """
         cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt
@@ -365,7 +365,7 @@ process append_to_file {
         path my_file
         val my_val
     output:
-        path "${my_file.simpleName}.duplicated.txt"
+        path "${my_file.simpleName}.appended.txt"
     script:
         """
         cat $my_file > ${my_file.simpleName}.appended.txt
@@ -483,13 +483,84 @@ This would produce a channel containing in order the values 1, 2, and 3. These w
 
 In this section we will explore again the example seen in the previous section.
 In the previous section, we saw how processes are not guaranteed to emit outputs in the same order in which inputs are received.
-This caused wrong input pairs to occur in downstream processes of our workflow.
+This caused unexpected input pairs to occur in downstream processes of our workflow.
 Here we will see how we can enforce the correct pairing of different channels by joining them using matching keys.
 We will also introduce the `tuple` input qualifier.
 
-Since we will use the same sample sheet as in the previous section, we will not edit the `nextflow.config` file.
-Compared to the previous section, we will just modify the workflow logic and the input of the process `append_to_file`.
-Edit the workflow definition as follows
+Let's first create a sample sheet very similar to the one we used before, but with the added column `id` to uniquely identify each line.
+
+```bash
+echo "id,sample,content" > ../nextflow_inputs/samplesheet.csv
+echo "1,$(pwd)/../nextflow_inputs/set_of_files_1.txt,csv_content_1" >> ../nextflow_inputs/samplesheet.csv
+echo "2,$(pwd)/../nextflow_inputs/set_of_files_2.txt,csv_content_2" >> ../nextflow_inputs/samplesheet.csv
+echo "3,$(pwd)/../nextflow_inputs/set_of_files_3.txt,csv_content_3" >> ../nextflow_inputs/samplesheet.csv
+echo "4,$(pwd)/../nextflow_inputs/set_of_files_4.txt,csv_content_4" >> ../nextflow_inputs/samplesheet.csv
+echo "5,$(pwd)/../nextflow_inputs/set_of_files_5.txt,csv_content_5" >> ../nextflow_inputs/samplesheet.csv
+echo "6,$(pwd)/../nextflow_inputs/set_of_files_6.txt,csv_content_6" >> ../nextflow_inputs/samplesheet.csv
+echo "7,$(pwd)/../nextflow_inputs/set_of_files_7.txt,csv_content_7" >> ../nextflow_inputs/samplesheet.csv
+echo "8,$(pwd)/../nextflow_inputs/set_of_files_8.txt,csv_content_8" >> ../nextflow_inputs/samplesheet.csv
+```
+
+Let's now modify the workflow definition as follows
+
+```groovy
+workflow {
+    Channel.fromPath( params.samplesheet )
+      .splitCsv( header: true )
+      .set{ input_ch }
+
+    input_ch.map{ [ it["id"], it["sample"] ] }.set{ sample_ch }
+
+    duplicate_lines( sample_ch )
+
+    input_ch.map{ [ it["id"], it["content"] ] }
+      .join(duplicate_lines.out, by: 0)
+      .set{ append_to_file_in_ch }
+
+    append_to_file( append_to_file_in_ch )
+}
+```
+
+And the definition of the `duplicate_lines` and `append_to_file` processes as follows
+
+```groovy
+process duplicate_lines {
+    publishDir "../nextflow_output/duplicate_lines"
+
+    input:
+        tuple(
+            val(id),
+            path(my_file)
+        )
+    output:
+        tuple(
+          val(id),
+          path("${my_file.simpleName}.duplicated.txt")
+        )
+    script:
+        """
+        cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt
+        """
+}
+
+process append_to_file {
+    publishDir "../nextflow_output/append_to_file"
+
+    input:
+        tuple(
+            val(id),
+            val(my_val),
+            path(my_file)
+        )
+    output:
+        path "${my_file.simpleName}.appended.txt"
+    script:
+        """
+        cat $my_file > ${my_file.simpleName}.appended.txt
+        echo "$my_val" >> ${my_file.simpleName}.appended.txt
+        """
+}
+```
 
 If you want to see how your `main.nf` file should look like at this stage open this hidden section
 
