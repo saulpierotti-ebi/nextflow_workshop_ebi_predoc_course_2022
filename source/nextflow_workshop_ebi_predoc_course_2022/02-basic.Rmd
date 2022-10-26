@@ -97,7 +97,7 @@ Let's analyse what happened this time:
 
 ## Creating channels and specifying pipeline parameters
 
-The workflow that we wrote works as expected but it is not very useful since we cannot specify dynamically its input files. We will now learn how to use pipeline parameters to specify an external input file for the whole workflow and how to use channel factories to feed it to our processes.
+The workflow that we wrote works as expected but it is not very useful since we cannot specify dynamically its input files. We will now learn how to use pipeline parameters to specify an external input file for the whole workflow and how to use channel factories to feed inputs to our processes.
 
 First, create a text file called `../nextflow_inputs/a_file.txt` containing the string `"This is the file content"`
 
@@ -268,7 +268,7 @@ Let's examine what happened:
 
 - We changed `params.input_ch` to contain a glob pattern. This is expanded by Nextflow to yield a list of matching files.
 - The matching files are fed one by one via the channel `input_ch` to the process `duplicate_lines`
-- `duplicate_lines` operates independently but in parallel on all the inputs, producing the output files. Each task is executed in its own private directory.
+- The process `duplicate_lines` operates independently but in parallel on all the inputs, producing the output files. Each task is executed in its own private directory.
 
 ## Using a sample sheet and value channels
 
@@ -276,7 +276,7 @@ Using glob patterns for specifying samples is useful and quick, but what if we w
 And if we want some files to be processed in pairs with other specific files, or with specific parameters?
 For such use cases, a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.
 
-A sample sheet is just a [csv](https://www.wikiwand.com/en/Comma-separated_values) file with one row per file to be processed, and with each column specifying either a file or a parameter.
+A sample sheet is just a [CSV](https://www.wikiwand.com/en/Comma-separated_values) file with one row per file to be processed, and with each column specifying either a file or a parameter.
 Create a sample sheet called `../nextflow_inputs/samplesheet.csv` by running the following command.
 
 
@@ -441,7 +441,7 @@ csv_content_3
 
 So the first two lines have the correct number but the last line shows the wrong element! What's more, the element shown on the last line can be different on each run (try!). We said before that channels are guaranteed to emit elements in the same order that they are received, so we should have the correct matches between files and values. What happened?
 
-What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process `duplicate_lines` receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the files are processed in parallel.
+What happened is that channels are indeed guaranteed to preserve order, but processes and some operators are not because of their asynchronous and parallel nature. In our case, the process `duplicate_lines` receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the files are processed in parallel.
 So for example, `set_of_files_5.append_to_file.txt` could be processed and emitted some milliseconds earlier than `set_of_files_1.append_to_file.txt`, altering the order.
 
 A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in a later section.
@@ -449,24 +449,24 @@ For now, let's examine what happened in this version of our workflow:
 
 - We created the process `append_to_file`, which takes in input a file (`path my_file`) and a value (`val my_val`). This process copies the content of `my_file` to `${my_file.simpleName}.append_to_file.txt` and then appends to the newly created file the content of `my_val`
 - We defined the parameter `samplesheet` in `nextflow.config`
-- We modified the workflow so that we use `params.samplesheet` to create a channel with `Channel.fromPath`
+- We modified the workflow so that we use `params.samplesheet` to create a channel with the channel factory `Channel.fromPath`
 - We applied the operator `splitCsv` to this channel containing the sample sheet, using the option `header: true`. This operator reads the file contained in the channel assuming it to be a CSV file with a header line. Then it produces in output another channel containing, for each row in the sample sheet, a groovy map (what in Python would be called a [dictionary](https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_data_structures/Dictionaries)). This map contains a key for each element in the CSV header, and a value corresponding to the value of that column in the current line of the CSV file.
-- We apply the `map` operator (`.map{ it["sample"] }`) to the resulting channel
+- We apply the `map` operator (`map{ it["sample"] }`) to the resulting channel
   - The map operator is follwed by a [closure](https://www.wikiwand.com/en/Closure_(computer_programming)) (`{ it["sample"] }`)
   - You can think of a closure as an unnamed function (like a lambda function in Python)
   - The `map` operator calls this unnamed function for each element in the channel and creates another channel containing the respective function outputs
   - Closures understand the implicit variable `it`, which represents whatever input is given to the function
   - If an explicit return statement is not present in the closure, the last evaluated expression is returned by the closure ( `it["sample"]` in this case)
 - Since `splitCsv` created a dictionary for each item in the sample sheet, `map{ it["sample"] }` replaces that dictionary (`it` in the closure) with the content of the value contained in it under the key `"sample"`
-- `input_ch` is used again in `input_ch.map{ it["content"] }.set{ content_ch }` to extract the value of `content` for each sample from the samplesheet
+- `input_ch` is used again in `input_ch.map{ it["content"] }.set{ content_ch }` to extract the value of the column `content` for each sample in the sample sheet
   - Channels can be used many times, and each time all the files contained in them are processed. So both `input_ch.map{ it["content"] }.set{ content_ch }` and `input_ch.map{ it["sample"] }.set{ sample_ch }` process every element in `input_ch`
 - We created the channels `sample_ch` and `content_ch` using the `set` operator. They contain respectively the sample files and the `content` values related to them.
   - The order of processing in a channel is guaranteed, so we can be sure that each sample will be paired with the correct `content` value
-- We fed `sample_ch` to `duplicate_lines`
-- We fed the output of `duplicate_lines` to `append_to_file`, together with the values in `content_ch`
+- We fed the channel `sample_ch` to the process `duplicate_lines`, and we fed the output of the process `duplicate_lines` to the process `append_to_file` together with the values in the channel `content_ch`
+  - This is the step that messed up the pairing of the channels, since the process `duplicate_lines` is not guaranteed to produce in output elements in the same order in which it receives them in input
 - `append_to_file` appended the value of `content_ch` to the output of `duplicate_lines`, creating the final result
 
-Note that we introduced a new qualifier: `val`. The `val` qualifier specifies a value, differently from the `path` qualifier that specifies a file. If I write `val variable_name`, then `variable_name` can contain something like a string or a number, depending on what is fed to the process input.
+Note that we introduced a new qualifier: `val`. The `val` qualifier specifies a value, differently from the `path` qualifier that specifies a file. If I write an expression like `val variable_name`, then the variable `variable_name` can contain something like a string or a number, depending on what is fed to the process input.
 It is also possible to manually create value channels using the channel factory `Channel.value`.
 Take as an example the following
 
@@ -668,7 +668,7 @@ And then we would need to either set `docker{enabled = true}` or `singularity{en
 A similar approach would work also for the process `plot_population_by_area`, using for example the container `docker:/rocker/tidyverse`.
 
 Note that containers in the format `docker:/username/container` are pulled by Nextflow from DockerHub.
-They can be used either with Docker or Singularity.
+They can be used either with Docker or Singularity as a container engine.
 
 
 
@@ -725,9 +725,9 @@ This number is calculated from the following values:
 - Environment modules
 - Any executed scripts in the bin directory
 
-So, any time one of the following features of a process changes, the hash value and hence the working directory changes.
+So, any time one of such features of a process changes, the hash value and hence the working directory changes.
 
-If a working directory with the same hash value as that of one of the tasks to be executed is found by Nextflow, and this folder contains all the required outputs declared in the `output` block of the process, and it contains a file called `.exitcode` containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.
+If a working directory with the same hash value as that of the task to be executed is found by Nextflow, and this folder contains all the required outputs declared in the `output` block of the process, and it contains a file called `.exitcode` containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.
 
 This feature allows resuming the execution of a previous failed run of a workflow from the last successful task, potentially saving a lot of computing time.
 A more in-depth explanation of the resume feature is available [here](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html).
@@ -779,9 +779,9 @@ Mapping sequencing reads to a reference genome and then performing variant calli
 
 For such common use cases, very efficient Nextflow pipelines are already available, so there is no need to reinvent the wheel.
 Community-curated pipelines can be found on the [nf-core](https://nf-co.re) repository.
-So for example for mapping reads to a reference and then performing variant calling we would use the [`nf-core/sarek`](https://nf-co.re/sarek) pipeline.
+So for example for mapping reads to a reference and then performing variant calling we would use the [`nf-core/sarek` pipeline](https://nf-co.re/sarek).
 These pipelines follow a standardised format where inputs are declared by the user in a sample sheet.
-You can read each pipeline's documentation in nf-core to learn more about the parameters available and the expected sample sheet.
+You can read each pipeline's documentation in nf-core to learn more about the parameters available and the expected format of the sample sheet.
 
 I cannot make you run an actual nf-core pipeline now since there is not a simple and self-contained pipeline that does not require additional data like sequencing files to be run. However, once you have some files to process and you wrote an appropriate sample sheet, running the pipeline is very easy, for example:
 

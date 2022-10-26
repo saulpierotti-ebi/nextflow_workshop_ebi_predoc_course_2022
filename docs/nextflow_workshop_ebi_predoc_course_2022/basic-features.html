@@ -23,7 +23,7 @@
 <meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
 
 
-<meta name="date" content="2022-10-25" />
+<meta name="date" content="2022-10-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -322,7 +322,7 @@ This is the EBI predoc course</code></pre>
 </div>
 <div id="creating-channels-and-specifying-pipeline-parameters" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Creating channels and specifying pipeline parameters<a href="basic-features.html#creating-channels-and-specifying-pipeline-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The workflow that we wrote works as expected but it is not very useful since we cannot specify dynamically its input files. We will now learn how to use pipeline parameters to specify an external input file for the whole workflow and how to use channel factories to feed it to our processes.</p>
+<p>The workflow that we wrote works as expected but it is not very useful since we cannot specify dynamically its input files. We will now learn how to use pipeline parameters to specify an external input file for the whole workflow and how to use channel factories to feed inputs to our processes.</p>
 <p>First, create a text file called <code>../nextflow_inputs/a_file.txt</code> containing the string <code>"This is the file content"</code></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="basic-features.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ../nextflow_inputs</span>
 <span id="cb18-2"><a href="basic-features.html#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;This is the file content&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/a_file.txt</span></code></pre></div>
@@ -448,7 +448,7 @@ set_of_files_8.duplicated.txt</code></pre>
 <ul>
 <li>We changed <code>params.input_ch</code> to contain a glob pattern. This is expanded by Nextflow to yield a list of matching files.</li>
 <li>The matching files are fed one by one via the channel <code>input_ch</code> to the process <code>duplicate_lines</code></li>
-<li><code>duplicate_lines</code> operates independently but in parallel on all the inputs, producing the output files. Each task is executed in its own private directory.</li>
+<li>The process <code>duplicate_lines</code> operates independently but in parallel on all the inputs, producing the output files. Each task is executed in its own private directory.</li>
 </ul>
 </div>
 <div id="using-a-sample-sheet-and-value-channels" class="section level2 hasAnchor" number="2.4">
@@ -456,7 +456,7 @@ set_of_files_8.duplicated.txt</code></pre>
 <p>Using glob patterns for specifying samples is useful and quick, but what if we want to specify input files that live in many different directories with very different names?
 And if we want some files to be processed in pairs with other specific files, or with specific parameters?
 For such use cases, a sample sheet is the easiest solution and it is the recommended way to specify workflow inputs.</p>
-<p>A sample sheet is just a <a href="https://www.wikiwand.com/en/Comma-separated_values">csv</a> file with one row per file to be processed, and with each column specifying either a file or a parameter.
+<p>A sample sheet is just a <a href="https://www.wikiwand.com/en/Comma-separated_values">CSV</a> file with one row per file to be processed, and with each column specifying either a file or a parameter.
 Create a sample sheet called <code>../nextflow_inputs/samplesheet.csv</code> by running the following command.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="basic-features.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;sample,content&quot;</span> <span class="op">&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
 <span id="cb30-2"><a href="basic-features.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/../nextflow_inputs/set_of_files_1.txt,csv_content_1&quot;</span> <span class="op">&gt;&gt;</span> ../nextflow_inputs/samplesheet.csv</span>
@@ -587,16 +587,16 @@ csv_content_1</code></pre>
 This is content of file 1
 csv_content_3</code></pre>
 <p>So the first two lines have the correct number but the last line shows the wrong element! What’s more, the element shown on the last line can be different on each run (try!). We said before that channels are guaranteed to emit elements in the same order that they are received, so we should have the correct matches between files and values. What happened?</p>
-<p>What happened is that while channels are indeed guaranteed to preserve order, processes and some operators are not because of their asynchronous and parallel nature. In our case, the process <code>duplicate_lines</code> receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the files are processed in parallel.
+<p>What happened is that channels are indeed guaranteed to preserve order, but processes and some operators are not because of their asynchronous and parallel nature. In our case, the process <code>duplicate_lines</code> receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the files are processed in parallel.
 So for example, <code>set_of_files_5.append_to_file.txt</code> could be processed and emitted some milliseconds earlier than <code>set_of_files_1.append_to_file.txt</code>, altering the order.</p>
 <p>A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in a later section.
 For now, let’s examine what happened in this version of our workflow:</p>
 <ul>
 <li>We created the process <code>append_to_file</code>, which takes in input a file (<code>path my_file</code>) and a value (<code>val my_val</code>). This process copies the content of <code>my_file</code> to <code>${my_file.simpleName}.append_to_file.txt</code> and then appends to the newly created file the content of <code>my_val</code></li>
 <li>We defined the parameter <code>samplesheet</code> in <code>nextflow.config</code></li>
-<li>We modified the workflow so that we use <code>params.samplesheet</code> to create a channel with <code>Channel.fromPath</code></li>
+<li>We modified the workflow so that we use <code>params.samplesheet</code> to create a channel with the channel factory <code>Channel.fromPath</code></li>
 <li>We applied the operator <code>splitCsv</code> to this channel containing the sample sheet, using the option <code>header: true</code>. This operator reads the file contained in the channel assuming it to be a CSV file with a header line. Then it produces in output another channel containing, for each row in the sample sheet, a groovy map (what in Python would be called a <a href="https://en.wikibooks.org/wiki/A-level_Computing/AQA/Paper_1/Fundamentals_of_data_structures/Dictionaries">dictionary</a>). This map contains a key for each element in the CSV header, and a value corresponding to the value of that column in the current line of the CSV file.</li>
-<li>We apply the <code>map</code> operator (<code>.map{ it["sample"] }</code>) to the resulting channel
+<li>We apply the <code>map</code> operator (<code>map{ it["sample"] }</code>) to the resulting channel
 <ul>
 <li>The map operator is follwed by a <a href="https://www.wikiwand.com/en/Closure_(computer_programming)">closure</a> (<code>{ it["sample"] }</code>)</li>
 <li>You can think of a closure as an unnamed function (like a lambda function in Python)</li>
@@ -605,7 +605,7 @@ For now, let’s examine what happened in this version of our workflow:</p>
 <li>If an explicit return statement is not present in the closure, the last evaluated expression is returned by the closure ( <code>it["sample"]</code> in this case)</li>
 </ul></li>
 <li>Since <code>splitCsv</code> created a dictionary for each item in the sample sheet, <code>map{ it["sample"] }</code> replaces that dictionary (<code>it</code> in the closure) with the content of the value contained in it under the key <code>"sample"</code></li>
-<li><code>input_ch</code> is used again in <code>input_ch.map{ it["content"] }.set{ content_ch }</code> to extract the value of <code>content</code> for each sample from the samplesheet
+<li><code>input_ch</code> is used again in <code>input_ch.map{ it["content"] }.set{ content_ch }</code> to extract the value of the column <code>content</code> for each sample in the sample sheet
 <ul>
 <li>Channels can be used many times, and each time all the files contained in them are processed. So both <code>input_ch.map{ it["content"] }.set{ content_ch }</code> and <code>input_ch.map{ it["sample"] }.set{ sample_ch }</code> process every element in <code>input_ch</code></li>
 </ul></li>
@@ -613,11 +613,13 @@ For now, let’s examine what happened in this version of our workflow:</p>
 <ul>
 <li>The order of processing in a channel is guaranteed, so we can be sure that each sample will be paired with the correct <code>content</code> value</li>
 </ul></li>
-<li>We fed <code>sample_ch</code> to <code>duplicate_lines</code></li>
-<li>We fed the output of <code>duplicate_lines</code> to <code>append_to_file</code>, together with the values in <code>content_ch</code></li>
+<li>We fed the channel <code>sample_ch</code> to the process <code>duplicate_lines</code>, and we fed the output of the process <code>duplicate_lines</code> to the process <code>append_to_file</code> together with the values in the channel <code>content_ch</code>
+<ul>
+<li>This is the step that messed up the pairing of the channels, since the process <code>duplicate_lines</code> is not guaranteed to produce in output elements in the same order in which it receives them in input</li>
+</ul></li>
 <li><code>append_to_file</code> appended the value of <code>content_ch</code> to the output of <code>duplicate_lines</code>, creating the final result</li>
 </ul>
-<p>Note that we introduced a new qualifier: <code>val</code>. The <code>val</code> qualifier specifies a value, differently from the <code>path</code> qualifier that specifies a file. If I write <code>val variable_name</code>, then <code>variable_name</code> can contain something like a string or a number, depending on what is fed to the process input.
+<p>Note that we introduced a new qualifier: <code>val</code>. The <code>val</code> qualifier specifies a value, differently from the <code>path</code> qualifier that specifies a file. If I write an expression like <code>val variable_name</code>, then the variable <code>variable_name</code> can contain something like a string or a number, depending on what is fed to the process input.
 It is also possible to manually create value channels using the channel factory <code>Channel.value</code>.
 Take as an example the following</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb39-1"><a href="basic-features.html#cb39-1" aria-hidden="true" tabindex="-1"></a>workflow<span class="op">{</span></span>
@@ -764,7 +766,7 @@ Packages are sourced from the repository <a href="https://anaconda.org/">Anacond
 <p>And then we would need to either set <code>docker{enabled = true}</code> or <code>singularity{enabled = true}</code> on our <code>nextflow.config</code> file, or we could specify the flag <code>-with-docker</code> or <code>-with-singularity</code> from the command line.
 A similar approach would work also for the process <code>plot_population_by_area</code>, using for example the container <code>docker:/rocker/tidyverse</code>.</p>
 <p>Note that containers in the format <code>docker:/username/container</code> are pulled by Nextflow from DockerHub.
-They can be used either with Docker or Singularity.</p>
+They can be used either with Docker or Singularity as a container engine.</p>
 </div>
 <div id="resource-allocation" class="section level2 hasAnchor" number="2.6">
 <h2><span class="header-section-number">2.6</span> Resource allocation<a href="basic-features.html#resource-allocation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -809,8 +811,8 @@ This number is calculated from the following values:</p>
 <li>Environment modules</li>
 <li>Any executed scripts in the bin directory</li>
 </ul>
-<p>So, any time one of the following features of a process changes, the hash value and hence the working directory changes.</p>
-<p>If a working directory with the same hash value as that of one of the tasks to be executed is found by Nextflow, and this folder contains all the required outputs declared in the <code>output</code> block of the process, and it contains a file called <code>.exitcode</code> containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.</p>
+<p>So, any time one of such features of a process changes, the hash value and hence the working directory changes.</p>
+<p>If a working directory with the same hash value as that of the task to be executed is found by Nextflow, and this folder contains all the required outputs declared in the <code>output</code> block of the process, and it contains a file called <code>.exitcode</code> containing a value of zero (this is created automatically by Nextflow to save the exit code of a task execution), then the task execution is skipped and the output files present in the directory are returned as if they were produced by the current task.</p>
 <p>This feature allows resuming the execution of a previous failed run of a workflow from the last successful task, potentially saving a lot of computing time.
 A more in-depth explanation of the resume feature is available <a href="https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html">here</a>.</p>
 <p>To test the resume feature by ourselves, let’s modify our <code>main.nf</code> file as follows</p>
@@ -847,9 +849,9 @@ Instead, the cached results obtained before are returned.</p>
 Mapping sequencing reads to a reference genome and then performing variant calling is an example of this.</p>
 <p>For such common use cases, very efficient Nextflow pipelines are already available, so there is no need to reinvent the wheel.
 Community-curated pipelines can be found on the <a href="https://nf-co.re">nf-core</a> repository.
-So for example for mapping reads to a reference and then performing variant calling we would use the <a href="https://nf-co.re/sarek"><code>nf-core/sarek</code></a> pipeline.
+So for example for mapping reads to a reference and then performing variant calling we would use the <a href="https://nf-co.re/sarek"><code>nf-core/sarek</code> pipeline</a>.
 These pipelines follow a standardised format where inputs are declared by the user in a sample sheet.
-You can read each pipeline’s documentation in nf-core to learn more about the parameters available and the expected sample sheet.</p>
+You can read each pipeline’s documentation in nf-core to learn more about the parameters available and the expected format of the sample sheet.</p>
 <p>I cannot make you run an actual nf-core pipeline now since there is not a simple and self-contained pipeline that does not require additional data like sequencing files to be run. However, once you have some files to process and you wrote an appropriate sample sheet, running the pipeline is very easy, for example:</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="basic-features.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/sarek</span></code></pre></div>
 <p>Note that Nextflow is able to run workflows from <a href="https://github.com/">GitHub</a>, and <code>nf-core/sarek</code> in the command above is just a pointer to <a href="https://github.com/nf-core/sarek">this GitHub repository</a>.
