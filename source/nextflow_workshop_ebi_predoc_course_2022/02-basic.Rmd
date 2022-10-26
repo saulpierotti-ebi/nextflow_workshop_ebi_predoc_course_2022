@@ -444,7 +444,8 @@ So the first two lines have the correct number but the last line shows the wrong
 What happened is that channels are indeed guaranteed to preserve order, but processes and some operators are not because of their asynchronous and parallel nature. In our case, the process `duplicate_lines` receives the files in the correct order, but it is not guaranteed to emit them in the same order. This is because all the files are processed in parallel.
 So for example, `set_of_files_5.append_to_file.txt` could be processed and emitted some milliseconds earlier than `set_of_files_1.append_to_file.txt`, altering the order.
 
-A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys. We will explore it in a later section.
+A better approach when we want multiple channels to be used by one process with some predictable matching is to join channels using matching keys.
+We will explore it in the next section.
 For now, let's examine what happened in this version of our workflow:
 
 - We created the process `append_to_file`, which takes in input a file (`path my_file`) and a value (`val my_val`). This process copies the content of `my_file` to `${my_file.simpleName}.append_to_file.txt` and then appends to the newly created file the content of `my_val`
@@ -477,6 +478,82 @@ workflow{
 ```
 
 This would produce a channel containing in order the values 1, 2, and 3. These would then be printed one by one to the terminal by the view operator.
+
+## The `tuple` input qualifier and joining channels
+
+In this section we will explore again the example seen in the previous section.
+In the previous section, we saw how processes are not guaranteed to emit outputs in the same order in which inputs are received.
+This caused wrong input pairs to occur in downstream processes of our workflow.
+Here we will see how we can enforce the correct pairing of different channels by joining them using matching keys.
+We will also introduce the `tuple` input qualifier.
+
+Since we will use the same sample sheet as in the previous section, we will not edit the `nextflow.config` file.
+Compared to the previous section, we will just modify the workflow logic and the input of the process `append_to_file`.
+Edit the workflow definition as follows
+
+If you want to see how your `main.nf` file should look like at this stage open this hidden section
+
+<details>
+<summary>Code</summary>
+```groovy
+nextflow.enable.dsl = 2
+
+process duplicate_lines {
+    publishDir "../nextflow_output/duplicate_lines"
+
+    input:
+        tuple(
+            val(id),
+            path(my_file)
+        )
+    output:
+        tuple(
+          val(id),
+          path("${my_file.simpleName}.duplicated.txt")
+        )
+    script:
+        """
+        cat $my_file $my_file > ${my_file.simpleName}.duplicated.txt
+        """
+}
+
+process append_to_file {
+    publishDir "../nextflow_output/append_to_file"
+
+    input:
+        tuple(
+            val(id),
+            val(my_val),
+            path(my_file)
+        )
+    output:
+        path "${my_file.simpleName}.appended.txt"
+    script:
+        """
+        cat $my_file > ${my_file.simpleName}.appended.txt
+        echo "$my_val" >> ${my_file.simpleName}.appended.txt
+        """
+}
+
+workflow {
+    Channel.fromPath( params.samplesheet )
+      .splitCsv( header: true )
+      .set{ input_ch }
+
+    input_ch.map{ [ it["id"], it["sample"] ] }.set{ sample_ch }
+
+    duplicate_lines( sample_ch )
+
+    input_ch.map{ [ it["id"], it["content"] ] }
+      .join(duplicate_lines.out, by: 0)
+      .set{ append_to_file_in_ch }
+
+    append_to_file( append_to_file_in_ch )
+}
+
+```
+</details>
+
 
 ## Software dependencies
 
