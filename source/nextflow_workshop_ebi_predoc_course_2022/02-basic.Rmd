@@ -481,7 +481,6 @@ This would produce a channel containing in order the values 1, 2, and 3. These w
 
 ## The `tuple` input qualifier and joining channels
 
-In this section we will explore again the example seen in the previous section.
 In the previous section, we saw how processes are not guaranteed to emit outputs in the same order in which inputs are received.
 This caused unexpected input pairs to occur in downstream processes of our workflow.
 Here we will see how we can enforce the correct pairing of different channels by joining them using matching keys.
