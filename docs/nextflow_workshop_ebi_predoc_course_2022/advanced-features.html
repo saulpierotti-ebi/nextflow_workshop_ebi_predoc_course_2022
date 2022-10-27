@@ -23,7 +23,7 @@
 <meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
 
 
-<meta name="date" content="2022-10-26" />
+<meta name="date" content="2022-10-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -252,8 +252,8 @@ You are supposed to try out by yourself these ideas, and see how they can be app
 <h2><span class="header-section-number">4.1</span> Process inputs<a href="advanced-features.html#process-inputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The input(s) used by a process is defined in its <code>input:</code> block, as we saw before.
 The input(s) specified can be of several types.
-We already saw in the basic section of this workshop the <code>path</code> and <code>val</code> input qualifiers.
-We will see them more in detail now, as well as explore some additional input qualifiers.</p>
+We already saw in the basic section of this workshop the <code>path</code>,<code>val</code>, and <code>tuple</code> input qualifiers.
+We will see them more in detail now.</p>
 <div id="input-of-type-val" class="section level3 hasAnchor" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Input of type <code>val</code><a href="advanced-features.html#input-of-type-val" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>An input of type <code>val</code> just defines a value, that is made available to the process as a variable.</p>
@@ -419,7 +419,7 @@ What especially differentiates <code>Channel.of</code> from <code>Channel.value<
 </div>
 <div id="operators" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> Operators<a href="advanced-features.html#operators" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In the basic section of this workshop, we introduced a few Nextflow operators: <code>map</code>, <code>splitCsv</code>, <code>view</code>.
+<p>In the basic section of this workshop, we introduced a few Nextflow operators: <code>map</code>, <code>splitCsv</code>, <code>view</code>, <code>join</code>.
 Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with more complex logic. Note that this is not an exhaustive list.
 An exhaustive list can be found <a href="https://www.nextflow.io/docs/latest/operator.html#">here</a>.</p>
 <div id="the-view-operator" class="section level3 hasAnchor" number="4.5.1">
@@ -540,6 +540,7 @@ This is achieved by specifying the <code>by</code> argument, with an integer spe
 <pre><code>[key1, 1, bb]
 [key3, 3, aa]
 [key2, 2, cc]</code></pre>
+<p><strong>Note:</strong> this version of the <code>combine</code> operator has basically equivalent functionality to that of the <code>join</code> operator.</p>
 </div>
 <div id="the-grouptuple-operator" class="section level3 hasAnchor" number="4.5.10">
 <h3><span class="header-section-number">4.5.10</span> The <code>groupTuple</code> operator<a href="advanced-features.html#the-grouptuple-operator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -584,7 +585,7 @@ They can be accessed to modify the execution of processes and workflows accordin
 <ul>
 <li><code>task.attempt</code>: the number of times the task has been retried because of errors (when using <code>errorStrategy "retry"</code>)</li>
 <li><code>task.hash</code>: the hash values of the task (this is used to define the task’s working directory)</li>
-<li><code>task.processes</code>: the name of the process</li>
+<li><code>task.process</code>: the name of the process</li>
 <li><code>task.name</code>: the name of the task (composed of process name and inputs)</li>
 <li><code>task.exitStatus</code>: the exit code of the task</li>
 </ul>
@@ -657,11 +658,11 @@ This allows all the configurations to be defined centrally in <code>nextflow.con
 <span id="cb107-13"><a href="advanced-features.html#cb107-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;&quot;&quot;</span></span>
 <span id="cb107-14"><a href="advanced-features.html#cb107-14" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;&quot;&quot;</span></span>
 <span id="cb107-15"><a href="advanced-features.html#cb107-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Any process directive can be included in the <code>withLabel</code> code block in <code>nextflow.config</code>.</p>
 <p>And in <code>nextflow.config</code>:</p>
 <div class="sourceCode" id="cb108"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb108-1"><a href="advanced-features.html#cb108-1" aria-hidden="true" tabindex="-1"></a>withLabel<span class="op">:</span>process_long <span class="op">{</span></span>
 <span id="cb108-2"><a href="advanced-features.html#cb108-2" aria-hidden="true" tabindex="-1"></a>  time <span class="op">=</span> <span class="st">&quot;3 days&quot;</span></span>
 <span id="cb108-3"><a href="advanced-features.html#cb108-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Any valid process directive can be used in the <code>withLabel:&lt;somelabel&gt; {}</code> code block of the <code>nextflow.config</code> file.</p>
 </div>
 <div id="the-debug-directive" class="section level3 hasAnchor" number="4.7.5">
 <h3><span class="header-section-number">4.7.5</span> The <code>debug</code> directive<a href="advanced-features.html#the-debug-directive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -753,7 +754,7 @@ The value assigned to the <code>queue</code> directive should be a string matchi
 <p>The <code>ext</code> directive is used for advanced, custom configurations.
 It allows you to define any key-value pair for the process.
 The argument of the <code>ext</code> directive should be a closure assigning a variable.
-The custom variables are made available like any other <code>task</code> implicit variable in the dictionary <code>task.ext</code>.</p>
+The custom variables are made available in the dictionary <code>task.ext</code>.</p>
 <div class="sourceCode" id="cb115"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb115-1"><a href="advanced-features.html#cb115-1" aria-hidden="true" tabindex="-1"></a>process do_something <span class="op">{</span></span>
 <span id="cb115-2"><a href="advanced-features.html#cb115-2" aria-hidden="true" tabindex="-1"></a>  ext <span class="op">{</span> my_var <span class="op">=</span> <span class="st">&quot;my_value&quot;</span> <span class="op">}</span></span>
 <span id="cb115-3"><a href="advanced-features.html#cb115-3" aria-hidden="true" tabindex="-1"></a></span>

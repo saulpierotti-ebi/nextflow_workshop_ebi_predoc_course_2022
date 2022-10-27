@@ -10,8 +10,8 @@ You are supposed to try out by yourself these ideas, and see how they can be app
 
 The input(s) used by a process is defined in its `input:` block, as we saw before.
 The input(s) specified can be of several types.
-We already saw in the basic section of this workshop the `path` and `val` input qualifiers.
-We will see them more in detail now, as well as explore some additional input qualifiers.
+We already saw in the basic section of this workshop the `path`,`val`, and `tuple` input qualifiers.
+We will see them more in detail now.
 
 ### Input of type `val`
 
@@ -231,7 +231,7 @@ What especially differentiates `Channel.of` from  `Channel.value` is that the la
 
 ## Operators
 
-In the basic section of this workshop, we introduced a few Nextflow operators: `map`, `splitCsv`, `view`.
+In the basic section of this workshop, we introduced a few Nextflow operators: `map`, `splitCsv`, `view`, `join`.
 Here we will more formally describe such operators and also look at additional operators that can be helpful for workflows with more complex logic. Note that this is not an exhaustive list.
 An exhaustive list can be found [here](https://www.nextflow.io/docs/latest/operator.html#).
 
@@ -416,6 +416,8 @@ Expected output:
 [key2, 2, cc]
 ```
 
+**Note:** this version of the `combine` operator has basically equivalent functionality to that of the `join` operator.
+
 ### The `groupTuple` operator
 
 The `groupTuple` operator collects the elements of a channel according to a matching key (whose position is specified with the `by` argument).
@@ -463,7 +465,7 @@ All of the process implicit variables are part of the `task` dictionary.
 
 - `task.attempt`: the number of times the task has been retried because of errors (when using `errorStrategy "retry"`)
 - `task.hash`: the hash values of the task (this is used to define the task's working directory)
-- `task.processes`: the name of the process
+- `task.process`: the name of the process
 - `task.name`: the name of the task (composed of process name and inputs)
 - `task.exitStatus`: the exit code of the task
 
@@ -552,8 +554,6 @@ process do_something_else {
 }
 ```
 
-Any process directive can be included in the `withLabel` code block in `nextflow.config`.
-
 And in `nextflow.config`:
 
 ```groovy
@@ -561,6 +561,8 @@ withLabel:process_long {
   time = "3 days"
 }
 ```
+
+Any valid process directive can be used in the `withLabel:<somelabel> {}` code block of the `nextflow.config` file.
 
 ### The `debug` directive
 
@@ -675,7 +677,7 @@ process do_something {
 The `ext` directive is used for advanced, custom configurations.
 It allows you to define any key-value pair for the process.
 The argument of the `ext` directive should be a closure assigning a variable.
-The custom variables are made available like any other `task` implicit variable in the dictionary `task.ext`.
+The custom variables are made available in the dictionary `task.ext`.
 
 ```groovy
 process do_something {

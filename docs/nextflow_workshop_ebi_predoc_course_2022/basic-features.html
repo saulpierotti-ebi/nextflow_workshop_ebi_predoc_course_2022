@@ -23,7 +23,7 @@
 <meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
 
 
-<meta name="date" content="2022-10-26" />
+<meta name="date" content="2022-10-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -661,7 +661,7 @@ We will also introduce the <code>tuple</code> input qualifier.</p>
 <span id="cb41-13"><a href="basic-features.html#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-14"><a href="basic-features.html#cb41-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">append_to_file</span><span class="op">(</span> append_to_file_in_ch <span class="op">)</span></span>
 <span id="cb41-15"><a href="basic-features.html#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>And the definition of the <code>duplicate_lines</code> and <code>append_to_file</code> processes as follows</p>
+<p>And let’s modify the definition of the processes <code>duplicate_lines</code> and <code>append_to_file</code> as follows</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb42-1"><a href="basic-features.html#cb42-1" aria-hidden="true" tabindex="-1"></a>process duplicate_lines <span class="op">{</span></span>
 <span id="cb42-2"><a href="basic-features.html#cb42-2" aria-hidden="true" tabindex="-1"></a>    publishDir <span class="st">&quot;../nextflow_output/duplicate_lines&quot;</span></span>
 <span id="cb42-3"><a href="basic-features.html#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -773,13 +773,13 @@ Here, as an example, the content of the file <code>set_of_files_1.append_to_file
 <pre><code>This is content of file 1
 This is content of file 1
 csv_content_1</code></pre>
-<p>Let’s examine how did we achieve this result:</p>
+<p>Let’s examine how we achieved this result:</p>
 <ul>
 <li>We modified the sample sheet so to include a unique ID for each line</li>
 <li>We modified all the processes to expect in input not a single element but tuples of two or three elements in a single channel
 <ul>
 <li>A <a href="https://www.wikiwand.com/en/Tuple">tuple</a> is the non-modifiable equivalent of a list</li>
-<li>When a channel emits lists of elements, the input specifier <code>tuple</code> should be used</li>
+<li>When a channel emits lists of elements, the input qualifier <code>tuple</code> should be used</li>
 <li>The input qualifiers in the process definition for the tuple elements must match the order and cardinality of the lists emitted by the channel used as input for the process</li>
 </ul></li>
 <li>The input channel for the process <code>duplicate_lines</code> was modified so as to emit lists of two elements: the content of the <code>id</code> column and the content of the <code>sample</code> column (<code>input_ch.map{ [ it["id"], it["sample"] ] }</code>)</li>
@@ -793,14 +793,14 @@ csv_content_1</code></pre>
 <li>This tuple produced in output will contain a first element of type <code>val</code>, consisting of the same <code>id</code> variable received as input</li>
 <li>The second element of the tuple is the output file produced by the process, with a qualifier of type <code>path</code></li>
 </ul></li>
-<li>The input channel is used again to extract the content of the columns <code>id</code> and <code>content</code>, as lists of two elements (<code>input_ch.map{ [ it["id"], it["content"] ] }</code>)</li>
+<li>The <code>map</code> operator is used again of the the channel <code>input_ch</code> to extract the content of the columns <code>id</code> and <code>content</code>, as lists of two elements (<code>input_ch.map{ [ it["id"], it["content"] ] }</code>)</li>
 <li>The channel operator <code>join</code> is used to join together the output of the process <code>duplicate_lines</code> with the channel resulting from the previous operation (<code>join(duplicate_lines.out, by: 0)</code>)
 <ul>
 <li>The <code>join</code> operator joins two or more channels together using a matching key, whose position is specified with the <code>by</code> keyword</li>
 <li>In our case, we used <code>by: 0</code> as an argument to the <code>join</code> operator, meaning that we want to match the keys in the first position in the respective channels</li>
 <li>The items of the two channels are matched in such a way that items with the same value in the first element of the lists (corresponding to the content of the column <code>id</code> of the sample sheet in both cases) are joined together</li>
-<li>The resulting channel after the joining operation contains lists of three elements: the matching keys itself, the rest of the list for the first channel (one element), and finally the rest of the list for the second channel (one element)</li>
-<li>The channel is named <code>append_to_file_in_ch</code> (<code>set{ append_to_file_in_ch }</code>)</li>
+<li>The resulting channel after the joining operation contains lists of three elements: the matching key itself, the remainder of the list emitted by the first channel after removal of the matching key (one element), and finally the remainder of the list emitted by the second channel after removal of the matching key (one element)</li>
+<li>The resulting channel is named <code>append_to_file_in_ch</code> (<code>set{ append_to_file_in_ch }</code>)</li>
 </ul></li>
 <li>The channel <code>append_to_file_in_ch</code> is used as an input to the process <code>append_to_file</code>
 <ul>
