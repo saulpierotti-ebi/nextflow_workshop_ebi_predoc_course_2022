@@ -809,7 +809,7 @@ workflow {
 }
 ```
 
-Sub-workflows can have an `input`, a `main`, and an `output` block.
+Sub-workflows can have an `take`, a `main`, and an `emit` block.
 The `take` block defines the name of one or more channels that are passed as inputs to the sub-workflows.
 The `emit` block can define a channel accessible from `<WORKFLOW_NAME>.out` after execution.
 The `main` block defines the actual workflow logic in terms of processes to be run and channel manipulations.

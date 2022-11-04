@@ -871,7 +871,7 @@ So for example a workflow that does germline variant calling on a set of sequenc
 <span id="cb117-25"><a href="advanced-features.html#cb117-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAP_TO_REF</span><span class="op">(</span> params<span class="op">.</span>input <span class="op">)</span></span>
 <span id="cb117-26"><a href="advanced-features.html#cb117-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">CALL_VARIANTS</span><span class="op">(</span> MAP_TO_REF<span class="op">.</span>out <span class="op">)</span></span>
 <span id="cb117-27"><a href="advanced-features.html#cb117-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Sub-workflows can have an <code>input</code>, a <code>main</code>, and an <code>output</code> block.
+<p>Sub-workflows can have an <code>take</code>, a <code>main</code>, and an <code>emit</code> block.
 The <code>take</code> block defines the name of one or more channels that are passed as inputs to the sub-workflows.
 The <code>emit</code> block can define a channel accessible from <code>&lt;WORKFLOW_NAME&gt;.out</code> after execution.
 The <code>main</code> block defines the actual workflow logic in terms of processes to be run and channel manipulations.</p>
