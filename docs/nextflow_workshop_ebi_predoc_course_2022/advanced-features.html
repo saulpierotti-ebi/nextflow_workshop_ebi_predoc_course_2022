@@ -23,7 +23,7 @@
 <meta name="author" content="Saul Pierotti, PhD student in the Birney group (European Bioinformatics Institute)" />
 
 
-<meta name="date" content="2022-10-27" />
+<meta name="date" content="2022-11-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -847,23 +847,23 @@ So for example a workflow that does germline variant calling on a set of sequenc
 <div class="sourceCode" id="cb117"><pre class="sourceCode groovy"><code class="sourceCode groovy"><span id="cb117-1"><a href="advanced-features.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>processes defined here<span class="op">&gt;</span></span>
 <span id="cb117-2"><a href="advanced-features.html#cb117-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb117-3"><a href="advanced-features.html#cb117-3" aria-hidden="true" tabindex="-1"></a>workflow MAP_TO_REF <span class="op">{</span></span>
-<span id="cb117-4"><a href="advanced-features.html#cb117-4" aria-hidden="true" tabindex="-1"></a>  input<span class="op">:</span></span>
+<span id="cb117-4"><a href="advanced-features.html#cb117-4" aria-hidden="true" tabindex="-1"></a>  take<span class="op">:</span></span>
 <span id="cb117-5"><a href="advanced-features.html#cb117-5" aria-hidden="true" tabindex="-1"></a>    fastq_ch</span>
 <span id="cb117-6"><a href="advanced-features.html#cb117-6" aria-hidden="true" tabindex="-1"></a>  main<span class="op">:</span></span>
 <span id="cb117-7"><a href="advanced-features.html#cb117-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">run_bwamem2</span><span class="op">(</span> fastq_ch <span class="op">)</span></span>
 <span id="cb117-8"><a href="advanced-features.html#cb117-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mark_duplicates</span><span class="op">(</span> run_bwamem2<span class="op">.</span>out <span class="op">)</span></span>
-<span id="cb117-9"><a href="advanced-features.html#cb117-9" aria-hidden="true" tabindex="-1"></a>  output<span class="op">:</span></span>
+<span id="cb117-9"><a href="advanced-features.html#cb117-9" aria-hidden="true" tabindex="-1"></a>  emit<span class="op">:</span></span>
 <span id="cb117-10"><a href="advanced-features.html#cb117-10" aria-hidden="true" tabindex="-1"></a>    mark_duplicates<span class="op">.</span>out</span>
 <span id="cb117-11"><a href="advanced-features.html#cb117-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb117-12"><a href="advanced-features.html#cb117-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb117-13"><a href="advanced-features.html#cb117-13" aria-hidden="true" tabindex="-1"></a>workflow CALL_VARIANTS <span class="op">{</span></span>
-<span id="cb117-14"><a href="advanced-features.html#cb117-14" aria-hidden="true" tabindex="-1"></a>  input<span class="op">:</span></span>
+<span id="cb117-14"><a href="advanced-features.html#cb117-14" aria-hidden="true" tabindex="-1"></a>  take<span class="op">:</span></span>
 <span id="cb117-15"><a href="advanced-features.html#cb117-15" aria-hidden="true" tabindex="-1"></a>    mapped_crams_ch</span>
 <span id="cb117-16"><a href="advanced-features.html#cb117-16" aria-hidden="true" tabindex="-1"></a>  main<span class="op">:</span></span>
 <span id="cb117-17"><a href="advanced-features.html#cb117-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gatk_haplotypecaller</span><span class="op">(</span> mapped_crams_ch <span class="op">)</span></span>
 <span id="cb117-18"><a href="advanced-features.html#cb117-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">genomics_db_import</span><span class="op">(</span> gatk_haplotypecaller<span class="op">.</span>out <span class="op">)</span></span>
 <span id="cb117-19"><a href="advanced-features.html#cb117-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gatk_genotypegvcfs</span><span class="op">(</span> genomics_db_import<span class="op">.</span>out <span class="op">)</span></span>
-<span id="cb117-20"><a href="advanced-features.html#cb117-20" aria-hidden="true" tabindex="-1"></a>  output<span class="op">:</span></span>
+<span id="cb117-20"><a href="advanced-features.html#cb117-20" aria-hidden="true" tabindex="-1"></a>  emit<span class="op">:</span></span>
 <span id="cb117-21"><a href="advanced-features.html#cb117-21" aria-hidden="true" tabindex="-1"></a>    gatk_genotypegvcfs<span class="op">.</span>out</span>
 <span id="cb117-22"><a href="advanced-features.html#cb117-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb117-23"><a href="advanced-features.html#cb117-23" aria-hidden="true" tabindex="-1"></a></span>
@@ -872,8 +872,8 @@ So for example a workflow that does germline variant calling on a set of sequenc
 <span id="cb117-26"><a href="advanced-features.html#cb117-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">CALL_VARIANTS</span><span class="op">(</span> MAP_TO_REF<span class="op">.</span>out <span class="op">)</span></span>
 <span id="cb117-27"><a href="advanced-features.html#cb117-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Sub-workflows can have an <code>input</code>, a <code>main</code>, and an <code>output</code> block.
-The <code>input</code> block defines the name of one or more channels that are passed as inputs to the sub-workflows.
-The <code>output</code> block can define a channel accessible from <code>&lt;WORKFLOW_NAME&gt;.out</code> after execution.
+The <code>take</code> block defines the name of one or more channels that are passed as inputs to the sub-workflows.
+The <code>emit</code> block can define a channel accessible from <code>&lt;WORKFLOW_NAME&gt;.out</code> after execution.
 The <code>main</code> block defines the actual workflow logic in terms of processes to be run and channel manipulations.</p>
 <p>It is also possible to write separate logical steps of the workflow in separate <code>.nf</code> files.
 Such additional files can have any name and are usually put under the folder <code>workflows</code> in the project directory.

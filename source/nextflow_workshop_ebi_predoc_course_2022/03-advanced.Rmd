@@ -783,23 +783,23 @@ So for example a workflow that does germline variant calling on a set of sequenc
 <processes defined here>
 
 workflow MAP_TO_REF {
-  input:
+  take:
     fastq_ch
   main:
     run_bwamem2( fastq_ch )
     mark_duplicates( run_bwamem2.out )
-  output:
+  emit:
     mark_duplicates.out
 }
 
 workflow CALL_VARIANTS {
-  input:
+  take:
     mapped_crams_ch
   main:
     gatk_haplotypecaller( mapped_crams_ch )
     genomics_db_import( gatk_haplotypecaller.out )
     gatk_genotypegvcfs( genomics_db_import.out )
-  output:
+  emit:
     gatk_genotypegvcfs.out
 }
 
@@ -810,8 +810,8 @@ workflow {
 ```
 
 Sub-workflows can have an `input`, a `main`, and an `output` block.
-The `input` block defines the name of one or more channels that are passed as inputs to the sub-workflows.
-The `output` block can define a channel accessible from `<WORKFLOW_NAME>.out` after execution.
+The `take` block defines the name of one or more channels that are passed as inputs to the sub-workflows.
+The `emit` block can define a channel accessible from `<WORKFLOW_NAME>.out` after execution.
 The `main` block defines the actual workflow logic in terms of processes to be run and channel manipulations.
 
 It is also possible to write separate logical steps of the workflow in separate `.nf` files.
