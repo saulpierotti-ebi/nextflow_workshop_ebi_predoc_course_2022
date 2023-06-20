@@ -1,4 +1,3 @@
-# Nextflow workshop - EBI predoc course 2022
+# My Github Pages
 
-This repository contains a markdown file rendered as html for use with GitHub pages.
-This repository is about the Nextflow workshop that I organised at EBI for the second year predoc course.
+This repository contains my personal (work-related) Github Pages website. Subfolders may contain projects.

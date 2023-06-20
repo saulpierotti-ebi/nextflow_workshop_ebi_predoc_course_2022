@@ -1,0 +1,22 @@
+body {
+	background-color: #202125;
+	color: white;
+	font-family: "Fira Code", "Inconsolata", "DejaVu Sans Mono", "monospace";
+	margin: 20vh
+}
+
+a{
+	text-decoration: none;
+	color: white;
+}
+
+.border_button{
+	border-width: 3px;
+	border-style: solid;
+	border-color: #FFFFFF;
+	border-radius: 25px;
+	padding: 13px;
+	line-height: 70px;
+	font-family: "Arial", "Helvetica", "sans";
+}
+
