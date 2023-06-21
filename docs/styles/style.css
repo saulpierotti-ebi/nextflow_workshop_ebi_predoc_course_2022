@@ -25,11 +25,13 @@ a{
 	padding: 1.6ex;
 	margin-right: 0.5em;
 	margin-left: 0.5em;
+	line-height: 4;
 	font-family: "Arial", "Helvetica", "sans";
 }
 
 .linkrow{
 	margin: 5em;
+	line-height: 4;
 }
 
 .icon{
