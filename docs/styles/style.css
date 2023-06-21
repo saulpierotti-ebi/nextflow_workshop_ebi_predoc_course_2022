@@ -2,6 +2,8 @@ body {
 	background-color: #202125;
 	color: white;
 	font-family: "Fira Code", "Inconsolata", "DejaVu Sans Mono", monospace;
+	margin-left: 1em;
+	margin-right: 1em;
 }
 
 a{
@@ -9,13 +11,38 @@ a{
 	color: white;
 }
 
+.titlesection{
+	margin-top: 3em;
+	margin-bottom: 7em;
+	line-height: 2;
+}
+
 .border_button{
 	border-width: 3px;
 	border-style: solid;
 	border-color: #FFFFFF;
 	border-radius: 25px;
-	padding: 13px;
-	line-height: 70px;
+	padding: 1.6ex;
+	margin-right: 0.5em;
+	margin-left: 0.5em;
 	font-family: "Arial", "Helvetica", "sans";
 }
 
+.linkrow{
+	margin: 5em;
+}
+
+.icon{
+	margin-right: 0.5em;
+	margin-left: 0.5em;
+}
+
+.icon_text_right{
+	margin-left: 2em;
+}
+
+.medaka_icon{
+	margin: 50px;
+	object-fit:cover;
+	height:200px;
+}
