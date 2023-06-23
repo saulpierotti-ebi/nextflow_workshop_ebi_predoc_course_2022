@@ -156,6 +156,6 @@ h2{
 
 .folding_linkrow{
 	line-height: 4;
-	margin-top: max(-12vw, -4em);
-	margin-bottom: 5vh;
+	margin-top: -8vh;
+	margin-bottom: 8vh;
 }
