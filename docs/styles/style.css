@@ -88,8 +88,52 @@ h2{
 	line-height: 2;
 }
 
+.header{
+	overflow-x: auto;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: #202125;
+	z-index: 1;
+	padding-top: min(1.5vw, 0.5em);
+	padding-top: min(1.5vw, 0.5em);
+}
+
+.header_img{
+	width : min(9vw, 3em);
+	height: min(9vw, 3em);
+	border-radius: 50%;
+	object-fit: cover;
+	position: relative;
+	top: 0em;
+	left: min(3vw, 1em);
+	margin: 0;
+}
+
+.header_main_pointer{
+	display: inline;
+	position: relative;
+	left: min(4.5vw, 1.5em);
+	bottom: min(3.3vw, 1.1em);
+}
+
+.header_title{
+	font-weight: bold;
+	display: inline;
+	position: relative;
+	left: min(30vw, 10em);
+	bottom: min(3.3vw, 1.1em);
+}
+
+.header_hr{
+	width: 100vw;
+	position: relative;
+	margin: 0;
+}
+
 .medaka_icon{
 	margin: min(3vw, 1em);
+	width: min(30vw, 30em);
 	object-fit: cover;
 }
 
