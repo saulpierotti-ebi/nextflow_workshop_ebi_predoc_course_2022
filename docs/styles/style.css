@@ -32,7 +32,7 @@ h2{
 	padding: min(3vw, 1em);
 	margin-right: min(1,5vw, 0.5em);
 	margin-left: min(1,5vw, 0.5em);
-	line-height: 4;
+	line-height: 4.5;
 	font-family: "Arial", "Helvetica", "sans";
 	font-size: min(3vw, 1em)
 }
@@ -76,6 +76,14 @@ h2{
 	top: min(1.5vw, 0.5em);
 	position: relative;
 	margin-right: min(6vw, 2em);
+}
+
+.icon_text_left{
+	object-fit: cover;
+	height: min(6vw, 2em);
+	position: relative;
+	margin-right: min(3vw, 0.5em);
+	margin-left: min(6vw, 2em);
 }
 
 .text_image_right{
@@ -137,3 +145,17 @@ h2{
 	object-fit: cover;
 }
 
+.content_tight{
+	margin-bottom:  10vh;
+}
+
+.page_with_head{
+	position: relative;
+	top: min(15vw, 5em);
+}
+
+.folding_linkrow{
+	line-height: 4;
+	margin-top: max(-12vw, -4em);
+	margin-bottom: 5vh;
+}
