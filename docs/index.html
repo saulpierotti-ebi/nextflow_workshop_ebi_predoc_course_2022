@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>
 			Saul Pierotti
 		</title>
@@ -11,7 +13,7 @@
 	<body>
 		<center>
 			<a href="index.html">
-				<img src="images/profile_image.jpg" alt="profile picture" style="width:200px;height:200px;border-radius:50%;object-fit:cover;margin:20px">
+				<img src="images/profile_image.jpg" alt="profile picture" class="profile_image_main">
 			</a>
 			<div class="titlesection">
 				<h1>
@@ -21,53 +23,57 @@
 					PhD student in bioinformatics and genetics
 				</h2>
 			</div>
-				<div style="margin:5em">
 				<div class="linkrow">
 					<a class=border_button href="https://www.ebi.ac.uk/people/person/saul-pierotti">EMBL&#8209;EBI&nbspstaff&nbsp;page</a>
 					<a class=border_button href="https://www.example.com">Curriculum&nbsp;Vitae</a>
 					<a class=border_button href="medaka_icons.html">Medaka&nbspfish&nbspicons&nbspby&nbspAmos&nbspPierotti</a>
 				</div>
 				<div class="linkrow">
-					<h1>
-						<a href="mailto:saul@ebi.ac.uk"><i class="fa-solid fa-envelope icon"></i></a>
-						<a href="https://twitter.com/saulpierotti"><i class="fa-brands fa-twitter icon" style="color: #FFFFFF;"></i></a>
-						<a href="https://www.linkedin.com/in/saulpierotti"><i class="fa-brands fa-linkedin icon"></i></a>
-						<a href="https://github.com/saulpierotti"><i class="fa-brands fa-github icon"></i></a>
-						<a href="https://orcid.org/0000-0002-5942-0793"><i class="fa-brands fa-orcid icon"></i></a>
-					</h1>
+					<a href="mailto:saul@ebi.ac.uk"><i class="fa-solid fa-envelope icon"></i></a>
+					<a href="https://twitter.com/saulpierotti"><i class="fa-brands fa-twitter icon"></i></a>
+					<a href="https://www.linkedin.com/in/saulpierotti"><i class="fa-brands fa-linkedin icon"></i></a>
+					<a href="https://github.com/saulpierotti"><i class="fa-brands fa-github icon"></i></a>
+					<a href="https://orcid.org/0000-0002-5942-0793"><i class="fa-brands fa-orcid icon"></i></a>
 				</div>
 			</div>
-		<hr>
+			<hr>
 		</center>
-		<div style="margin-left:10%;margin-right:10%;margin-top:5em;line-height:4">
-			<h2 style="line-height:1">Research interests:</h2>
-			<a href="https://doi.org/10.1186/s13059-022-02623-z">
-			Medaka fish genetics
-			<img src="images/medaka_icons_png/medaka_red_female.png" alt="medaka_red" style="object-fit:cover;height:40px;left:1em;top:1em;position:relative">
-			</a>
-			<br>
-
-			<a href="https://www.mv.helsinki.fi/home/mjxpirin/GWAS_course/">
-			Genome-wide association studies
-			<img src="images/lmm_eqn.png" alt="lmm_equation" style="object-fit:cover;height:40px;top:1em;left:1em;position:relative">
-			</a>
-			<br>
-
-			Reproducibility in data science
-			<a href="https://www.nextflow.io/">
-			<img src="images/nextflow2014_no-bg-bright.png" alt="nextflow_logo" style="object-fit:cover;height:40px;top:1em;left:1em;position:relative">
-			</a>
-			<a href="https://www.docker.com/">
-			<img src="images/docker.webp" alt="docker_logo" style="object-fit:cover;height:40px;top:1em;left:1em;position:relative">
-			</a>
+		<div class="content">
+			<h2>Research interests:</h2>
+			<div class="content_with_inline_image" style="margin-top:min(9vw, 3em)">
+				<a href="https://doi.org/10.1186/s13059-022-02623-z">
+					<div class="text_image_right">Medaka fish genetics</div>
+					<img src="images/medaka_icons_png/medaka_red_female.png" alt="medaka_red" class="icon_text_right">
+				</a>
+			</div>
+			<div class="content_with_inline_image">
+				<a href="https://www.mv.helsinki.fi/home/mjxpirin/GWAS_course/">
+					<div class="text_image_right">Genome-wide association studies</div>
+					<img src="images/lmm_eqn.png" alt="lmm_equation" class="icon_text_right">
+				</a>
+			</div>
+			<div class="content_with_inline_image">
+				<div class="text_image_right">Reproducibility in data science</div>
+					<nobr>
+						<a href="https://www.nextflow.io/">
+							<img src="images/nextflow2014_no-bg-bright.png" alt="nextflow_logo" class="icon_text_right">
+						</a>
+						<a href="https://www.docker.com/">
+							<img src="images/docker.webp" alt="docker_logo" class="icon_text_right">
+						</a>
+					</nobr>
+			</div>
 		</div>
-		<div style="margin-left:10%;margin-right:10%;margin-top:5em;line-height:4">
+		<div class="content">
 			<h2 style="line-height:1">Recent work:</h2>
-			Research retreat poster at EMBL-EBI
-			<a href="https://www.example.com"><i class="fa-solid fa-file-pdf fa-2xl" style="left:1ex;position:relative"></i></a>
-			<br>
-			Lab day poster at EMBL-Heidelberg
-			<a href="https://www.example.com"><i class="fa-solid fa-file-pdf fa-2xl" style="left:1ex;position:relative"></i></a>
+			<div class="content_with_icon" style="margin-top:min(9vw, 3em)">
+				July 3rd 2023 - Research retreat poster at EMBL-EBI
+				<a href="https://www.example.com"><i class="fa-solid fa-file-pdf fa-2xl" style="left:1ex;position:relative"></i></a>
+			</div>
+			<div class="content_with_icon">
+				July 7th 2023 - Lab day poster at EMBL-Heidelberg
+				<a href="https://www.example.com"><i class="fa-solid fa-file-pdf fa-2xl" style="left:1ex;position:relative"></i></a>
+			</div>
 		</div>
 	</body>
 </html>
