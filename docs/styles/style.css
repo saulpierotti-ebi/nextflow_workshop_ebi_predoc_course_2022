@@ -98,6 +98,7 @@ h2{
 
 .header{
 	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
 	position: fixed;
 	top: 0;
 	left: 0;
