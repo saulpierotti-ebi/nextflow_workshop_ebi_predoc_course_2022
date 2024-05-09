@@ -173,10 +173,10 @@ h2{
 }
 
 .small_caption{
-	font-size: 13px;
+	font-size: 80%;
 }
 
 .small_caption_large_line{
-	font-size: 13px;
-	line-height: 50px;
+	font-size: 80%;
+	line-height: 300%;
 }
